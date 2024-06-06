@@ -10,4 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="tab_images">Images</string>
+    <string name="tab_albums">Albums</string>
+    <string name="fab_main">Floating Action Button</string>
 </resources>
