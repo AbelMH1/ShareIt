@@ -8,8 +8,20 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="uniovi.eii.shareit.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_home_images"
+        android:name="uniovi.eii.shareit.ui.home.images.HomeImagesFragment"
+        android:label="@string/tab_images"
+        tools:layout="@layout/fragment_home_images" />
+
+    <fragment
+        android:id="@+id/nav_home_albums"
+        android:name="uniovi.eii.shareit.ui.home.albums.HomeAlbumsFragment"
+        android:label="@string/tab_albums"
+        tools:layout="@layout/fragment_home_albums" />
 
     <fragment
         android:id="@+id/nav_gallery"
