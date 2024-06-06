@@ -11,12 +11,15 @@
         android:layout_height="wrap_content"
         android:theme="@style/Theme.ShareIt.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.ShareIt.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:title="@string/app_name"
+            app:menu="@menu/main"
+            app:navigationIcon="@drawable/ic_menu_menu_24" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,6 +32,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_dialog_email"
+        android:contentDescription="@string/fab_main" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
