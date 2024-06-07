@@ -19,7 +19,7 @@
             app:titleCentered="true"
             app:title="@string/app_name"
             app:menu="@menu/main"
-            app:navigationIcon="@drawable/ic_menu_menu_24" />
+            app:navigationIcon="@drawable/ic_nav_menu_24" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

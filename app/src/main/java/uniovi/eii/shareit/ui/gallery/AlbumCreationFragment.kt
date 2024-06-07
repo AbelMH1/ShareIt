@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.ui.home
+package uniovi.eii.shareit.ui.gallery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +8,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
-import uniovi.eii.shareit.databinding.FragmentHomeBinding
+import uniovi.eii.shareit.databinding.FragmentAlbumCreationBinding
 
-class HomeFragment : Fragment() {
+class AlbumCreationFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentAlbumCreationBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -30,34 +28,21 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        val albumCreationViewModel =
+            ViewModelProvider(this)[AlbumCreationViewModel::class.java]
+        _binding = FragmentAlbumCreationBinding.inflate(inflater, container, false)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textGallery
+        albumCreationViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        return root
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         configureToolBar()
-        binding.pager.adapter = ViewPagerAdapter(this)
-        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
-            when (position) {
-                0 -> {
-                    tab.text = resources.getString(R.string.tab_images)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
-                }
-                1 -> {
-                    tab.text = resources.getString(R.string.tab_albums)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)
-                }
-            }
-        }.attach()
     }
 
     override fun onDestroyView() {
@@ -69,11 +54,15 @@ class HomeFragment : Fragment() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
-                toolbar.isTitleCentered = true
+                toolbar.isTitleCentered = false
+                menu.clear()
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
         }, viewLifecycleOwner)
     }
+
+
+
 }

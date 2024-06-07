@@ -7,10 +7,13 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--    AppBar titles:-->
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_album_creation">Create Album</string>
     <string name="menu_slideshow">Slideshow</string>
+    <!--    Tabs titles-->
     <string name="tab_images">Images</string>
     <string name="tab_albums">Albums</string>
+    <!--    Main Activity-->
     <string name="fab_main">Floating Action Button</string>
 </resources>
