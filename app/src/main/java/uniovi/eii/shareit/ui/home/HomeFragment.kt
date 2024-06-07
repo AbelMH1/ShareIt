@@ -45,19 +45,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureToolBar()
-        binding.pager.adapter = ViewPagerAdapter(this)
-        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
-            when (position) {
-                0 -> {
-                    tab.text = resources.getString(R.string.tab_images)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
-                }
-                1 -> {
-                    tab.text = resources.getString(R.string.tab_albums)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)
-                }
-            }
-        }.attach()
+        configureTabs()
     }
 
     override fun onDestroyView() {
@@ -75,5 +63,20 @@ class HomeFragment : Fragment() {
                 return false
             }
         }, viewLifecycleOwner)
+    }
+    private fun configureTabs() {
+        binding.pager.adapter = ViewPagerAdapter(this)
+        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.text = resources.getString(R.string.tab_images)
+                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
+                }
+                1 -> {
+                    tab.text = resources.getString(R.string.tab_albums)
+                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)
+                }
+            }
+        }.attach()
     }
 }
