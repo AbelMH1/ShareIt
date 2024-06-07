@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
 
 class HomeAlbumsFragment : Fragment() {
@@ -25,6 +26,12 @@ class HomeAlbumsFragment : Fragment() {
     ): View? {
         viewModel = ViewModelProvider(this).get(HomeAlbumsViewModel::class.java)
         _binding = FragmentHomeAlbumsBinding.inflate(inflater, container, false)
+
+        binding.fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own album action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
+
         return binding.root
     }
 

@@ -10,4 +10,14 @@
         android:layout_height="match_parent"
         android:text="Fragmento para los álbumes" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/fab_main"
+        android:src="@android:drawable/ic_input_add" />
+
 </FrameLayout>
