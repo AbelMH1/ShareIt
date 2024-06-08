@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.ui.gallery
+package uniovi.eii.shareit.ui.album
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

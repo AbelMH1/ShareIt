@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.ui.gallery
+package uniovi.eii.shareit.ui.album
 
 import android.os.Bundle
 import android.view.LayoutInflater
