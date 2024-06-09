@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
+import uniovi.eii.shareit.ui.album.AlbumFragment
 
 class HomeAlbumsFragment : Fragment() {
 
@@ -30,6 +31,22 @@ class HomeAlbumsFragment : Fragment() {
 
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.nav_album_creation)
+        }
+
+        binding.button1.setOnClickListener {
+            findNavController().navigate(R.id.nav_album, Bundle().apply {
+                putInt(AlbumFragment.ARG_COLUMN_COUNT, 1)
+            })
+        }
+        binding.button2.setOnClickListener {
+            findNavController().navigate(R.id.nav_album, Bundle().apply {
+                putInt(AlbumFragment.ARG_COLUMN_COUNT, 2)
+            })
+        }
+        binding.button4.setOnClickListener {
+            findNavController().navigate(R.id.nav_album, Bundle().apply {
+                putInt(AlbumFragment.ARG_COLUMN_COUNT, 4)
+            })
         }
 
         return binding.root

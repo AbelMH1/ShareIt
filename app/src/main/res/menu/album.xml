@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_menu_chat_24"
+        android:title="@string/action_chat"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/action_order"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_menu_slideshow"
+        android:title="@string/action_filter"
+        app:showAsAction="never" />
+</menu>
