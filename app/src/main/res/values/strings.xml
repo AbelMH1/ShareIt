@@ -5,7 +5,6 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <!--    AppBar titles:-->
     <string name="menu_home">Home</string>
@@ -16,4 +15,9 @@
     <string name="tab_albums">Albums</string>
     <!--    Main Activity-->
     <string name="fab_main">Floating Action Button</string>
+    <!--    Menus-->
+    <string name="action_account">Account</string>
+    <string name="action_chat">Chat</string>
+    <string name="action_order">Order By…</string>
+    <string name="action_filter">Filter By…</string>
 </resources>
