@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/images_margin"
-    android:background="#C6C6C6"
+    android:background="@color/md_theme_secondaryContainer"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingVertical="@dimen/images_padding">
