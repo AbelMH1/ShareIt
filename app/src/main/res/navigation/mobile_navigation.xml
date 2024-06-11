@@ -39,19 +39,29 @@
 
     <fragment
         android:id="@+id/nav_album_creation"
-        android:name="uniovi.eii.shareit.ui.album.AlbumCreationFragment"
+        android:name="uniovi.eii.shareit.ui.album.creation.AlbumCreationFragment"
         android:label="@string/menu_album_creation"
-        tools:layout="@layout/fragment_album_creation" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="uniovi.eii.shareit.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_album_creation" >
+        <action
+            android:id="@+id/action_nav_album_creation_to_nav_album_prueba"
+            app:destination="@id/nav_album_creation_shared" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_album"
         android:name="uniovi.eii.shareit.ui.album.AlbumFragment"
         android:label="Album name"
         tools:layout="@layout/fragment_album" />
+
+    <fragment
+        android:id="@+id/nav_album_creation_shared"
+        android:name="uniovi.eii.shareit.ui.album.creation.AlbumCreationSharedFragment"
+        android:label="@string/menu_album_creation"
+        tools:layout="@layout/fragment_album_creation_shared" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="uniovi.eii.shareit.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
 </navigation>

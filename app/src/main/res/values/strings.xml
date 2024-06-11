@@ -6,18 +6,41 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <!--    AppBar titles:-->
+    <!--    AppBar titles    -->
     <string name="menu_home">Home</string>
     <string name="menu_album_creation">Create Album</string>
     <string name="menu_slideshow">Slideshow</string>
-    <!--    Tabs titles-->
+    <!--    Tabs titles    -->
     <string name="tab_images">Images</string>
     <string name="tab_albums">Albums</string>
-    <!--    Main Activity-->
+    <!--    Main Activity    -->
     <string name="fab_main">Floating Action Button</string>
-    <!--    Menus-->
+    <string name="read_only">Read only supporting text</string>
+    <!--    Menus    -->
     <string name="action_account">Account</string>
     <string name="action_chat">Chat</string>
     <string name="action_order">Order By…</string>
     <string name="action_filter">Filter By…</string>
+    <!--    Album Creation    -->
+    <string name="album_name">Album\'s name</string>
+    <string name="label_date_selection">Select Date for the Album</string>
+    <string name="date_selection_none">None</string>
+    <string name="date_selection_single">Single</string>
+    <string name="date_selection_range">Range</string>
+    <string name="date_format">DD/MM/YYYY</string>
+    <string name="album_date_start">Album\'s start date</string>
+    <string name="album_date_end">Album\'s end date</string>
+    <string name="switch_ubication_selection">Select Ubication for the Album</string>
+    <string name="switch_shared_album">Shared Album</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_create">Create</string>
+    <string name="btn_add">Add</string>
+    <string name="switch_invitation_link">Invitation link</string>
+    <string name="label_permission_settings">Permission Settings</string>
+    <string name="label_permission_members">Members</string>
+    <string name="label_permission_images">Images</string>
+    <string name="label_permission_guests">Guests</string>
+    <string name="label_permission_chat">Chat</string>
+    <string name="label_participants">Participants</string>
+    <string name="add_participant">Email del participante</string>
 </resources>
