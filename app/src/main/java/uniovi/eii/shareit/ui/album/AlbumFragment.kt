@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,6 +73,10 @@ class AlbumFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.action_chat -> {
                         Toast.makeText(context, "Opening chat...", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.action_info -> {
+                        findNavController().navigate(R.id.nav_album_information)
                         true
                     }
                     R.id.action_order -> {

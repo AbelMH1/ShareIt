@@ -9,6 +9,7 @@
     <!--    AppBar titles    -->
     <string name="menu_home">Home</string>
     <string name="menu_album_creation">Create Album</string>
+    <string name="menu_album_information">Information</string>
     <string name="menu_slideshow">Slideshow</string>
     <!--    AppBar subtitles    -->
     <string name="menu_album_creation_general">General information</string>
@@ -16,12 +17,16 @@
     <!--    Tabs titles    -->
     <string name="tab_images">Images</string>
     <string name="tab_albums">Albums</string>
+    <string name="tab_general">General</string>
+    <string name="tab_shared">Shared</string>
+    <string name="tab_participants">Participants</string>
     <!--    Main Activity    -->
     <string name="fab_main">Floating Action Button</string>
     <string name="read_only">Read only supporting text</string>
     <!--    Menus    -->
     <string name="action_account">Account</string>
     <string name="action_chat">Chat</string>
+    <string name="action_info">Information</string>
     <string name="action_order">Order By…</string>
     <string name="action_filter">Filter By…</string>
     <!--    Album Creation    -->
