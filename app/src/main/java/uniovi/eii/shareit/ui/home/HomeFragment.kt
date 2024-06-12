@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
         }, viewLifecycleOwner)
     }
     private fun configureTabs() {
-        binding.pager.adapter = ViewPagerAdapter(this)
+        binding.pager.adapter = HomeViewPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             when (position) {
                 0 -> {

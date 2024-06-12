@@ -6,7 +6,7 @@ import uniovi.eii.shareit.ui.home.albums.HomeAlbumsFragment
 import uniovi.eii.shareit.ui.home.images.HomeImagesFragment
 
 private const val NUM_TABS = 2
-class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class HomeViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = NUM_TABS
 
