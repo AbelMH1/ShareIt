@@ -66,7 +66,6 @@ class AlbumFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = false
-                menu.clear()
                 menuInflater.inflate(R.menu.album, menu)
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -85,6 +84,10 @@ class AlbumFragment : Fragment() {
                     }
                     else -> false
                 }
+            }
+            override fun onPrepareMenu(menu: Menu) {
+                super.onPrepareMenu(menu)
+                menu.removeItem(R.id.action_account)
             }
         }, viewLifecycleOwner)
     }

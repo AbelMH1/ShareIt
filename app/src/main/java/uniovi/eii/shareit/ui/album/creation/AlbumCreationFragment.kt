@@ -116,10 +116,13 @@ class AlbumCreationFragment : Fragment() {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = false
                 toolbar.subtitle = resources.getString(R.string.menu_album_creation_general)
-                menu.clear()
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
+            }
+            override fun onPrepareMenu(menu: Menu) {
+                super.onPrepareMenu(menu)
+                menu.removeItem(R.id.action_account)
             }
         }, viewLifecycleOwner)
     }
