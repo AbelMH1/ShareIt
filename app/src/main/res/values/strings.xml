@@ -10,6 +10,9 @@
     <string name="menu_home">Home</string>
     <string name="menu_album_creation">Create Album</string>
     <string name="menu_slideshow">Slideshow</string>
+    <!--    AppBar subtitles    -->
+    <string name="menu_album_creation_general">General information</string>
+    <string name="menu_album_creation_shared">Sharing information</string>
     <!--    Tabs titles    -->
     <string name="tab_images">Images</string>
     <string name="tab_albums">Albums</string>

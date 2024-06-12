@@ -77,10 +77,16 @@
                     android:text="@string/date_selection_range" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dateStartLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:hint="@string/album_date_start"
                 app:endIconDrawable="@drawable/ic_calendar_24"
                 app:endIconMode="custom"
@@ -97,8 +103,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dateEndLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:hint="@string/album_date_end"
                 app:endIconDrawable="@drawable/ic_calendar_24"
                 app:endIconMode="custom"
@@ -112,6 +119,8 @@
                     android:inputType="date" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"

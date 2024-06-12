@@ -68,7 +68,7 @@ class AlbumCreationSharedFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = false
-                toolbar.subtitle = "Sharing information"
+                toolbar.subtitle = resources.getString(R.string.menu_album_creation_shared)
                 menu.clear()
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

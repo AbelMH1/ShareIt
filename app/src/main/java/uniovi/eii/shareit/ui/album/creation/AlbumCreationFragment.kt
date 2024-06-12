@@ -115,7 +115,7 @@ class AlbumCreationFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = false
-                toolbar.subtitle = "General information"
+                toolbar.subtitle = resources.getString(R.string.menu_album_creation_general)
                 menu.clear()
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
