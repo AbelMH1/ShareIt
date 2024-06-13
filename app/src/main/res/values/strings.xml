@@ -36,9 +36,9 @@
     <string name="date_selection_single">Single</string>
     <string name="date_selection_range">Range</string>
     <string name="date_format">DD/MM/YYYY</string>
-    <string name="album_date_start">Album\'s start date</string>
-    <string name="album_date_end">Album\'s end date</string>
-    <string name="switch_ubication_selection">Select Ubication for the Album</string>
+    <string name="album_date_start">Start date</string>
+    <string name="album_date_end">End date</string>
+    <string name="switch_location_selection">Select Location for the Album</string>
     <string name="switch_shared_album">Shared Album</string>
     <string name="btn_continue">Continue</string>
     <string name="btn_create">Create</string>

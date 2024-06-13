@@ -2,14 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.album.creation.AlbumCreationSharedFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,12 +107,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/divider_margin" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchInvitationLink"
-                style="?attr/materialSwitchStyle"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/switch_invitation_link" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelSharedAlbum"
+                    style="@style/TextAppearance.App.TitleMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:labelFor="@+id/switchInvitationLink"
+                    android:text="@string/switch_invitation_link" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchInvitationLink"
+                    style="?attr/materialSwitchStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/invitationLinkLayout"
@@ -176,6 +192,7 @@
                     android:id="@+id/addParticipantBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/divider_margin"
                     android:text="@string/btn_add" />
 
             </LinearLayout>
@@ -188,11 +205,12 @@
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
+        android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/createBtn"

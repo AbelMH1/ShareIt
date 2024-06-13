@@ -63,7 +63,7 @@ class AlbumCreationFragment : Fragment() {
             // Show date picker
         }
 
-        binding.switchUbicationSelection.setOnCheckedChangeListener { _, isChecked ->
+        binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {
                     binding.mapView.visibility = View.VISIBLE

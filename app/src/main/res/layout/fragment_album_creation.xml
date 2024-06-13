@@ -2,14 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.album.creation.AlbumCreationFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,74 +78,104 @@
                     android:text="@string/date_selection_range" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dateStartLayout"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/album_date_start"
-                app:endIconDrawable="@drawable/ic_calendar_24"
-                app:endIconMode="custom"
-                app:helperText="@string/date_format"
-                app:helperTextEnabled="true">
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dateStartEditText"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateStartLayout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="date" />
+                    android:layout_weight="1"
+                    android:hint="@string/album_date_start"
+                    app:endIconDrawable="@drawable/ic_calendar_24"
+                    app:endIconMode="custom"
+                    app:helperText="@string/date_format"
+                    app:helperTextEnabled="true">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dateStartEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dateEndLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/album_date_end"
-                app:endIconDrawable="@drawable/ic_calendar_24"
-                app:endIconMode="custom"
-                app:helperText="@string/date_format"
-                app:helperTextEnabled="true">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dateEndEditText"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateEndLayout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="date" />
+                    android:layout_weight="1"
+                    android:hint="@string/album_date_end"
+                    app:endIconDrawable="@drawable/ic_calendar_24"
+                    app:endIconMode="custom"
+                    app:helperText="@string/date_format"
+                    app:helperTextEnabled="true">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dateEndEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
 
-        </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/divider_margin" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchUbicationSelection"
-                style="?attr/materialSwitchStyle"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/switch_ubication_selection" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelLocation"
+                    style="@style/TextAppearance.App.TitleMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:labelFor="@+id/switchLocationSelection"
+                    android:text="@string/switch_location_selection" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchLocationSelection"
+                    style="?attr/materialSwitchStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/switchSharedAlbum"
-                style="?attr/materialSwitchStyle"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/switch_shared_album" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelSharedAlbum"
+                    style="@style/TextAppearance.App.TitleMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:labelFor="@+id/switchSharedAlbum"
+                    android:text="@string/switch_shared_album" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchSharedAlbum"
+                    style="?attr/materialSwitchStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -152,11 +183,12 @@
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
+        android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/continueBtn"
