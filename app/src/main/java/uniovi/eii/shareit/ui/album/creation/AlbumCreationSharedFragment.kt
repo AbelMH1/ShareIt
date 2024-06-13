@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -27,21 +26,6 @@ class AlbumCreationSharedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumCreationSharedBinding.inflate(inflater, container, false)
-
-        binding.switchInvitationLink.setOnCheckedChangeListener { _, isChecked ->
-            when(isChecked) {
-                true -> {
-                    binding.invitationLinkLayout.visibility = View.VISIBLE
-                }
-                false -> {
-                    binding.invitationLinkLayout.visibility = View.GONE
-                }
-            }
-        }
-
-        binding.invitationLinkLayout.setEndIconOnClickListener {
-            Toast.makeText(context, "Copy", Toast.LENGTH_SHORT).show()
-        }
 
         binding.createBtn.setOnClickListener {
             findNavController().navigateUp()
