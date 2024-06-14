@@ -23,6 +23,7 @@
     <!--    Main Activity    -->
     <string name="fab_main">Floating Action Button</string>
     <string name="read_only">Read only supporting text</string>
+    <string name="not_enabled">Not enabled</string>
     <!--    Menus    -->
     <string name="action_account">Account</string>
     <string name="action_chat">Chat</string>
@@ -51,4 +52,10 @@
     <string name="label_permission_chat">Chat</string>
     <string name="label_participants">Participants</string>
     <string name="add_participant">Email del participante</string>
+    <!--    Album Information    -->
+    <string name="labelName">Name</string>
+    <string name="labelCover">Album\'s Cover</string>
+    <string name="cover_settings_btn_desc">Set your Album\'s cover preferences</string>
+    <string name="labelDate">Date of the album</string>
+    <string name="labelLocation">Location of the Album</string>
 </resources>
