@@ -11,9 +11,12 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationSharedBinding
+import uniovi.eii.shareit.ui.adapter.ParticipantsListAdapter
+import uniovi.eii.shareit.ui.album.placeholder.PlaceholderContent
 
 class AlbumCreationSharedFragment : Fragment() {
 
@@ -26,6 +29,9 @@ class AlbumCreationSharedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumCreationSharedBinding.inflate(inflater, container, false)
+
+        binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
+        binding.recyclerParticipants.adapter = ParticipantsListAdapter(PlaceholderContent.ITEMS)
 
         binding.createBtn.setOnClickListener {
             findNavController().navigateUp()

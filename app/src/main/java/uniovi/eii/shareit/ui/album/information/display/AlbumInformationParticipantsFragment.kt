@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationParticipantsBinding
+import uniovi.eii.shareit.ui.adapter.ParticipantsListAdapter
 import uniovi.eii.shareit.ui.album.information.AlbumInformationViewModel
+import uniovi.eii.shareit.ui.album.placeholder.PlaceholderContent
 
 class AlbumInformationParticipantsFragment : Fragment() {
 
@@ -25,6 +28,8 @@ class AlbumInformationParticipantsFragment : Fragment() {
     ): View {
         _binding = FragmentAlbumInformationParticipantsBinding.inflate(inflater, container, false)
 
+        binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
+        binding.recyclerParticipants.adapter = ParticipantsListAdapter(PlaceholderContent.ITEMS)
 
         return binding.root
     }
