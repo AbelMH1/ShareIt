@@ -36,7 +36,7 @@
                     style="?attr/materialSwitchStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"/>
+                    android:checked="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -66,32 +66,38 @@
                     android:text="@string/label_permission_members" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/membersImagesPermission"
+                    android:id="@+id/membersImagesPermissionLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:hint="@string/label_permission_images">
+                    android:hint="@string/label_permission_images"
+                    android:labelFor="@id/membersImagesPermissionEditText">
 
                     <AutoCompleteTextView
+                        android:id="@+id/membersImagesPermissionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
                         android:inputType="none"
                         app:simpleItems="@array/ImagesPermission" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/membersChatPermission"
+                    android:id="@+id/membersChatPermissionLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:hint="@string/label_permission_chat">
+                    android:hint="@string/label_permission_chat"
+                    android:labelFor="@id/membersChatPermissionEditText">
 
                     <AutoCompleteTextView
+                        android:id="@+id/membersChatPermissionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
                         android:inputType="none"
                         app:simpleItems="@array/ChatPermission" />
 
@@ -107,32 +113,38 @@
                     android:text="@string/label_permission_guests" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/guestsImagesPermission"
+                    android:id="@+id/guestsImagesPermissionLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:hint="@string/label_permission_images">
+                    android:hint="@string/label_permission_images"
+                    android:labelFor="@id/guestsImagesPermissionEditText">
 
                     <AutoCompleteTextView
+                        android:id="@+id/guestsImagesPermissionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
                         android:inputType="none"
                         app:simpleItems="@array/ImagesPermission" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/guestsChatPermission"
+                    android:id="@+id/guestsChatPermissionLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:hint="@string/label_permission_chat">
+                    android:hint="@string/label_permission_chat"
+                    android:labelFor="@id/guestsChatPermissionEditText">
 
                     <AutoCompleteTextView
+                        android:id="@+id/guestsChatPermissionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
                         android:inputType="none"
                         app:simpleItems="@array/ChatPermission" />
 
@@ -163,7 +175,7 @@
                         style="?attr/materialSwitchStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"/>
+                        android:checked="true" />
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -201,6 +213,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/fab_edit_desc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_edit_24" />
@@ -211,6 +224,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/fab_save_desc"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

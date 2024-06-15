@@ -106,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:contentDescription="@string/labelCover"
                     app:srcCompat="@android:mipmap/sym_def_app_icon"
                     tools:srcCompat="@tools:sample/avatars" />
 
@@ -221,6 +222,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:labelFor="@+id/mapView"
                     android:text="@string/labelLocation" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
@@ -244,6 +246,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/fab_edit_desc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_edit_24" />
@@ -254,6 +257,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/fab_save_desc"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
