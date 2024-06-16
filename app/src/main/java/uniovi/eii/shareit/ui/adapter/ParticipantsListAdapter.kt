@@ -33,7 +33,7 @@ class ParticipantsListAdapter(
 
     inner class ParticipantViewHolder(binding: LineRecyclerViewParticipantBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val participantText = binding.textView2
+        private val participantText = binding.participantName
 
         fun assignValuesToComponents(participant: PlaceholderItem) {
             participantText.text = "Participant ${participant.id}"

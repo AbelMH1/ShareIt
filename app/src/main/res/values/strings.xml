@@ -67,4 +67,5 @@
     <string name="warn_disable_shared_message">This will permanently delete all participants from the album and their shared photos.</string>
     <string name="warn_disable_shared_accept">Accept</string>
     <string name="warn_disable_shared_cancel">Cancel</string>
+    <string name="participant_profile_image_desc">Participant profile image</string>
 </resources>
