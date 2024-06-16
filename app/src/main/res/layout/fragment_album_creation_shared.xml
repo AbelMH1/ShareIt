@@ -20,14 +20,14 @@
 
             <TextView
                 android:id="@+id/labelPermissionSettings"
-                style="@style/TextAppearance.App.TitleLarge"
+                style="?attr/textAppearanceTitleLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_permission_settings" />
 
             <TextView
                 android:id="@+id/labelPermissionMembers"
-                style="@style/TextAppearance.App.TitleMedium"
+                style="?attr/textAppearanceTitleMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_margin"
@@ -72,7 +72,7 @@
 
             <TextView
                 android:id="@+id/labelPermissionGuests"
-                style="@style/TextAppearance.App.TitleMedium"
+                style="?attr/textAppearanceTitleMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_margin"
@@ -121,7 +121,7 @@
 
             <TextView
                 android:id="@+id/labelParticipants"
-                style="@style/TextAppearance.App.TitleLarge"
+                style="?attr/textAppearanceTitleLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_participants" />
