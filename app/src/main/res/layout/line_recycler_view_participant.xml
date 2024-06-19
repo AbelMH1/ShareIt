@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/participantImage"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/profile_image_size"
+        android:layout_height="@dimen/profile_image_size"
         android:layout_gravity="center"
         android:contentDescription="@string/participant_profile_image_desc"
         app:srcCompat="@drawable/ic_person_24" />

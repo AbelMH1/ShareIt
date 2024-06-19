@@ -9,4 +9,5 @@
     <dimen name="images_margin">1dp</dimen>
     <dimen name="images_padding">10dp</dimen>
     <dimen name="divider_margin">10dp</dimen>
+    <dimen name="profile_image_size">48dp</dimen>
 </resources>
