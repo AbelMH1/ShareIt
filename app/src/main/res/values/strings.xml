@@ -10,6 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_album_creation">Create Album</string>
     <string name="menu_album_information">Information</string>
+    <string name="menu_album_image">Images</string>
     <string name="menu_slideshow">Slideshow</string>
     <!--    AppBar subtitles    -->
     <string name="menu_album_creation_general">General information</string>
@@ -68,4 +69,10 @@
     <string name="warn_disable_shared_accept">Accept</string>
     <string name="warn_disable_shared_cancel">Cancel</string>
     <string name="participant_profile_image_desc">Participant profile image</string>
+    <!--    Image Display    -->
+    <string name="author_profile_image_desc">Image\'s author profile picture</string>
+    <string name="upload_image_desc">Image uploaded to the album</string>
+    <string name="label_by">By</string>
+    <string name="label_likes">Likes</string>
+    <string name="label_upload_date">Uploaded on</string>
 </resources>

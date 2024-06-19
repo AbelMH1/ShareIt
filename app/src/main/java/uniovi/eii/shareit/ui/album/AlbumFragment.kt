@@ -100,6 +100,7 @@ class AlbumFragment : Fragment() {
     fun clickOnItem(image: PlaceholderContent.PlaceholderItem) {
         Log.i("Click adapter", "Item Clicked ${image.id}")
         Toast.makeText(context, "Item Clicked ${image.id}", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.nav_album_image)
     }
 
     companion object {
