@@ -8,29 +8,53 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumImageBinding
-import uniovi.eii.shareit.model.Image
-import java.util.Date
+import uniovi.eii.shareit.ui.album.AlbumViewModel
 
 class ImageFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ImageFragment()
+        const val SELECTED_IMAGE = "selected_image"
+
+        fun newInstance(selectedImage: Int) =
+            ImageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(SELECTED_IMAGE, selectedImage)
+                }
+            }
     }
 
     private var _binding: FragmentAlbumImageBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ImageViewModel by viewModels()
+    private val viewModel: AlbumViewModel by activityViewModels()
+    private var selectedImage = 1
+    private lateinit var imagePagerAdapter: ImageViewPagerAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            selectedImage = it.getInt(SELECTED_IMAGE)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumImageBinding.inflate(inflater, container, false)
+        imagePagerAdapter = ImageViewPagerAdapter(this)
+
+        viewModel.imageList.observe(viewLifecycleOwner) {
+            imagePagerAdapter.update(it.toMutableList())
+            binding.pager.doOnPreDraw {
+                binding.pager.currentItem = selectedImage
+            }
+        }
 
         return binding.root
     }
@@ -63,12 +87,10 @@ class ImageFragment : Fragment() {
     }
 
     private fun configureViewPager() {
-        val items: MutableList<Image> = ArrayList()
-        for (i in 1..10) {
-            val time: Long = 86400000
-            items.add(Image("Author $i", creationDate = Date(time*i)))
+        binding.pager.adapter = imagePagerAdapter
+        binding.pager.doOnPreDraw {
+            binding.pager.currentItem = selectedImage
         }
-        binding.pager.adapter = ImageViewPagerAdapter(this, items)
     }
 
 }
