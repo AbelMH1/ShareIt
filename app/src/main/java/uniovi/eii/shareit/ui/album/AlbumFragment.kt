@@ -11,13 +11,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
-import uniovi.eii.shareit.ui.album.placeholder.PlaceholderContent
+import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.ui.album.image.ImageFragment
 
 /**
  * A fragment representing a list of Items.
@@ -25,7 +27,8 @@ import uniovi.eii.shareit.ui.album.placeholder.PlaceholderContent
 class AlbumFragment : Fragment() {
 
     private var columnCount = 4
-
+    private val viewModel: AlbumViewModel by activityViewModels()
+    private lateinit var imageListAdapter: ImagesListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -38,6 +41,15 @@ class AlbumFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_album, container, false)
+        imageListAdapter = ImagesListAdapter(listener =
+            object : ImagesListAdapter.OnItemClickListener {
+                override fun onItemClick(item: Image, position: Int) {
+                    clickOnItem(item, position)
+                }
+            })
+        viewModel.imageList.observe(viewLifecycleOwner) {
+            imageListAdapter.update(it)
+        }
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -46,12 +58,7 @@ class AlbumFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = ImagesListAdapter(PlaceholderContent.ITEMS,
-                    object : ImagesListAdapter.OnItemClickListener {
-                        override fun onItemClick(item: PlaceholderContent.PlaceholderItem) {
-                            clickOnItem(item)
-                        }
-                    })
+                adapter = imageListAdapter
             }
         }
         return view
@@ -97,10 +104,10 @@ class AlbumFragment : Fragment() {
         }, viewLifecycleOwner)
     }
 
-    fun clickOnItem(image: PlaceholderContent.PlaceholderItem) {
-        Log.i("Click adapter", "Item Clicked ${image.id}")
-        Toast.makeText(context, "Item Clicked ${image.id}", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.nav_album_image)
+    fun clickOnItem(image: Image, position: Int) {
+        Log.i("Click adapter", "Item Clicked at index $position: $image")
+        Toast.makeText(context, "Item Clicked ${image.author}", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.nav_album_image, Bundle().apply { putInt(ImageFragment.SELECTED_IMAGE, position) })
     }
 
     companion object {

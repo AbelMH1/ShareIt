@@ -31,7 +31,7 @@ class AlbumCreationSharedFragment : Fragment() {
         _binding = FragmentAlbumCreationSharedBinding.inflate(inflater, container, false)
 
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
-        binding.recyclerParticipants.adapter = ParticipantsListAdapter(PlaceholderContent.ITEMS)
+        binding.recyclerParticipants.adapter = ParticipantsListAdapter(PlaceholderContent.getParticipantsList(20))
 
         binding.createBtn.setOnClickListener {
             findNavController().navigateUp()

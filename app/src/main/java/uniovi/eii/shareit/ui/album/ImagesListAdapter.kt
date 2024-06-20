@@ -1,44 +1,45 @@
 package uniovi.eii.shareit.ui.album
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumSmallImageBinding
-import uniovi.eii.shareit.ui.album.placeholder.PlaceholderContent.PlaceholderItem
+import uniovi.eii.shareit.model.Image
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class ImagesListAdapter(
-    private val imagesList: List<PlaceholderItem>,
+    private var imagesList: List<Image> = emptyList(),
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<ImagesListAdapter.ImagesViewHolder>() {
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun update(imagesList: List<Image>) {
+        this.imagesList = imagesList
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {
         return ImagesViewHolder(
             FragmentAlbumSmallImageBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
         )
-
     }
 
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
         val image = imagesList[position]
         Log.i("Lista", "Visualiza elemento: $image")
-        holder.assignValuesToComponents(image, listener)
+        holder.assignValuesToComponents(image, listener, position)
     }
 
     override fun getItemCount(): Int = imagesList.size
 
     interface OnItemClickListener {
-        fun onItemClick(item : PlaceholderItem)
+        fun onItemClick(item: Image, position: Int)
     }
 
     inner class ImagesViewHolder(binding: FragmentAlbumSmallImageBinding) :
@@ -50,11 +51,11 @@ class ImagesListAdapter(
             return super.toString() + " '" + contentView.contentDescription + "'"
         }
 
-        fun assignValuesToComponents(image: PlaceholderItem, listener : OnItemClickListener){
-            idView.text = image.id
-            contentView.setImageResource(image.content)
+        fun assignValuesToComponents(image: Image, listener: OnItemClickListener, position: Int) {
+            idView.text = image.author
+            contentView.setImageResource(R.drawable.ic_menu_camera)
             itemView.setOnClickListener {
-                listener.onItemClick(image)
+                listener.onItemClick(image, position)
             }
         }
     }

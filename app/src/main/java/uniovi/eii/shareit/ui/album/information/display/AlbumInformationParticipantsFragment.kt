@@ -29,7 +29,7 @@ class AlbumInformationParticipantsFragment : Fragment() {
         _binding = FragmentAlbumInformationParticipantsBinding.inflate(inflater, container, false)
 
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
-        binding.recyclerParticipants.adapter = ParticipantsListAdapter(PlaceholderContent.ITEMS)
+        binding.recyclerParticipants.adapter = ParticipantsListAdapter(PlaceholderContent.getParticipantsList(20))
 
         return binding.root
     }

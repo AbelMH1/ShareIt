@@ -1,57 +1,28 @@
 package uniovi.eii.shareit.ui.album.placeholder
 
-import uniovi.eii.shareit.R
+import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.model.Participant
+import java.util.Date
 
-/**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- *
- * TODO: Replace all uses of this class before publishing your app.
- */
-object PlaceholderContent {
+class PlaceholderContent {
 
-    /**
-     * An array of sample (placeholder) items.
-     */
-    val ITEMS: MutableList<PlaceholderItem> = ArrayList()
+    companion object {
+        fun getImagesList(count: Int): MutableList<Image> {
+            val items: MutableList<Image> = ArrayList()
+            for (i in 1..count) {
+                val time: Long = 86400000
+                items.add(Image("Author $i", creationDate = Date(time*i)))
+            }
+            return items
+        }
 
-    /**
-     * A map of sample (placeholder) items, by ID.
-     */
-    val ITEM_MAP: MutableMap<String, PlaceholderItem> = HashMap()
-
-    private val COUNT = 25
-
-    init {
-        // Add some sample items.
-        for (i in 1..COUNT) {
-            addItem(createPlaceholderItem(i))
+        fun getParticipantsList(count: Int): MutableList<Participant> {
+            val items: MutableList<Participant> = ArrayList()
+            for (i in 1..count) {
+                items.add(Participant("Participant $i", "participant$i@gmail.com", "Guest"))
+            }
+            return items
         }
     }
 
-    private fun addItem(item: PlaceholderItem) {
-        ITEMS.add(item)
-        ITEM_MAP[item.id] = item
-    }
-
-    private fun createPlaceholderItem(position: Int): PlaceholderItem {
-        val icon = R.drawable.ic_menu_camera
-        return PlaceholderItem(position.toString(), icon, makeDetails(position))
-    }
-
-    private fun makeDetails(position: Int): String {
-        val builder = StringBuilder()
-        builder.append("Details about Item: ").append(position)
-        for (i in 0..position - 1) {
-            builder.append("\nMore details information here.")
-        }
-        return builder.toString()
-    }
-
-    /**
-     * A placeholder item representing a piece of content.
-     */
-    data class PlaceholderItem(val id: String, val content: Int, val details: String) {
-        override fun toString(): String = content.toString()
-    }
 }
