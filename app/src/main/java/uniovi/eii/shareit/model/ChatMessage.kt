@@ -1,10 +1,10 @@
 package uniovi.eii.shareit.model
 
-import java.util.Date
+import java.time.LocalDateTime
 
 data class ChatMessage(
     var message: String = "",
     var senderId: String = "",
     var senderName: String = "",
-    var timestamp: Date = Date(),
+    var timestamp: LocalDateTime = LocalDateTime.now(),
 )
