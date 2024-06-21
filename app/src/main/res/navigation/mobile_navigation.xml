@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_nav_album_to_nav_album_image"
             app:destination="@id/nav_album_image" />
+        <action
+            android:id="@+id/action_nav_album_to_nav_album_chat"
+            app:destination="@id/nav_album_chat" />
     </fragment>
 
     <fragment
@@ -77,6 +80,12 @@
         android:name="uniovi.eii.shareit.ui.album.image.ImageFragment"
         android:label="@string/menu_album_image"
         tools:layout="@layout/fragment_album_image" />
+
+    <fragment
+        android:id="@+id/nav_album_chat"
+        android:name="uniovi.eii.shareit.ui.album.chat.ChatFragment"
+        android:label="Album name"
+        tools:layout="@layout/fragment_chat" />
 
     <fragment
         android:id="@+id/nav_slideshow"

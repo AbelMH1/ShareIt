@@ -80,6 +80,7 @@ class AlbumFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.action_chat -> {
                         Toast.makeText(context, "Opening chat...", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.nav_album_chat)
                         true
                     }
                     R.id.action_info -> {

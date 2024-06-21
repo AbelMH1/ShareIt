@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.ui.album.placeholder
 
+import uniovi.eii.shareit.model.ChatMessage
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant
 import java.util.Date
@@ -21,6 +22,21 @@ class PlaceholderContent {
             for (i in 1..count) {
                 items.add(Participant("Participant $i", "participant$i@gmail.com", "Guest"))
             }
+            return items
+        }
+
+        fun getChatMessageList(count: Int): MutableList<ChatMessage> {
+            val items: MutableList<ChatMessage> = ArrayList()
+            val time: Long = 4200000
+            for (i in 1..count/2) {
+                items.add(ChatMessage("This is message nº$i", "${i%2}", "User${(i%2)+1}", Date(time*i)))
+            }
+            for (i in count/2..count) {
+                val id = if (i%4<2) "0" else "1"
+                items.add(ChatMessage("This is message nº$i", id, "User${id}", Date(time*i)))
+            }
+            items.add(ChatMessage("This is message nº${count-1}", "1", "User2", Date(time*(count-1))))
+            items.add(ChatMessage("This is message nº$count", "1","User3", Date(time*count)))
             return items
         }
     }

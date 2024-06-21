@@ -75,4 +75,7 @@
     <string name="label_by">By</string>
     <string name="label_likes">Likes</string>
     <string name="label_upload_date">Uploaded on</string>
+    <!--    Chat    -->
+    <string name="fab_send_desc">Send the current written message</string>
+    <string name="hint_write_message">Write a message</string>
 </resources>
