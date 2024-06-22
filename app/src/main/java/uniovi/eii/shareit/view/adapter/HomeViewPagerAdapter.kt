@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.view.home
+package uniovi.eii.shareit.view.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

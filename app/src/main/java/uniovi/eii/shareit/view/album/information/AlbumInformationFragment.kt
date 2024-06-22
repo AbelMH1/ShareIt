@@ -14,6 +14,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationBinding
+import uniovi.eii.shareit.view.adapter.AlbumInformationViewPagerAdapter
 
 class AlbumInformationFragment : Fragment() {
 
@@ -26,8 +27,7 @@ class AlbumInformationFragment : Fragment() {
     private val viewModel: AlbumInformationViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumInformationBinding.inflate(inflater, container, false)
 
@@ -52,9 +52,11 @@ class AlbumInformationFragment : Fragment() {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = true
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
+
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)

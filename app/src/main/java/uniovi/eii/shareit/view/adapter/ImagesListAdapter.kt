@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.view.album
+package uniovi.eii.shareit.view.adapter
 
 import android.annotation.SuppressLint
 import android.util.Log

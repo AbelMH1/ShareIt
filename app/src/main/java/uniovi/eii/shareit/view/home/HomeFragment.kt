@@ -15,6 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeBinding
+import uniovi.eii.shareit.view.adapter.HomeViewPagerAdapter
 
 class HomeFragment : Fragment() {
 
@@ -26,9 +27,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
@@ -53,11 +52,13 @@ class HomeFragment : Fragment() {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = true
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
         }, viewLifecycleOwner)
     }
+
     private fun configureTabs() {
         binding.pager.adapter = HomeViewPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
@@ -66,6 +67,7 @@ class HomeFragment : Fragment() {
                     tab.text = resources.getString(R.string.tab_images)
                     tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
                 }
+
                 1 -> {
                     tab.text = resources.getString(R.string.tab_albums)
                     tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)

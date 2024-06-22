@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumImageBinding
+import uniovi.eii.shareit.view.adapter.ImageViewPagerAdapter
 import uniovi.eii.shareit.view.album.AlbumViewModel
 
 class ImageFragment : Fragment() {
@@ -21,12 +22,11 @@ class ImageFragment : Fragment() {
     companion object {
         const val SELECTED_IMAGE = "selected_image"
 
-        fun newInstance(selectedImage: Int) =
-            ImageFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(SELECTED_IMAGE, selectedImage)
-                }
+        fun newInstance(selectedImage: Int) = ImageFragment().apply {
+            arguments = Bundle().apply {
+                putInt(SELECTED_IMAGE, selectedImage)
             }
+        }
     }
 
     private var _binding: FragmentAlbumImageBinding? = null
@@ -43,8 +43,7 @@ class ImageFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumImageBinding.inflate(inflater, container, false)
         imagePagerAdapter = ImageViewPagerAdapter(this)
@@ -76,9 +75,11 @@ class ImageFragment : Fragment() {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = true
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
+
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)

@@ -1,9 +1,10 @@
-package uniovi.eii.shareit.view.album.image
+package uniovi.eii.shareit.view.adapter
 
 import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.view.album.image.ImageDetailsFragment
 
 class ImageViewPagerAdapter(
     fragment: Fragment,

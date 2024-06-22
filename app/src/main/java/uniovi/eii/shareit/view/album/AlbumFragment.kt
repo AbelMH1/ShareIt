@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.view.adapter.ImagesListAdapter
 import uniovi.eii.shareit.view.album.image.ImageFragment
 
 /**
@@ -37,12 +38,11 @@ class AlbumFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_album, container, false)
-        imageListAdapter = ImagesListAdapter(listener =
-            object : ImagesListAdapter.OnItemClickListener {
+        imageListAdapter =
+            ImagesListAdapter(listener = object : ImagesListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
                     clickOnItem(item, position)
                 }
@@ -76,6 +76,7 @@ class AlbumFragment : Fragment() {
                 toolbar.isTitleCentered = false
                 menuInflater.inflate(R.menu.album, menu)
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_chat -> {
@@ -83,21 +84,26 @@ class AlbumFragment : Fragment() {
                         findNavController().navigate(R.id.nav_album_chat)
                         true
                     }
+
                     R.id.action_info -> {
                         findNavController().navigate(R.id.nav_album_information)
                         true
                     }
+
                     R.id.action_order -> {
                         Toast.makeText(context, "Order images...", Toast.LENGTH_SHORT).show()
                         true
                     }
+
                     R.id.action_filter -> {
                         Toast.makeText(context, "Filter images...", Toast.LENGTH_SHORT).show()
                         true
                     }
+
                     else -> false
                 }
             }
+
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)
@@ -108,7 +114,8 @@ class AlbumFragment : Fragment() {
     fun clickOnItem(image: Image, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $image")
         Toast.makeText(context, "Item Clicked ${image.author}", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.nav_album_image, Bundle().apply { putInt(ImageFragment.SELECTED_IMAGE, position) })
+        findNavController().navigate(R.id.nav_album_image,
+            Bundle().apply { putInt(ImageFragment.SELECTED_IMAGE, position) })
     }
 
     companion object {
@@ -118,11 +125,10 @@ class AlbumFragment : Fragment() {
 
         // TODO: Customize parameter initialization
         @JvmStatic
-        fun newInstance(columnCount: Int) =
-            AlbumFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
+        fun newInstance(columnCount: Int) = AlbumFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_COLUMN_COUNT, columnCount)
             }
+        }
     }
 }
