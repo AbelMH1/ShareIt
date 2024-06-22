@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.view.album.information
+package uniovi.eii.shareit.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,7 +18,7 @@ class AlbumInformationViewModel : ViewModel() {
         return album.value?.copy() ?: Album()
     }
 
-    fun hasDisabledShared(newAlbum: Album) : Boolean {
+    fun hasDisabledShared(newAlbum: Album): Boolean {
         return (album.value?.shared ?: false) && !newAlbum.shared
     }
 

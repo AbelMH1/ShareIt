@@ -15,7 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumImageBinding
 import uniovi.eii.shareit.view.adapter.ImageViewPagerAdapter
-import uniovi.eii.shareit.view.album.AlbumViewModel
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 class ImageFragment : Fragment() {
 

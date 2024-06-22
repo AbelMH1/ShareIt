@@ -17,6 +17,7 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationSharedBinding
 import uniovi.eii.shareit.view.adapter.ParticipantsListAdapter
 import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
+import uniovi.eii.shareit.viewModel.AlbumCreationViewModel
 
 class AlbumCreationSharedFragment : Fragment() {
 
@@ -25,13 +26,13 @@ class AlbumCreationSharedFragment : Fragment() {
     private val viewModel: AlbumCreationViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumCreationSharedBinding.inflate(inflater, container, false)
 
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
-        binding.recyclerParticipants.adapter = ParticipantsListAdapter(PlaceholderContent.getParticipantsList(20))
+        binding.recyclerParticipants.adapter =
+            ParticipantsListAdapter(PlaceholderContent.getParticipantsList(20))
 
         binding.createBtn.setOnClickListener {
             findNavController().navigateUp()
@@ -60,9 +61,11 @@ class AlbumCreationSharedFragment : Fragment() {
                 toolbar.isTitleCentered = false
                 toolbar.subtitle = resources.getString(R.string.menu_album_creation_shared)
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
+
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)

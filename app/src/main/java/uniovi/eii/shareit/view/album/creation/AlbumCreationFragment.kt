@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationBinding
+import uniovi.eii.shareit.viewModel.AlbumCreationViewModel
 
 class AlbumCreationFragment : Fragment() {
 
@@ -25,9 +26,7 @@ class AlbumCreationFragment : Fragment() {
     private val viewModel: AlbumCreationViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumCreationBinding.inflate(inflater, container, false)
 
@@ -37,15 +36,17 @@ class AlbumCreationFragment : Fragment() {
 
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
-                when(checkedId) {
+                when (checkedId) {
                     R.id.toggleNone -> {
                         binding.dateStartLayout.visibility = View.GONE
                         binding.dateEndLayout.visibility = View.GONE
                     }
+
                     R.id.toggleSingle -> {
                         binding.dateStartLayout.visibility = View.VISIBLE
                         binding.dateEndLayout.visibility = View.GONE
                     }
+
                     R.id.toggleRange -> {
                         binding.dateStartLayout.visibility = View.VISIBLE
                         binding.dateEndLayout.visibility = View.VISIBLE
@@ -64,10 +65,11 @@ class AlbumCreationFragment : Fragment() {
         }
 
         binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
-            when(isChecked) {
+            when (isChecked) {
                 true -> {
                     binding.mapView.visibility = View.VISIBLE
                 }
+
                 false -> {
                     binding.mapView.visibility = View.GONE
                 }
@@ -75,11 +77,12 @@ class AlbumCreationFragment : Fragment() {
         }
 
         binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
-            when(isChecked) {
+            when (isChecked) {
                 true -> {
                     binding.continueBtn.visibility = View.VISIBLE
                     binding.createBtn.visibility = View.GONE
                 }
+
                 false -> {
                     binding.continueBtn.visibility = View.GONE
                     binding.createBtn.visibility = View.VISIBLE
@@ -117,16 +120,16 @@ class AlbumCreationFragment : Fragment() {
                 toolbar.isTitleCentered = false
                 toolbar.subtitle = resources.getString(R.string.menu_album_creation_general)
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
+
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)
             }
         }, viewLifecycleOwner)
     }
-
-
 
 }

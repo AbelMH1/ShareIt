@@ -21,6 +21,7 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.view.adapter.ImagesListAdapter
 import uniovi.eii.shareit.view.album.image.ImageFragment
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 /**
  * A fragment representing a list of Items.
@@ -114,7 +115,8 @@ class AlbumFragment : Fragment() {
     fun clickOnItem(image: Image, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $image")
         Toast.makeText(context, "Item Clicked ${image.author}", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.nav_album_image,
+        findNavController().navigate(
+            R.id.nav_album_image,
             Bundle().apply { putInt(ImageFragment.SELECTED_IMAGE, position) })
     }
 

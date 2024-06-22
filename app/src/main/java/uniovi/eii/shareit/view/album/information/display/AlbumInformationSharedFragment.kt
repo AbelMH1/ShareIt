@@ -14,7 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationSharedBinding
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.view.album.information.AlbumInformationViewModel
+import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 
 class AlbumInformationSharedFragment : Fragment() {
 

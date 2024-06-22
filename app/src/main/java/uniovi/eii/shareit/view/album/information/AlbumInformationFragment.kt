@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationBinding
 import uniovi.eii.shareit.view.adapter.AlbumInformationViewPagerAdapter
+import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 
 class AlbumInformationFragment : Fragment() {
 

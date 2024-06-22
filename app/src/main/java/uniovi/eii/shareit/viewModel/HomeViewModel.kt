@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.view.home
+package uniovi.eii.shareit.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

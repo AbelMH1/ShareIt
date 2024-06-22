@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.databinding.FragmentHomeImagesBinding
+import uniovi.eii.shareit.viewModel.HomeViewModel
 
 class HomeImagesFragment : Fragment() {
 
@@ -17,14 +18,11 @@ class HomeImagesFragment : Fragment() {
 
     private var _binding: FragmentHomeImagesBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var viewModel: HomeImagesViewModel
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(HomeImagesViewModel::class.java)
         _binding = FragmentHomeImagesBinding.inflate(inflater, container, false)
 
         binding.fab.setOnClickListener { view ->

@@ -15,7 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentChatBinding
 import uniovi.eii.shareit.view.adapter.MessageListAdapter
-import uniovi.eii.shareit.view.album.AlbumViewModel
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 class ChatFragment : Fragment() {
 
@@ -29,8 +29,7 @@ class ChatFragment : Fragment() {
     private val adapter = MessageListAdapter()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
@@ -41,7 +40,7 @@ class ChatFragment : Fragment() {
 
         viewModel.messageList.observe(viewLifecycleOwner) {
             adapter.update(it)
-            binding.messagesRecycler.layoutManager?.scrollToPosition(it.size-1)
+            binding.messagesRecycler.layoutManager?.scrollToPosition(it.size - 1)
         }
 
         binding.sendFAB.setOnClickListener {

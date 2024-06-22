@@ -15,7 +15,7 @@ import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.view.adapter.AlbumListAdapter
 import uniovi.eii.shareit.view.album.AlbumFragment
-import uniovi.eii.shareit.view.home.HomeViewModel
+import uniovi.eii.shareit.viewModel.HomeViewModel
 
 class HomeAlbumsFragment : Fragment() {
 

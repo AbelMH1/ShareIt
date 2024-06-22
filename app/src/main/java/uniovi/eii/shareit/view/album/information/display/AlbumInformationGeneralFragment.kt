@@ -13,7 +13,7 @@ import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationGeneralBinding
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.view.album.information.AlbumInformationViewModel
+import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -147,10 +147,12 @@ class AlbumInformationGeneralFragment : Fragment() {
                 albumData.startDate = null
                 albumData.endDate = null
             }
+
             R.id.toggleSingle -> {
                 albumData.startDate = validateDate(binding.dateStartLayout) ?: return null
                 albumData.endDate = null
             }
+
             R.id.toggleRange -> {
                 val dateStart = validateDate(binding.dateStartLayout) ?: return null
                 val dateEnd = validateDate(binding.dateEndLayout) ?: return null

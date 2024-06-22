@@ -1,4 +1,4 @@
-package uniovi.eii.shareit
+package uniovi.eii.shareit.view
 
 import android.os.Bundle
 import android.view.Menu
@@ -12,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -50,15 +51,17 @@ class MainActivity : AppCompatActivity() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.main, menu)
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_account -> {
                         Toast.makeText(this@MainActivity, "Account...", Toast.LENGTH_SHORT).show()
                         true
                     }
+
                     else -> false
                 }
             }
-        },this)
+        }, this)
     }
 }
