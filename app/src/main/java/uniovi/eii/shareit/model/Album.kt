@@ -5,6 +5,7 @@ import java.util.Date
 
 data class Album(
     var name: String = "",
+    var creatorName: String = "",
     var startDate: Date? = null,
     var endDate: Date? = null,
     var location: LatLng? = null,
@@ -24,6 +25,7 @@ data class Album(
         other as Album
 
         if (name != other.name) return false
+        if (creatorName != other.creatorName) return false
         if (startDate != other.startDate) return false
         if (endDate != other.endDate) return false
         if (location != other.location) return false
@@ -40,6 +42,7 @@ data class Album(
 
     override fun hashCode(): Int {
         var result = name.hashCode()
+        result = 31 * result + creatorName.hashCode()
         result = 31 * result + (startDate?.hashCode() ?: 0)
         result = 31 * result + (endDate?.hashCode() ?: 0)
         result = 31 * result + (location?.hashCode() ?: 0)

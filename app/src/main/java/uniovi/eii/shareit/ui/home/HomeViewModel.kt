@@ -3,11 +3,18 @@ package uniovi.eii.shareit.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.ui.album.placeholder.PlaceholderContent
 
 class HomeViewModel : ViewModel() {
+    private val _albumList = MutableLiveData<List<Album>>(emptyList())
+    val albumList: LiveData<List<Album>> = _albumList
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    init {
+        updateAlbumList(PlaceholderContent.getAlbumList(25))
     }
-    val text: LiveData<String> = _text
+
+    fun updateAlbumList(newAlbums: List<Album>) {
+        _albumList.value = newAlbums
+    }
 }

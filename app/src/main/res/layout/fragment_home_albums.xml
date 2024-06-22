@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.albums.HomeAlbumsFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/albumRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Fragmento para los álbumes" />
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -19,26 +19,5 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:contentDescription="@string/fab_main"
         android:src="@android:drawable/ic_input_add" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|start"
-        android:text="Album 1" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Album 2" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:text="Album 4" />
 
 </FrameLayout>

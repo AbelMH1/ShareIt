@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_nav_home_albums_to_nav_album"
             app:destination="@id/nav_album" />
+        <action
+            android:id="@+id/action_nav_home_albums_to_nav_album_information"
+            app:destination="@id/nav_album_information" />
     </fragment>
 
     <fragment
@@ -87,9 +90,4 @@
         android:label="Album name"
         tools:layout="@layout/fragment_chat" />
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="uniovi.eii.shareit.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 </navigation>

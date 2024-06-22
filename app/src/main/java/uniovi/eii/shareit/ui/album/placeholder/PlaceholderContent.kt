@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.ui.album.placeholder
 
+import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.ChatMessage
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant
@@ -10,6 +11,15 @@ import java.util.Date
 class PlaceholderContent {
 
     companion object {
+
+        fun getAlbumList(count: Int): MutableList<Album> {
+            val items: MutableList<Album> = ArrayList()
+            for (i in 1..count) {
+                items.add(Album("Coolname$i", "Author$i"))
+            }
+            return items
+        }
+
         fun getImagesList(count: Int): MutableList<Image> {
             val items: MutableList<Image> = ArrayList()
             for (i in 1..count) {
