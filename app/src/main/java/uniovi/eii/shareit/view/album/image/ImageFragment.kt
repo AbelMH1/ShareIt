@@ -32,7 +32,7 @@ class ImageFragment : Fragment() {
     private var _binding: FragmentAlbumImageBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumViewModel by activityViewModels()
-    private var selectedImage = 1
+    private var selectedImage = 0
     private lateinit var imagePagerAdapter: ImageViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

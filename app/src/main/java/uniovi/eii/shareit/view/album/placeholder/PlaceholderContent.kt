@@ -4,6 +4,7 @@ import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.ChatMessage
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant
+import uniovi.eii.shareit.model.Section
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.Date
@@ -11,6 +12,14 @@ import java.util.Date
 class PlaceholderContent {
 
     companion object {
+
+        fun getSectionList(count: Int): MutableList<Section> {
+            val items: MutableList<Section> = ArrayList()
+            for (i in 1..count) {
+                items.add(Section("Section $i", getImagesList(i)))
+            }
+            return items
+        }
 
         fun getAlbumList(count: Int): MutableList<Album> {
             val items: MutableList<Album> = ArrayList()

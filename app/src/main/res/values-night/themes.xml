@@ -72,4 +72,9 @@
         <item name="fontFamily">@font/rubik</item>
         <item name="android:fontFamily">@font/rubik</item>
     </style>
+
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/image_corner_radius</item>
+    </style>
 </resources>

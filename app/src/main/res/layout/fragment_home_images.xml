@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".view.home.images.HomeImagesFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/allImagesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Fragmento para las imágenes" />
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
