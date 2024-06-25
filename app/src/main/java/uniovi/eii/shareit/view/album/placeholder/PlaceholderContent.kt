@@ -7,7 +7,6 @@ import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Section
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.Date
 
 class PlaceholderContent {
 
@@ -33,7 +32,7 @@ class PlaceholderContent {
             val items: MutableList<Image> = ArrayList()
             for (i in 1..count) {
                 val time: Long = 86400000
-                items.add(Image("Author $i", creationDate = Date(time*i)))
+                items.add(Image("Author $i", creationDate = LocalDateTime.ofEpochSecond(time*i, 0, ZoneOffset.UTC)))
             }
             return items
         }

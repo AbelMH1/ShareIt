@@ -2,20 +2,22 @@ package uniovi.eii.shareit.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.util.Date
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoField
 
 data class Image(
     var author : String = "",
     var albumName: String = "",
     var imagePath : String = "",
-    var creationDate: Date = Date(),
+    var creationDate: LocalDateTime = LocalDateTime.now(),
     var likes : List<String> = emptyList()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        Date(parcel.readLong()),
+        LocalDateTime.ofEpochSecond(parcel.readLong(), 0, ZoneOffset.UTC),
         parcel.createStringArrayList().orEmpty()
     ) {
     }
@@ -24,7 +26,7 @@ data class Image(
         parcel.writeString(author)
         parcel.writeString(albumName)
         parcel.writeString(imagePath)
-        parcel.writeLong(creationDate.time)
+        parcel.writeLong(creationDate.getLong(ChronoField.INSTANT_SECONDS))
         parcel.writeStringList(likes)
     }
 
