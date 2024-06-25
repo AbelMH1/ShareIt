@@ -10,20 +10,24 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumImageBinding
 import uniovi.eii.shareit.view.adapter.ImageViewPagerAdapter
-import uniovi.eii.shareit.viewModel.AlbumViewModel
+import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
+import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
 
 class ImageFragment : Fragment() {
 
     companion object {
+        const val USE_VIEWMODEL = "use_viewModel"
         const val SELECTED_IMAGE = "selected_image"
 
-        fun newInstance(selectedImage: Int) = ImageFragment().apply {
+        @JvmStatic
+        fun newInstance(viewModelToUse: String, selectedImage: Int) = ImageFragment().apply {
             arguments = Bundle().apply {
+                putString(USE_VIEWMODEL, viewModelToUse)
                 putInt(SELECTED_IMAGE, selectedImage)
             }
         }
@@ -31,13 +35,15 @@ class ImageFragment : Fragment() {
 
     private var _binding: FragmentAlbumImageBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlbumViewModel by activityViewModels()
-    private var selectedImage = 0
+    private lateinit var viewModel: ImagesDisplayViewModel
     private lateinit var imagePagerAdapter: ImageViewPagerAdapter
+    private var usingViewModel = ""
+    private var selectedImage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            usingViewModel = it.getString(USE_VIEWMODEL)!!
             selectedImage = it.getInt(SELECTED_IMAGE)
         }
     }
@@ -46,6 +52,11 @@ class ImageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumImageBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(
+            requireActivity(),
+            ImagesDisplayViewModelFactory()
+        )[usingViewModel, ImagesDisplayViewModel::class.java]
+
         imagePagerAdapter = ImageViewPagerAdapter(this)
 
         viewModel.imageList.observe(viewLifecycleOwner) {

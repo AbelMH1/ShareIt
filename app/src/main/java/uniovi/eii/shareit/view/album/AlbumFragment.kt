@@ -11,26 +11,41 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
+import uniovi.eii.shareit.databinding.FragmentAlbumBinding
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.view.adapter.ImagesListAdapter
 import uniovi.eii.shareit.view.album.image.ImageFragment
-import uniovi.eii.shareit.viewModel.AlbumViewModel
+import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
+import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
+import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Items(Images).
  */
 class AlbumFragment : Fragment() {
+    companion object {
+        const val ARG_COLUMN_COUNT = "column-count"
 
-    private var columnCount = 4
-    private val viewModel: AlbumViewModel by activityViewModels()
+        @JvmStatic
+        fun newInstance(columnCount: Int) = AlbumFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_COLUMN_COUNT, columnCount)
+            }
+        }
+    }
+
+    private var _binding: FragmentAlbumBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: ImagesDisplayViewModel
     private lateinit var imageListAdapter: ImagesListAdapter
+    private var columnCount = 4
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,8 +55,13 @@ class AlbumFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_album, container, false)
+    ): View {
+        _binding = FragmentAlbumBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(
+            requireActivity(),
+            ImagesDisplayViewModelFactory()
+        )[ALBUM_VIEW, ImagesDisplayViewModel::class.java]
+
         imageListAdapter =
             ImagesListAdapter(listener = object : ImagesListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
@@ -53,16 +73,15 @@ class AlbumFragment : Fragment() {
         }
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = imageListAdapter
+        binding.root.apply {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = imageListAdapter
         }
-        return view
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,22 +134,9 @@ class AlbumFragment : Fragment() {
     fun clickOnItem(image: Image, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $image")
         Toast.makeText(context, "Item Clicked ${image.author}", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(
-            R.id.nav_album_image,
-            Bundle().apply { putInt(ImageFragment.SELECTED_IMAGE, position) })
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) = AlbumFragment().apply {
-            arguments = Bundle().apply {
-                putInt(ARG_COLUMN_COUNT, columnCount)
-            }
-        }
+        findNavController().navigate(R.id.nav_album_image, Bundle().apply {
+            putString(ImageFragment.USE_VIEWMODEL, ALBUM_VIEW)
+            putInt(ImageFragment.SELECTED_IMAGE, position)
+        })
     }
 }

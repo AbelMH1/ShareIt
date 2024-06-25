@@ -22,7 +22,11 @@
         android:id="@+id/nav_home_images"
         android:name="uniovi.eii.shareit.view.home.images.HomeImagesFragment"
         android:label="@string/tab_images"
-        tools:layout="@layout/fragment_home_images" />
+        tools:layout="@layout/fragment_home_images" >
+        <action
+            android:id="@+id/action_nav_home_images_to_nav_album_image"
+            app:destination="@id/nav_album_image" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_home_albums"
