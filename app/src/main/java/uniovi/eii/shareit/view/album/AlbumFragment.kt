@@ -19,7 +19,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumBinding
 import uniovi.eii.shareit.model.Image
-import uniovi.eii.shareit.view.adapter.SectionImageListAdapter
+import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.album.image.ImageFragment
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
@@ -43,7 +43,7 @@ class AlbumFragment : Fragment() {
     private var _binding: FragmentAlbumBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ImagesDisplayViewModel
-    private lateinit var imageListAdapter: SectionImageListAdapter
+    private lateinit var imageListAdapter: ImageListAdapter
     private var columnCount = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +63,7 @@ class AlbumFragment : Fragment() {
         )[ALBUM_VIEW, ImagesDisplayViewModel::class.java]
 
         imageListAdapter =
-            SectionImageListAdapter(listener = object : SectionImageListAdapter.OnItemClickListener {
+            ImageListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
                     clickOnItem(item, position)
                 }

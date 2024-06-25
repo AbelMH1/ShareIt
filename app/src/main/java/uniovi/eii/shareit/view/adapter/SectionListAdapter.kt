@@ -11,7 +11,7 @@ import uniovi.eii.shareit.model.Section
 
 class SectionListAdapter(
     private var sectionList: List<Section> = emptyList(),
-    private val listener: SectionImageListAdapter.OnItemClickListener
+    private val listener: ImageListAdapter.OnItemClickListener
 ) : RecyclerView.Adapter<SectionListAdapter.SectionViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
@@ -40,9 +40,9 @@ class SectionListAdapter(
     inner class SectionViewHolder(private val binding: LineRecyclerViewImageSectionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun assignValuesToComponents(section: Section, listener: SectionImageListAdapter.OnItemClickListener, position: Int, accPos: Int) {
+        fun assignValuesToComponents(section: Section, listener: ImageListAdapter.OnItemClickListener, position: Int, accPos: Int) {
             binding.sectionTitle.text = section.sectionTitle
-            val adapter = SectionImageListAdapter(section.imageList, listener, accPos)
+            val adapter = ImageListAdapter(section.imageList, listener, accPos)
             binding.imagesRecyclerView.layoutManager = GridLayoutManager(itemView.context, 5)
             binding.imagesRecyclerView.adapter = adapter
         }

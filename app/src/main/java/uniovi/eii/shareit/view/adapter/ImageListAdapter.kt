@@ -9,11 +9,11 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewImageBinding
 import uniovi.eii.shareit.model.Image
 
-class SectionImageListAdapter(
+class ImageListAdapter(
     private var imagesList: List<Image> = emptyList(),
     private val listener: OnItemClickListener,
     private val accPos: Int = 0
-) : RecyclerView.Adapter<SectionImageListAdapter.SectionImageViewHolder>() {
+) : RecyclerView.Adapter<ImageListAdapter.ImageViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun update(imagesList: List<Image>) {
@@ -21,15 +21,15 @@ class SectionImageListAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionImageViewHolder {
-        return SectionImageViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        return ImageViewHolder(
             LineRecyclerViewImageBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
     }
 
-    override fun onBindViewHolder(holder: SectionImageViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val image = imagesList[position]
         Log.i("Lista", "Visualiza elemento: $image")
         holder.assignValuesToComponents(image, listener, position, accPos)
@@ -41,7 +41,7 @@ class SectionImageListAdapter(
         fun onItemClick(item: Image, position: Int)
     }
 
-    inner class SectionImageViewHolder(private val binding: LineRecyclerViewImageBinding) :
+    inner class ImageViewHolder(private val binding: LineRecyclerViewImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun assignValuesToComponents(image: Image, listener: OnItemClickListener, position: Int, accumulatedPosition: Int) {

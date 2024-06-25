@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeImagesBinding
 import uniovi.eii.shareit.model.Image
-import uniovi.eii.shareit.view.adapter.SectionImageListAdapter
+import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.adapter.SectionListAdapter
 import uniovi.eii.shareit.view.album.image.ImageFragment
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
@@ -56,7 +56,7 @@ class HomeImagesFragment : Fragment() {
         )[GENERAL_VIEW, ImagesDisplayViewModel::class.java]
 
         sectionListAdapter =
-            SectionListAdapter(listener = object : SectionImageListAdapter.OnItemClickListener {
+            SectionListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
                     clickOnImageItem(item, position)
                 }
