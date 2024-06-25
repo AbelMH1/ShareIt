@@ -5,13 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewImageBinding
 import uniovi.eii.shareit.model.Image
 
 class SectionImageListAdapter(
     private var imagesList: List<Image> = emptyList(),
     private val listener: OnItemClickListener,
-    private val accPos: Int
+    private val accPos: Int = 0
 ) : RecyclerView.Adapter<SectionImageListAdapter.SectionImageViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
@@ -44,7 +45,7 @@ class SectionImageListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun assignValuesToComponents(image: Image, listener: OnItemClickListener, position: Int, accumulatedPosition: Int) {
-//            binding.image.setImageResource(R.drawable.ic_menu_gallery) // TODO: Añadir imagen
+            binding.image.setImageResource(R.drawable.ic_menu_gallery) // TODO: Añadir imagen
             itemView.setOnClickListener {
                 listener.onItemClick(image, accumulatedPosition+position)
             }

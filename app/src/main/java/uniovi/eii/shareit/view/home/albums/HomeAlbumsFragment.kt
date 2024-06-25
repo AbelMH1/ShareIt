@@ -68,7 +68,7 @@ class HomeAlbumsFragment : Fragment() {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
         Toast.makeText(context, "Item Clicked ${album.name}", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.nav_album, Bundle().apply {
-            putInt(AlbumFragment.ARG_COLUMN_COUNT, 2)
+            putInt(AlbumFragment.ARG_COLUMN_COUNT, 4)
             // TODO: Pasar id del album a abrir
         })
     }
