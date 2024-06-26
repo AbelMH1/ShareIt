@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/action_order"
+        app:showAsAction="never">
+        <menu
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <group
+                android:id="@+id/action_order_select"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_order_custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:title="@string/action_order_custom" />
+                <item
+                    android:id="@+id/action_order_creation_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:title="@string/action_order_creation_date" />
+                <item
+                    android:id="@+id/action_order_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:title="@string/action_order_name" />
+                <item
+                    android:id="@+id/action_order_last_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:title="@string/action_order_last_update" />
+            </group>
+            <group
+                android:id="@+id/action_order_direction"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_order_ascending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:title="@string/action_order_ascending" />
+                <item
+                    android:id="@+id/action_order_descending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:title="@string/action_order_descending" />
+            </group>
+        </menu>
+    </item>
+</menu>

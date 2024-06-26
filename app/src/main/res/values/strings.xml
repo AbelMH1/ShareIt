@@ -33,7 +33,18 @@
     <string name="action_chat">Chat</string>
     <string name="action_info">Information</string>
     <string name="action_order">Order By…</string>
+    <string name="action_order_album">Album</string>
+    <string name="action_order_date">Date</string>
+    <string name="action_order_likes">Likes</string>
+    <string name="action_order_custom">Custom</string>
+    <string name="action_order_creation_date">Creation date</string>
+    <string name="action_order_name">Name</string>
+    <string name="action_order_last_update">Last update</string>
+    <string name="action_order_ascending">Ascending</string>
+    <string name="action_order_descending">Descending</string>
     <string name="action_filter">Filter By…</string>
+    <string name="action_filter_all">All images</string>
+    <string name="action_filter_mine">My images</string>
     <!--    Album Creation    -->
     <string name="album_name">Album\'s name</string>
     <string name="label_date_selection">Select Date for the Album</string>

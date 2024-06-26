@@ -3,11 +3,16 @@ package uniovi.eii.shareit.view.home.albums
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import uniovi.eii.shareit.R
@@ -59,9 +64,40 @@ class HomeAlbumsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        configureToolBar()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun configureToolBar() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.album_order, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_order_custom, R.id.action_order_creation_date, R.id.action_order_name, R.id.action_order_last_update -> {
+                        menuItem.isChecked = !menuItem.isChecked
+                        Toast.makeText(context, "Ordering albums by ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+
+                    R.id.action_order_ascending, R.id.action_order_descending -> {
+                        menuItem.isChecked = !menuItem.isChecked
+                        Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     fun clickOnCardViewItem(album: Album, position: Int) {

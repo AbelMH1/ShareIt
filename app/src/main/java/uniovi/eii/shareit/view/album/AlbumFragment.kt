@@ -89,18 +89,23 @@ class AlbumFragment : Fragment() {
         configureToolBar()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
                 toolbar.isTitleCentered = false
                 menuInflater.inflate(R.menu.album, menu)
+                menuInflater.inflate(R.menu.image_order_filter, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_chat -> {
-                        Toast.makeText(context, "Opening chat...", Toast.LENGTH_SHORT).show()
                         findNavController().navigate(R.id.nav_album_chat)
                         true
                     }
@@ -110,13 +115,21 @@ class AlbumFragment : Fragment() {
                         true
                     }
 
-                    R.id.action_order -> {
-                        Toast.makeText(context, "Order images...", Toast.LENGTH_SHORT).show()
+                    R.id.action_order_album, R.id.action_order_date, R.id.action_order_likes -> {
+                        menuItem.isChecked = !menuItem.isChecked
+                        Toast.makeText(context, "Ordering images by ${menuItem.title}", Toast.LENGTH_SHORT).show()
                         true
                     }
 
-                    R.id.action_filter -> {
-                        Toast.makeText(context, "Filter images...", Toast.LENGTH_SHORT).show()
+                    R.id.action_order_ascending, R.id.action_order_descending -> {
+                        menuItem.isChecked = !menuItem.isChecked
+                        Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+
+                    R.id.action_filter_all, R.id.action_filter_mine -> {
+                        menuItem.isChecked = !menuItem.isChecked
+                        Toast.makeText(context, "Filtering images: ${menuItem.title}", Toast.LENGTH_SHORT).show()
                         true
                     }
 
@@ -127,6 +140,7 @@ class AlbumFragment : Fragment() {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)
+                menu.findItem(R.id.action_order)?.subMenu?.removeItem(R.id.action_order_album)
             }
         }, viewLifecycleOwner)
     }

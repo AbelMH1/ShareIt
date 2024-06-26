@@ -1,11 +1,13 @@
 package uniovi.eii.shareit.view
 
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuCompat
 import androidx.core.view.MenuProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -50,6 +52,9 @@ class MainActivity : AppCompatActivity() {
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.main, menu)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    binding.appBarMain.toolbar.menu.setGroupDividerEnabled(true)
+                } else MenuCompat.setGroupDividerEnabled(menu, true)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
