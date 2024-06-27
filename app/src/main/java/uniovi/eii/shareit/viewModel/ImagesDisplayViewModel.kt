@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.VIEW_MODEL_KEY
 import androidx.lifecycle.viewmodel.CreationExtras
+import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
@@ -31,18 +32,28 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
         }
     }
 
-    private val _imageList = MutableLiveData<List<Image>>(emptyList())
-    val imageList: LiveData<List<Image>> = _imageList
+    private val _allImageList = MutableLiveData<List<Image>>(emptyList())
+    val allImageList: LiveData<List<Image>> = _allImageList
 
-    private val _sectionList = MutableLiveData<List<Section>>(emptyList())
-    val sectionList: LiveData<List<Section>> = _sectionList
+    private val _displayImageList = MutableLiveData<List<Image>>(emptyList())
+    val displayImageList: LiveData<List<Image>> = _displayImageList
+    private val _displaySectionList = MutableLiveData<List<Section>>(emptyList())
+    val displaySectionList: LiveData<List<Section>> = _displaySectionList
+
+    private val _currentFilter = MutableLiveData(R.id.action_filter_all)
+    val currentFilter: LiveData<Int> = _currentFilter
+    private val _currentOrder = MutableLiveData(R.id.action_order_date)
+    val currentOrder: LiveData<Int> = _currentOrder
+    private val _currentOrderDirection = MutableLiveData(R.id.action_order_ascending)
+    val currentOrderDirection: LiveData<Int> = _currentOrderDirection
+
 
     init {
         Log.d("ImageViewModel", "View: $instanceKey")
         if (instanceKey == ALBUM_VIEW) {
-            updateImageList(PlaceholderContent.getImagesList(15))
+            updateAllImageList(PlaceholderContent.getImagesList(15))
         } else {
-            updateImageList(PlaceholderContent.getImagesList(20))
+            updateAllImageList(PlaceholderContent.getImagesList(25))
         }
     }
 
@@ -50,20 +61,63 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
         return instanceKey
     }
 
-    fun updateImageList(newImages: List<Image>) {
-        val newImagesValues = newImages.sortedByDescending { image -> image.creationDate }
-        _imageList.value = newImagesValues
-        val newSectionList: List<Section> =
-            newImagesValues.groupBy { image: Image -> image.creationDate }.map { entry ->
-                Section(
-                    entry.key.format(DateTimeFormatter.ofPattern("d MMM uuuu")), entry.value
-                )
-            }
-        updateSectionList(newSectionList)
+    private fun updateAllImageList(newImages: List<Image>) {
+        _allImageList.value = newImages
+        updateDisplayImageList(orderImageList(currentOrder.value!!, currentOrderDirection.value!!, filterImageList(currentFilter.value!!, newImages)))
     }
 
-    fun updateSectionList(newSections: List<Section>) {
-        _sectionList.value = newSections
+    private fun updateDisplayImageList(newImages: List<Image>) {
+        Log.d("ImagesDisplayViewModel", "New value for displayImageList (size: ${newImages.size}):  $newImages")
+        _displayImageList.value = newImages
+        updateSectionList(newImages)
     }
+
+    private fun updateSectionList(newImages: List<Image>) {
+        val newSectionList: List<Section> =
+            when (currentOrder.value) {
+                R.id.action_order_date ->
+                    newImages.groupBy { image: Image -> image.creationDate.format(DateTimeFormatter.ofPattern("d MMM uuuu")) }
+                R.id.action_order_album ->
+                    newImages.groupBy { image: Image -> image.albumName }
+                else -> return
+            }.map { entry -> Section(entry.key, entry.value) }
+        _displaySectionList.value = newSectionList
+    }
+
+    fun applyFilter(filter: Int) {
+        if (filter == currentFilter.value) return
+        _currentFilter.value = filter
+        updateDisplayImageList(orderImageList(currentOrder.value!!, currentOrderDirection.value!!, filterImageList(filter, allImageList.value!!)))
+    }
+
+    private fun filterImageList(filter: Int, newImages: List<Image>): List<Image> {
+        return when (filter) {
+            R.id.action_filter_all -> newImages
+            R.id.action_filter_mine -> newImages.filter { img -> img.author == "Author 0" }
+            else -> emptyList()
+        }
+    }
+
+    fun applyOrder(order: Int = currentOrder.value!!, direction: Int = currentOrderDirection.value!!) {
+        if (order == currentOrder.value && direction == currentOrderDirection.value) return
+        _currentOrder.value = order
+        _currentOrderDirection.value = direction
+        updateDisplayImageList(orderImageList(order, direction, displayImageList.value!!))
+    }
+
+    private fun orderImageList(order: Int, direction: Int, newImages: List<Image>): List<Image> {
+        val orderedImages = when (order) {
+            R.id.action_order_date -> newImages.sortedBy { img -> img.creationDate }
+            R.id.action_order_album -> newImages.sortedBy { img -> img.albumName }
+            R.id.action_order_likes -> newImages.sortedBy { img -> img.likes.size }
+            else -> emptyList()
+        }
+        return if (direction == R.id.action_order_ascending) orderedImages else orderedImages.asReversed()
+    }
+
+    fun shouldDisplaySections(): Boolean {
+        return currentOrder.value == R.id.action_order_date || currentOrder.value == R.id.action_order_album
+    }
+
 }
 

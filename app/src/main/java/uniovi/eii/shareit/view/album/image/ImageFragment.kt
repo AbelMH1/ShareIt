@@ -59,7 +59,7 @@ class ImageFragment : Fragment() {
 
         imagePagerAdapter = ImageViewPagerAdapter(this)
 
-        viewModel.imageList.observe(viewLifecycleOwner) {
+        viewModel.displayImageList.observe(viewLifecycleOwner) {
             imagePagerAdapter.update(it.toMutableList())
             binding.pager.doOnPreDraw {
                 binding.pager.currentItem = selectedImage

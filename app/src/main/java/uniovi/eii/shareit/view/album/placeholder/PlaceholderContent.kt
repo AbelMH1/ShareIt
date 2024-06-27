@@ -4,21 +4,12 @@ import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.ChatMessage
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant
-import uniovi.eii.shareit.model.Section
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class PlaceholderContent {
 
     companion object {
-
-        fun getSectionList(count: Int): MutableList<Section> {
-            val items: MutableList<Section> = ArrayList()
-            for (i in 1..count) {
-                items.add(Section("Section $i", getImagesList(i)))
-            }
-            return items
-        }
 
         fun getAlbumList(count: Int): MutableList<Album> {
             val items: MutableList<Album> = ArrayList()
@@ -31,8 +22,8 @@ class PlaceholderContent {
         fun getImagesList(count: Int): MutableList<Image> {
             val items: MutableList<Image> = ArrayList()
             for (i in 1..count) {
-                val time: Long = 86400000
-                items.add(Image("Author $i", creationDate = LocalDateTime.ofEpochSecond(time*i, 0, ZoneOffset.UTC)))
+                val time: Long = 15768000
+                items.add(Image("Author ${i%7}", "${i%3}", creationDate = LocalDateTime.ofEpochSecond(time*i, 0, ZoneOffset.UTC)))
             }
             return items
         }

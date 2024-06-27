@@ -19,7 +19,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumBinding
 import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.adapter.ImageListAdapter
+import uniovi.eii.shareit.view.adapter.SectionListAdapter
 import uniovi.eii.shareit.view.album.image.ImageFragment
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
@@ -43,6 +45,7 @@ class AlbumFragment : Fragment() {
     private var _binding: FragmentAlbumBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ImagesDisplayViewModel
+    private lateinit var sectionListAdapter: SectionListAdapter
     private lateinit var imageListAdapter: ImageListAdapter
     private var columnCount = 4
 
@@ -62,14 +65,26 @@ class AlbumFragment : Fragment() {
             ImagesDisplayViewModelFactory()
         )[ALBUM_VIEW, ImagesDisplayViewModel::class.java]
 
+        sectionListAdapter =
+            SectionListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
+                override fun onItemClick(item: Image, position: Int) {
+                    clickOnItem(item, position)
+                }
+            })
         imageListAdapter =
             ImageListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
                     clickOnItem(item, position)
                 }
             })
-        viewModel.imageList.observe(viewLifecycleOwner) {
-            imageListAdapter.update(it)
+
+        viewModel.displayImageList.observe(viewLifecycleOwner) {
+            if(!viewModel.shouldDisplaySections())
+                setUpImageRecyclerView(it)
+        }
+        viewModel.displaySectionList.observe(viewLifecycleOwner) {
+            if(viewModel.shouldDisplaySections())
+                setUpSectionRecyclerView(it)
         }
 
         // Set the adapter
@@ -115,21 +130,24 @@ class AlbumFragment : Fragment() {
                         true
                     }
 
-                    R.id.action_order_album, R.id.action_order_date, R.id.action_order_likes -> {
+                    R.id.action_order_date, R.id.action_order_likes -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Ordering images by ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyOrder(order = menuItem.itemId)
                         true
                     }
 
                     R.id.action_order_ascending, R.id.action_order_descending -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyOrder(direction = menuItem.itemId)
                         true
                     }
 
                     R.id.action_filter_all, R.id.action_filter_mine -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Filtering images: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyFilter(menuItem.itemId)
                         true
                     }
 
@@ -141,6 +159,9 @@ class AlbumFragment : Fragment() {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)
                 menu.findItem(R.id.action_order)?.subMenu?.removeItem(R.id.action_order_album)
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrder.value!!)?.isChecked = true
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrderDirection.value!!)?.isChecked = true
+                menu.findItem(R.id.action_filter)?.subMenu?.findItem(viewModel.currentFilter.value!!)?.isChecked = true
             }
         }, viewLifecycleOwner)
     }
@@ -152,5 +173,24 @@ class AlbumFragment : Fragment() {
             putString(ImageFragment.USE_VIEWMODEL, ALBUM_VIEW)
             putInt(ImageFragment.SELECTED_IMAGE, position)
         })
+    }
+
+    private fun setUpSectionRecyclerView(sections: List<Section>) {
+        binding.root.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = sectionListAdapter
+        }
+        sectionListAdapter.update(sections)
+    }
+
+    private fun setUpImageRecyclerView(images: List<Image>) {
+        binding.root.apply {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
+            }
+            adapter = imageListAdapter
+        }
+        imageListAdapter.update(images)
     }
 }

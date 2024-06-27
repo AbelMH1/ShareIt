@@ -13,11 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeImagesBinding
 import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.adapter.SectionListAdapter
 import uniovi.eii.shareit.view.album.image.ImageFragment
@@ -42,6 +44,7 @@ class HomeImagesFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: ImagesDisplayViewModel
     private lateinit var sectionListAdapter: SectionListAdapter
+    private lateinit var imageListAdapter: ImageListAdapter
     private var columnCount = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +69,13 @@ class HomeImagesFragment : Fragment() {
                     clickOnImageItem(item, position)
                 }
             })
+        imageListAdapter =
+            ImageListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
+                override fun onItemClick(item: Image, position: Int) {
+                    clickOnImageItem(item, position)
+                }
+            })
+
 
         // Set the adapter
         binding.allImagesRecyclerView.apply {
@@ -78,8 +88,13 @@ class HomeImagesFragment : Fragment() {
                 .setAction("Action", null).show()
         }
 
-        viewModel.sectionList.observe(viewLifecycleOwner) {
-            sectionListAdapter.update(it)
+        viewModel.displayImageList.observe(viewLifecycleOwner) {
+            if(!viewModel.shouldDisplaySections())
+                setUpImageRecyclerView(it)
+        }
+        viewModel.displaySectionList.observe(viewLifecycleOwner) {
+            if(viewModel.shouldDisplaySections())
+                setUpSectionRecyclerView(it)
         }
 
         return binding.root
@@ -106,22 +121,32 @@ class HomeImagesFragment : Fragment() {
                     R.id.action_order_album, R.id.action_order_date, R.id.action_order_likes -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Ordering images by ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyOrder(order = menuItem.itemId)
                         true
                     }
 
                     R.id.action_order_ascending, R.id.action_order_descending -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyOrder(direction = menuItem.itemId)
                         true
                     }
 
                     R.id.action_filter_all, R.id.action_filter_mine -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Filtering images: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyFilter(menuItem.itemId)
                         true
                     }
                     else -> false
                 }
+            }
+
+            override fun onPrepareMenu(menu: Menu) {
+                super.onPrepareMenu(menu)
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrder.value!!)?.isChecked = true
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrderDirection.value!!)?.isChecked = true
+                menu.findItem(R.id.action_filter)?.subMenu?.findItem(viewModel.currentFilter.value!!)?.isChecked = true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -132,6 +157,25 @@ class HomeImagesFragment : Fragment() {
             putString(ImageFragment.USE_VIEWMODEL, GENERAL_VIEW)
             putInt(ImageFragment.SELECTED_IMAGE, position)
         })
+    }
+
+    private fun setUpSectionRecyclerView(sections: List<Section>) {
+        binding.allImagesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = sectionListAdapter
+        }
+        sectionListAdapter.update(sections)
+    }
+
+    private fun setUpImageRecyclerView(images: List<Image>) {
+        binding.allImagesRecyclerView.apply {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
+            }
+            adapter = imageListAdapter
+        }
+        imageListAdapter.update(images)
     }
 
 }
