@@ -14,7 +14,8 @@ class PlaceholderContent {
         fun getAlbumList(count: Int): MutableList<Album> {
             val items: MutableList<Album> = ArrayList()
             for (i in 1..count) {
-                items.add(Album("Coolname$i", "Author$i"))
+                val time: Long = 15768000
+                items.add(Album("Coolname$i", "Author$i", LocalDateTime.ofEpochSecond(time*i, 0, ZoneOffset.UTC), LocalDateTime.ofEpochSecond(time*(count-i), 0, ZoneOffset.UTC)))
             }
             return items
         }

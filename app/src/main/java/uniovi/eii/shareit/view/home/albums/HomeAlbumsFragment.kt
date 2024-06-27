@@ -20,7 +20,7 @@ import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.view.adapter.AlbumListAdapter
 import uniovi.eii.shareit.view.album.AlbumFragment
-import uniovi.eii.shareit.viewModel.HomeViewModel
+import uniovi.eii.shareit.viewModel.AlbumsDisplayViewModel
 
 class HomeAlbumsFragment : Fragment() {
 
@@ -31,7 +31,7 @@ class HomeAlbumsFragment : Fragment() {
     private var _binding: FragmentHomeAlbumsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by activityViewModels()
+    private val viewModel: AlbumsDisplayViewModel by activityViewModels()
     private lateinit var albumListAdapter: AlbumListAdapter
 
     override fun onCreateView(
@@ -57,7 +57,7 @@ class HomeAlbumsFragment : Fragment() {
             findNavController().navigate(R.id.nav_album_creation)
         }
 
-        viewModel.albumList.observe(viewLifecycleOwner) {
+        viewModel.displayAlbumList.observe(viewLifecycleOwner) {
             albumListAdapter.update(it)
         }
 
@@ -85,17 +85,25 @@ class HomeAlbumsFragment : Fragment() {
                     R.id.action_order_custom, R.id.action_order_creation_date, R.id.action_order_name, R.id.action_order_last_update -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Ordering albums by ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyOrder(order = menuItem.itemId)
                         true
                     }
 
                     R.id.action_order_ascending, R.id.action_order_descending -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        viewModel.applyOrder(direction = menuItem.itemId)
                         true
                     }
 
                     else -> false
                 }
+            }
+
+            override fun onPrepareMenu(menu: Menu) {
+                super.onPrepareMenu(menu)
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrder.value!!)?.isChecked = true
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrderDirection.value!!)?.isChecked = true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
