@@ -35,8 +35,8 @@ class AlbumCreationSharedFragment : Fragment() {
             ParticipantsListAdapter(PlaceholderContent.getParticipantsList(20))
 
         binding.createBtn.setOnClickListener {
-            findNavController().navigateUp()
-            findNavController().navigateUp()
+            findNavController().navigate(AlbumCreationSharedFragmentDirections
+                .actionNavAlbumCreationSharedToNavHome())
         }
 
         return binding.root

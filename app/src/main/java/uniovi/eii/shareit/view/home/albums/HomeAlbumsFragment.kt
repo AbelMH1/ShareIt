@@ -19,7 +19,7 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.view.adapter.AlbumListAdapter
-import uniovi.eii.shareit.view.album.AlbumFragment
+import uniovi.eii.shareit.view.home.HomeFragmentDirections
 import uniovi.eii.shareit.viewModel.AlbumsDisplayViewModel
 
 class HomeAlbumsFragment : Fragment() {
@@ -54,7 +54,8 @@ class HomeAlbumsFragment : Fragment() {
         binding.albumRecyclerView.adapter = albumListAdapter
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.nav_album_creation)
+            findNavController().navigate(HomeFragmentDirections
+                .actionNavHomeToNavAlbumCreation())
         }
 
         viewModel.displayAlbumList.observe(viewLifecycleOwner) {
@@ -111,17 +112,17 @@ class HomeAlbumsFragment : Fragment() {
     fun clickOnCardViewItem(album: Album, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
         Toast.makeText(context, "Item Clicked ${album.name}", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.nav_album, Bundle().apply {
-            putInt(AlbumFragment.ARG_COLUMN_COUNT, 4)
-            // TODO: Pasar id del album a abrir
-        })
+        // TODO: Pasar id del album a abrir
+        findNavController().navigate(HomeFragmentDirections
+            .actionNavHomeToNavAlbum(5))
     }
 
     fun clickOnInfoButtonItem(album: Album, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
         Toast.makeText(context, "Info Clicked ${album.name}", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.nav_album_information)
         // TODO: Pasar id del album a abrir
+        findNavController().navigate(HomeFragmentDirections
+            .actionNavHomeToNavAlbumInformation())
     }
 
 }

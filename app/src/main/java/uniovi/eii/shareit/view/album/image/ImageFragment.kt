@@ -11,6 +11,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumImageBinding
@@ -20,19 +21,7 @@ import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDispl
 
 class ImageFragment : Fragment() {
 
-    companion object {
-        const val USE_VIEWMODEL = "use_viewModel"
-        const val SELECTED_IMAGE = "selected_image"
-
-        @JvmStatic
-        fun newInstance(viewModelToUse: String, selectedImage: Int) = ImageFragment().apply {
-            arguments = Bundle().apply {
-                putString(USE_VIEWMODEL, viewModelToUse)
-                putInt(SELECTED_IMAGE, selectedImage)
-            }
-        }
-    }
-
+    private val args: ImageFragmentArgs by navArgs()
     private var _binding: FragmentAlbumImageBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ImagesDisplayViewModel

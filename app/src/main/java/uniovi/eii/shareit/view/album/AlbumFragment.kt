@@ -13,6 +13,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
@@ -22,7 +23,6 @@ import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.adapter.SectionListAdapter
-import uniovi.eii.shareit.view.album.image.ImageFragment
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
@@ -31,17 +31,8 @@ import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDispl
  * A fragment representing a list of Items(Images).
  */
 class AlbumFragment : Fragment() {
-    companion object {
-        const val ARG_COLUMN_COUNT = "column-count"
 
-        @JvmStatic
-        fun newInstance(columnCount: Int) = AlbumFragment().apply {
-            arguments = Bundle().apply {
-                putInt(ARG_COLUMN_COUNT, columnCount)
-            }
-        }
-    }
-
+    private val args: AlbumFragmentArgs by navArgs()
     private var _binding: FragmentAlbumBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ImagesDisplayViewModel
@@ -51,9 +42,7 @@ class AlbumFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+        columnCount = args.COLUMNCOUNT
     }
 
     override fun onCreateView(
@@ -70,7 +59,7 @@ class AlbumFragment : Fragment() {
                 override fun onItemClick(item: Image, position: Int) {
                     clickOnItem(item, position)
                 }
-            })
+            }, columns = columnCount)
         imageListAdapter =
             ImageListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
@@ -121,12 +110,14 @@ class AlbumFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_chat -> {
-                        findNavController().navigate(R.id.nav_album_chat)
+                        findNavController().navigate(AlbumFragmentDirections
+                            .actionNavAlbumToNavAlbumChat())
                         true
                     }
 
                     R.id.action_info -> {
-                        findNavController().navigate(R.id.nav_album_information)
+                        findNavController().navigate(AlbumFragmentDirections
+                            .actionNavAlbumToNavAlbumInformation())
                         true
                     }
 
@@ -169,10 +160,8 @@ class AlbumFragment : Fragment() {
     fun clickOnItem(image: Image, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $image")
         Toast.makeText(context, "Item Clicked ${image.author}", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.nav_album_image, Bundle().apply {
-            putString(ImageFragment.USE_VIEWMODEL, ALBUM_VIEW)
-            putInt(ImageFragment.SELECTED_IMAGE, position)
-        })
+        findNavController().navigate(AlbumFragmentDirections
+            .actionNavAlbumToNavAlbumImage(ALBUM_VIEW, position))
     }
 
     private fun setUpSectionRecyclerView(sections: List<Section>) {

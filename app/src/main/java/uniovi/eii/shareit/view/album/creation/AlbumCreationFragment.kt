@@ -91,11 +91,13 @@ class AlbumCreationFragment : Fragment() {
         }
 
         binding.continueBtn.setOnClickListener {
-            findNavController().navigate(R.id.nav_album_creation_shared)
+            findNavController().navigate(AlbumCreationFragmentDirections
+                .actionNavAlbumCreationToNavAlbumCreationShared())
         }
 
         binding.createBtn.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().navigate(AlbumCreationFragmentDirections
+                .actionNavAlbumCreationToNavHome())
         }
 
         return binding.root

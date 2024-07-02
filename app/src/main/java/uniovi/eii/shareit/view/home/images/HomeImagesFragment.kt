@@ -22,7 +22,7 @@ import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.adapter.SectionListAdapter
-import uniovi.eii.shareit.view.album.image.ImageFragment
+import uniovi.eii.shareit.view.home.HomeFragmentDirections
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.GENERAL_VIEW
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
@@ -68,7 +68,7 @@ class HomeImagesFragment : Fragment() {
                 override fun onItemClick(item: Image, position: Int) {
                     clickOnImageItem(item, position)
                 }
-            })
+            }, columns = columnCount)
         imageListAdapter =
             ImageListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
@@ -153,10 +153,8 @@ class HomeImagesFragment : Fragment() {
 
     private fun clickOnImageItem(image: Image, position: Int) {
         Toast.makeText(context, "Item Clicked $position", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.nav_album_image, Bundle().apply {
-            putString(ImageFragment.USE_VIEWMODEL, GENERAL_VIEW)
-            putInt(ImageFragment.SELECTED_IMAGE, position)
-        })
+        findNavController().navigate(
+            HomeFragmentDirections.actionNavHomeToNavAlbumImage(GENERAL_VIEW, position))
     }
 
     private fun setUpSectionRecyclerView(sections: List<Section>) {
