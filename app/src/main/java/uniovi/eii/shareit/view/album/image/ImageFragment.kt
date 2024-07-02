@@ -31,10 +31,8 @@ class ImageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            usingViewModel = it.getString(USE_VIEWMODEL)!!
-            selectedImage = it.getInt(SELECTED_IMAGE)
-        }
+        usingViewModel = args.USEVIEWMODEL
+        selectedImage = args.SELECTEDIMAGE
     }
 
     override fun onCreateView(
