@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuCompat
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -19,8 +21,10 @@ import uniovi.eii.shareit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+    private lateinit var destinationChangedListener: NavController.OnDestinationChangedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,17 +34,35 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
+
+        destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
+            binding.appBarMain.toolbar.isVisible = arguments?.getBoolean("ShowAppBar", true) == true // TODO: Decide Op2:
+            // TODO: Decide Op1:
+//            if (arguments?.getBoolean("ShowAppBar", true) == true)
+//                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//            else supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_signup
             ), binding.drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
         configureToolBar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        navController.addOnDestinationChangedListener(destinationChangedListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        navController.removeOnDestinationChangedListener(destinationChangedListener)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -51,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     private fun configureToolBar() {
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.main, menu)
+//                menuInflater.inflate(R.menu.main, menu)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     binding.appBarMain.toolbar.menu.setGroupDividerEnabled(true)
                 } else MenuCompat.setGroupDividerEnabled(menu, true)
