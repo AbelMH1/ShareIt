@@ -7,28 +7,28 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import uniovi.eii.shareit.databinding.FragmentSignupBinding
+import uniovi.eii.shareit.databinding.FragmentLoginBinding
 import uniovi.eii.shareit.viewModel.SignUpViewModel
 
 
-class SignUpFragment : Fragment() {
+class LoginFragment : Fragment() {
 
-    private var _binding: FragmentSignupBinding? = null
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSignupBinding.inflate(inflater, container, false)
-        val signUpViewModel =
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        val loginViewModel =
             ViewModelProvider(this)[SignUpViewModel::class.java]
 
-        binding.btSwitchToLogin.setOnClickListener {
-            findNavController().navigate(SignUpFragmentDirections.actionNavSignupToNavLogin())
+        binding.btSwitchToSignUp.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavSignup())
         }
 
-        binding.btSignUp.setOnClickListener {
-//            findNavController().navigate(SignUpFragmentDirections.actionNavSignupToNavHome())
+        binding.btLogIn.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavHome())
         }
 
         return binding.root

@@ -2,24 +2,29 @@ package uniovi.eii.shareit.view
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.MenuCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
+import uniovi.eii.shareit.view.home.HomeFragmentDirections
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -37,21 +42,23 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_content_main)
 
         destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
-            binding.appBarMain.toolbar.isVisible = arguments?.getBoolean("ShowAppBar", true) == true // TODO: Decide Op2:
+            binding.appBarMain.toolbar.isVisible = arguments?.getBoolean("ShowAppBar", true) ?: true // TODO: Decide Op2:
             // TODO: Decide Op1:
 //            if (arguments?.getBoolean("ShowAppBar", true) == true)
 //                supportActionBar?.setDisplayHomeAsUpEnabled(true)
 //            else supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            Log.d("BACKSTACK", controller.currentBackStack.value.map { stackEntry -> stackEntry.destination.displayName }.toString())
         }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_signup
+                R.id.nav_home
             ), binding.drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
+        binding.navView.setNavigationItemSelectedListener(this)
         configureToolBar()
     }
 
@@ -63,6 +70,16 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         navController.removeOnDestinationChangedListener(destinationChangedListener)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        var successNavigation = true
+        when (item.itemId) {
+            R.id.log_out -> navController.navigate(HomeFragmentDirections.actionNavHomeToNavLogin())
+            else -> successNavigation = NavigationUI.onNavDestinationSelected(item, navController)
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return successNavigation
     }
 
     override fun onSupportNavigateUp(): Boolean {

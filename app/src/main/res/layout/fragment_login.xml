@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_primaryContainer"
-    tools:context=".view.identification.SignUpFragment">
+    tools:context=".view.identification.LoginFragment">
 
     <!--  TODO: Decide Op1: android:layout_marginTop="35dp"-->
     <TextView
@@ -58,7 +58,7 @@
                 style="?attr/textAppearanceDisplaySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_signUp"
+                android:text="@string/label_login"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -108,50 +108,112 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordRepeatLayout"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/options"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/divider_margin"
-                android:hint="@string/label_password_repeat"
-                app:endIconMode="password_toggle"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/passwordLayout"
                 app:layout_constraintVertical_bias="0.0">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordRepeatEditText"
-                    android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/checkboxRememberMe"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:singleLine="true" />
+                    android:text="@string/label_remember"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/btForgotPassword"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_forgot_password"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
-                android:id="@+id/btSignUp"
+                android:id="@+id/btLogIn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/divider_margin"
-                android:text="@string/btn_signUp"
+                android:text="@string/btn_logIn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/passwordRepeatLayout"
+                app:layout_constraintTop_toBottomOf="@+id/options"
                 app:layout_constraintVertical_bias="0.0" />
 
+            <TextView
+                android:id="@+id/labelOtherMethods"
+                style="?attr/textAppearanceBodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/divider_margin"
+                android:text="@string/label_other_methods"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btLogIn"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <LinearLayout
+                android:id="@+id/otherMethodsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/divider_margin"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/labelOtherMethods"
+                app:layout_constraintVertical_bias="0.0">
+
+                <Button
+                    android:id="@+id/btGoogleLogin"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/google_login_btn_desc"
+                    app:icon="@drawable/ic_person_24" />
+
+                <Button
+                    android:id="@+id/btFacebookLogin"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/facebook_login_btn_desc"
+                    app:icon="@drawable/ic_menu_account_circle_24" />
+
+                <Button
+                    android:id="@+id/btTwitterLogin"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/twitter_login_btn_desc"
+                    app:icon="@drawable/ic_send_24" />
+            </LinearLayout>
+
             <Button
-                android:id="@+id/btSwitchToLogin"
+                android:id="@+id/btSwitchToSignUp"
                 style="?attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_already_have_account"
+                android:text="@string/btn_do_not_have_account"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btSignUp"
+                app:layout_constraintTop_toBottomOf="@+id/otherMethodsLayout"
                 app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
