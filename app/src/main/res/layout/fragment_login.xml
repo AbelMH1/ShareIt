@@ -141,6 +141,19 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                style="@style/Widget.Material3.CircularProgressIndicator.ExtraSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:contentDescription="@string/progress_login_btn_desc"
+                app:layout_constraintBottom_toBottomOf="@+id/btLogIn"
+                app:layout_constraintEnd_toEndOf="@+id/btLogIn"
+                app:layout_constraintStart_toStartOf="@+id/btLogIn"
+                app:layout_constraintTop_toTopOf="@+id/btLogIn" />
+
             <Button
                 android:id="@+id/btLogIn"
                 android:layout_width="0dp"
