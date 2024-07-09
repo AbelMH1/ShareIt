@@ -16,12 +16,11 @@ class LoginViewModel : ViewModel() {
     val loginAttempt: LiveData<LoginResult> = _loginAttempt
 
     fun attemptLogin(email: String, password: String, rememberMe: Boolean) {
-        if (checkValidData(email, password)) {
-            viewModelScope.launch(Dispatchers.IO) {
-                // TODO: login
-                delay(2000)
-                _loginAttempt.postValue(LoginResult(true))
-            }
+        if (!checkValidData(email, password)) return
+        viewModelScope.launch(Dispatchers.IO) {
+            // TODO: login
+            delay(2000)
+            _loginAttempt.postValue(LoginResult(true))
         }
 
     }
@@ -44,7 +43,7 @@ class LoginViewModel : ViewModel() {
 
     data class LoginResult(
         var isUserLogged: Boolean = false,
-        var emailError : Int? = null,
-        var passwordError : Int? = null
+        var emailError: Int? = null,
+        var passwordError: Int? = null
     )
 }

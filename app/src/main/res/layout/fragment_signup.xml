@@ -69,8 +69,9 @@
                 android:id="@+id/emailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/divider_margin"
-                android:hint="@string/label_email"
+                android:layout_marginTop="@dimen/text_margin"
+                android:hint="@string/placeholder_email"
+                app:helperText="@string/required"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,9 +91,10 @@
                 android:id="@+id/passwordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/divider_margin"
-                android:hint="@string/label_password"
+                android:layout_marginTop="@dimen/text_margin"
+                android:hint="@string/placeholder_password"
                 app:endIconMode="password_toggle"
+                app:helperText="@string/help_text_password"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,9 +114,10 @@
                 android:id="@+id/passwordRepeatLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/divider_margin"
-                android:hint="@string/label_password_repeat"
+                android:layout_marginTop="@dimen/text_margin"
+                android:hint="@string/placeholder_password_repeat"
                 app:endIconMode="password_toggle"
+                app:helperText="@string/required"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -129,6 +132,19 @@
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                style="@style/Widget.Material3.CircularProgressIndicator.ExtraSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/progress_signup_btn_desc"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btSignUp"
+                app:layout_constraintEnd_toEndOf="@+id/btSignUp"
+                app:layout_constraintStart_toStartOf="@+id/btSignUp"
+                app:layout_constraintTop_toTopOf="@+id/btSignUp" />
 
             <Button
                 android:id="@+id/btSignUp"

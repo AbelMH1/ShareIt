@@ -54,8 +54,8 @@ class LoginFragment : Fragment() {
                 Toast.makeText(context, getString(R.string.toast_successful_login), Toast.LENGTH_SHORT).show()
                 findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavHome())
             } else {
-                updateErrors(it.emailError, it.passwordError)
                 enableForm(true)
+                updateErrors(it.emailError, it.passwordError)
             }
         }
 

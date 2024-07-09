@@ -62,13 +62,19 @@
     <string name="label_other_methods">or Log in with</string>
     <string name="btn_forgot_password">Forgot password?</string>
     <string name="progress_login_btn_desc">Trying to log in to your account</string>
+    <string name="progress_signup_btn_desc">Trying to create an account</string>
     <string name="google_login_btn_desc">Log in using your Google account</string>
     <string name="facebook_login_btn_desc">Log in using your Facebook account</string>
     <string name="twitter_login_btn_desc">Log in using your Twitter account</string>
     <string name="btn_already_have_account">Already have an account? Log in</string>
     <string name="btn_do_not_have_account">Don\'t have an account? Sign up</string>
     <string name="toast_successful_login">You have been logged in to your account</string>
+    <string name="toast_successful_signup">Your account has been successfully created</string>
+    <string name="help_text_password">Passwords must have at least 1 digit, 1 lower case and 1 upper case letter</string>
     <string name="err_not_an_email">Not recognized as an email</string>
+    <string name="err_password_too_short">Passwords must have at least 6 characters</string>
+    <string name="err_invalid_password">1 digit, 1 lower case and 1 upper case letter are required</string>
+    <string name="err_passwords_dont_match">Passwords do not match</string>
     <!--    Album Creation    -->
     <string name="album_name">Album\'s name</string>
     <string name="label_date_selection">Select Date for the Album</string>
