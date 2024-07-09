@@ -2,6 +2,8 @@ package uniovi.eii.shareit.view
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,6 +22,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
 import uniovi.eii.shareit.view.home.HomeFragmentDirections
@@ -107,5 +110,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }, this)
+    }
+
+    class ErrorCleaningTextWatcher (private val etLayout: TextInputLayout) : TextWatcher {
+        override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+        override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+        override fun afterTextChanged(editable: Editable) {
+            etLayout.error = null
+        }
     }
 }

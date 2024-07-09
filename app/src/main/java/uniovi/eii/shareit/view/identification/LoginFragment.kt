@@ -1,9 +1,6 @@
 package uniovi.eii.shareit.view.identification
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +12,15 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentLoginBinding
-import uniovi.eii.shareit.viewModel.SignUpViewModel
+import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
+import uniovi.eii.shareit.viewModel.LoginViewModel
 
 
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SignUpViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -35,22 +33,30 @@ class LoginFragment : Fragment() {
 
         binding.btLogIn.setOnClickListener {
             enableForm(false)
-            val email = binding.emailEditText.text?.toString() ?: ""
-            val password = binding.passwordEditText.text?.toString() ?: ""
-            val rememberMe = binding.checkboxRememberMe.isChecked
-            if (checkValidData(email, password)){
-                viewModel.attemptLogin(email, password, rememberMe)
-            } else enableForm(true)
+            viewModel.attemptLogin(
+                binding.emailEditText.text?.toString() ?: "",
+                binding.passwordEditText.text?.toString() ?: "",
+                binding.checkboxRememberMe.isChecked
+            )
         }
 
-        binding.emailEditText.addTextChangedListener(ValidationTextWatcher(binding.emailLayout))
-        binding.passwordEditText.addTextChangedListener(ValidationTextWatcher(binding.passwordLayout))
+        binding.emailEditText.setOnFocusChangeListener { _, hasFocus ->
+            updateHint(binding.emailLayout, hasFocus, R.string.label_email, R.string.placeholder_email)
+        }
+        binding.passwordEditText.setOnFocusChangeListener { _, hasFocus ->
+            updateHint(binding.passwordLayout, hasFocus, R.string.label_password, R.string.placeholder_password)
+        }
+        binding.emailEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.emailLayout))
+        binding.passwordEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.passwordLayout))
 
-        viewModel.isUserLogged.observe(viewLifecycleOwner) {
-            if (it) {
+        viewModel.loginAttempt.observe(viewLifecycleOwner) {
+            if (it.isUserLogged) {
                 Toast.makeText(context, getString(R.string.toast_successful_login), Toast.LENGTH_SHORT).show()
                 findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavHome())
-            } else enableForm(true)
+            } else {
+                updateErrors(it.emailError, it.passwordError)
+                enableForm(true)
+            }
         }
 
         return binding.root
@@ -75,32 +81,21 @@ class LoginFragment : Fragment() {
         binding.btSwitchToSignUp.isEnabled = enabled
     }
 
-    private fun checkValidData(email: String, password: String): Boolean {
-        if (email.isBlank()) {
-            binding.emailLayout.error = resources.getString(R.string.err_empty_field)
+    private fun updateErrors(emailError: Int?, passwordError: Int?) {
+        if (emailError != null) {
+            binding.emailLayout.error = resources.getString(emailError)
             binding.emailEditText.requestFocus()
-            return false
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.emailLayout.error = resources.getString(R.string.err_not_an_email)
-            binding.emailEditText.requestFocus()
-            return false
-        }
-        if (password.isBlank()) {
-            binding.passwordLayout.error = resources.getString(R.string.err_empty_field)
+        if (passwordError != null) {
+            binding.passwordLayout.error = resources.getString(passwordError)
             binding.passwordEditText.requestFocus()
-            return false
         }
-        return true
     }
 
-    private class ValidationTextWatcher (private val etLayout: TextInputLayout) :
-        TextWatcher {
-        override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-        override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-        override fun afterTextChanged(editable: Editable) {
-            etLayout.error = null
-        }
+    private fun updateHint(etLayout: TextInputLayout, hasFocus: Boolean, label: Int, placeholder: Int) {
+        if (hasFocus || etLayout.editText?.text?.isNotEmpty() == true)
+            etLayout.hint = resources.getString(label)
+        else etLayout.hint = resources.getString(placeholder)
     }
 
 }

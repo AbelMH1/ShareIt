@@ -25,6 +25,7 @@
     <string name="fab_main">Floating Action Button</string>
     <string name="read_only">Read only supporting text</string>
     <string name="not_enabled">Not enabled</string>
+    <string name="required">*required</string>
     <string name="err_empty_field">This field is mandatory</string>
     <string name="err_invalid_date">This is not a valid date</string>
     <string name="err_invalid_later_date">It must be later than the start date</string>
@@ -49,9 +50,12 @@
     <string name="label_welcome">Welcome to</string> <!--  TODO: Decide Op1: <string name="label_welcome">Welcome</string> -->
     <string name="label_signUp">Register</string>
     <string name="label_login">Login</string>
-    <string name="label_email">Email*</string>
-    <string name="label_password">Password*</string>
-    <string name="label_password_repeat">Repeat password*</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="label_password_repeat">Repeat password</string>
+    <string name="placeholder_email">Email*</string>
+    <string name="placeholder_password">Password*</string>
+    <string name="placeholder_password_repeat">Repeat password*</string>
     <string name="btn_signUp">Sign Up</string>
     <string name="btn_logIn">Log In</string>
     <string name="label_remember">Remember me</string>
