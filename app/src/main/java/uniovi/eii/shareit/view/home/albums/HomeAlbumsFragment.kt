@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
-import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.view.adapter.AlbumListAdapter
 import uniovi.eii.shareit.view.home.HomeFragmentDirections
 import uniovi.eii.shareit.viewModel.AlbumsDisplayViewModel
@@ -41,11 +41,11 @@ class HomeAlbumsFragment : Fragment() {
 
         albumListAdapter =
             AlbumListAdapter(cardListener = object : AlbumListAdapter.OnItemClickListener {
-                override fun onItemClick(item: Album, position: Int) {
+                override fun onItemClick(item: UserAlbum, position: Int) {
                     clickOnCardViewItem(item, position)
                 }
             }, infoBtnListener = object : AlbumListAdapter.OnItemClickListener {
-                override fun onItemClick(item: Album, position: Int) {
+                override fun onItemClick(item: UserAlbum, position: Int) {
                     clickOnInfoButtonItem(item, position)
                 }
             })
@@ -109,7 +109,7 @@ class HomeAlbumsFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    fun clickOnCardViewItem(album: Album, position: Int) {
+    fun clickOnCardViewItem(album: UserAlbum, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
         Toast.makeText(context, "Item Clicked ${album.name}", Toast.LENGTH_SHORT).show()
         // TODO: Pasar id del album a abrir
@@ -117,7 +117,7 @@ class HomeAlbumsFragment : Fragment() {
             .actionNavHomeToNavAlbum(5))
     }
 
-    fun clickOnInfoButtonItem(album: Album, position: Int) {
+    fun clickOnInfoButtonItem(album: UserAlbum, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
         Toast.makeText(context, "Info Clicked ${album.name}", Toast.LENGTH_SHORT).show()
         // TODO: Pasar id del album a abrir

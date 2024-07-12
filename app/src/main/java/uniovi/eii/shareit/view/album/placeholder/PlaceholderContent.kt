@@ -1,9 +1,9 @@
 package uniovi.eii.shareit.view.album.placeholder
 
-import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.ChatMessage
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant
+import uniovi.eii.shareit.model.UserAlbum
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -11,11 +11,20 @@ class PlaceholderContent {
 
     companion object {
 
-        fun getAlbumList(count: Int): MutableList<Album> {
-            val items: MutableList<Album> = ArrayList()
+        fun getAlbumList(count: Int): MutableList<UserAlbum> {
+            val items: MutableList<UserAlbum> = ArrayList()
             for (i in 1..count) {
                 val time: Long = 15768000
-                items.add(Album("Coolname$i", "Author$i", LocalDateTime.ofEpochSecond(time*i, 0, ZoneOffset.UTC), LocalDateTime.ofEpochSecond(time*(count-i), 0, ZoneOffset.UTC)))
+                items.add(
+                    UserAlbum(
+                        "$i",
+                        "Coolname$i",
+                        "",
+                        "Author$i",
+                        LocalDateTime.ofEpochSecond(time * i, 0, ZoneOffset.UTC),
+                        LocalDateTime.ofEpochSecond(time * (count - i), 0, ZoneOffset.UTC)
+                    )
+                )
             }
             return items
         }

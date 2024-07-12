@@ -6,16 +6,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import uniovi.eii.shareit.databinding.LineRecyclerViewAlbumBinding
-import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.UserAlbum
 
 class AlbumListAdapter(
-    private var albumList: List<Album> = emptyList(),
+    private var albumList: List<UserAlbum> = emptyList(),
     private val cardListener: OnItemClickListener,
     private val infoBtnListener: OnItemClickListener
 ) : RecyclerView.Adapter<AlbumListAdapter.AlbumViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
-    fun update(albumList: List<Album>) {
+    fun update(albumList: List<UserAlbum>) {
         this.albumList = albumList
         notifyDataSetChanged()
     }
@@ -37,13 +37,13 @@ class AlbumListAdapter(
     override fun getItemCount(): Int = albumList.size
 
     interface OnItemClickListener {
-        fun onItemClick(item: Album, position: Int)
+        fun onItemClick(item: UserAlbum, position: Int)
     }
 
     inner class AlbumViewHolder(private val binding: LineRecyclerViewAlbumBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun assignValuesToComponents(album: Album, position: Int, cardListener: OnItemClickListener, infoBtnListener: OnItemClickListener) {
+        fun assignValuesToComponents(album: UserAlbum, position: Int, cardListener: OnItemClickListener, infoBtnListener: OnItemClickListener) {
             binding.albumName.text = album.name
             binding.creatorName.text = album.creatorName
             binding.infoBtn.setOnClickListener {

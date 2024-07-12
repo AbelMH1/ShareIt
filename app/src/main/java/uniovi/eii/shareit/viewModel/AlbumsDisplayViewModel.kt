@@ -4,15 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import uniovi.eii.shareit.R
-import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
 
 class AlbumsDisplayViewModel : ViewModel() {
 
-    private val _albumList = MutableLiveData<List<Album>>(emptyList())
-    val albumList: LiveData<List<Album>> = _albumList
-    private val _displayAlbumList = MutableLiveData<List<Album>>(emptyList())
-    val displayAlbumList: LiveData<List<Album>> = _displayAlbumList
+    private val _albumList = MutableLiveData<List<UserAlbum>>(emptyList())
+    val albumList: LiveData<List<UserAlbum>> = _albumList
+    private val _displayAlbumList = MutableLiveData<List<UserAlbum>>(emptyList())
+    val displayAlbumList: LiveData<List<UserAlbum>> = _displayAlbumList
 
     private val _currentOrder = MutableLiveData(R.id.action_order_creation_date)
     val currentOrder: LiveData<Int> = _currentOrder
@@ -23,12 +23,12 @@ class AlbumsDisplayViewModel : ViewModel() {
         updateAlbumList(PlaceholderContent.getAlbumList(25))
     }
 
-    fun updateAlbumList(newAlbums: List<Album>) {
+    fun updateAlbumList(newAlbums: List<UserAlbum>) {
         _albumList.value = newAlbums
         updateDisplayAlbumList(orderAlbumList(currentOrder.value!!, currentOrderDirection.value!!, newAlbums))
     }
 
-    fun updateDisplayAlbumList(newAlbums: List<Album>) {
+    fun updateDisplayAlbumList(newAlbums: List<UserAlbum>) {
         _displayAlbumList.value = newAlbums
     }
 
@@ -39,7 +39,7 @@ class AlbumsDisplayViewModel : ViewModel() {
         updateDisplayAlbumList(orderAlbumList(order, direction, displayAlbumList.value!!))
     }
 
-    private fun orderAlbumList(order: Int, direction: Int, newAlbums: List<Album>): List<Album> {
+    private fun orderAlbumList(order: Int, direction: Int, newAlbums: List<UserAlbum>): List<UserAlbum> {
         val orderedImages = when (order) {
             R.id.action_order_creation_date -> newAlbums.sortedBy { album -> album.creationDate }
             R.id.action_order_name -> newAlbums.sortedBy { album -> album.name }
