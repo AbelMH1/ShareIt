@@ -15,6 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentChatBinding
 import uniovi.eii.shareit.view.adapter.MessageListAdapter
+import uniovi.eii.shareit.viewModel.AlbumChatViewModel
 import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 class ChatFragment : Fragment() {
@@ -25,7 +26,8 @@ class ChatFragment : Fragment() {
 
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlbumViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by activityViewModels()
+    private val chatViewModel: AlbumChatViewModel by activityViewModels()
     private val adapter = MessageListAdapter()
 
     override fun onCreateView(
@@ -38,15 +40,20 @@ class ChatFragment : Fragment() {
         binding.messagesRecycler.layoutManager = layoutManager
         binding.messagesRecycler.adapter = adapter
 
-        viewModel.messageList.observe(viewLifecycleOwner) {
+        chatViewModel.messageList.observe(viewLifecycleOwner) {
             adapter.update(it)
             binding.messagesRecycler.layoutManager?.scrollToPosition(it.size - 1)
+        }
+
+        val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+        albumViewModel.currentAlbum.observe(viewLifecycleOwner) {
+            toolbar.title = it.name
         }
 
         binding.sendFAB.setOnClickListener {
             val message = binding.writeMessageEditText.text?.toString()?.trim() ?: ""
             if (message.isBlank()) return@setOnClickListener
-            viewModel.sendMessage(message)
+            chatViewModel.sendMessage(message)
             binding.writeMessageEditText.text = null
         }
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -23,6 +24,7 @@ import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.adapter.SectionListAdapter
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
@@ -35,21 +37,25 @@ class AlbumFragment : Fragment() {
     private val args: AlbumFragmentArgs by navArgs()
     private var _binding: FragmentAlbumBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: ImagesDisplayViewModel
+    private val albumViewModel: AlbumViewModel by activityViewModels()
+    private lateinit var imagesViewModel: ImagesDisplayViewModel
     private lateinit var sectionListAdapter: SectionListAdapter
     private lateinit var imageListAdapter: ImageListAdapter
     private var columnCount = 4
+    private var albumID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         columnCount = args.COLUMNCOUNT
+        albumID = args.albumID
+        albumID?.let { albumViewModel.updateCurrentAlbum(it) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(
+        imagesViewModel = ViewModelProvider(
             requireActivity(),
             ImagesDisplayViewModelFactory()
         )[ALBUM_VIEW, ImagesDisplayViewModel::class.java]
@@ -67,13 +73,18 @@ class AlbumFragment : Fragment() {
                 }
             })
 
-        viewModel.displayImageList.observe(viewLifecycleOwner) {
-            if(!viewModel.shouldDisplaySections())
+        imagesViewModel.displayImageList.observe(viewLifecycleOwner) {
+            if(!imagesViewModel.shouldDisplaySections())
                 setUpImageRecyclerView(it)
         }
-        viewModel.displaySectionList.observe(viewLifecycleOwner) {
-            if(viewModel.shouldDisplaySections())
+        imagesViewModel.displaySectionList.observe(viewLifecycleOwner) {
+            if(imagesViewModel.shouldDisplaySections())
                 setUpSectionRecyclerView(it)
+        }
+
+        val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+        albumViewModel.currentAlbum.observe(viewLifecycleOwner) {
+            toolbar.title = it.name
         }
 
         // Set the adapter
@@ -117,28 +128,28 @@ class AlbumFragment : Fragment() {
 
                     R.id.action_info -> {
                         findNavController().navigate(AlbumFragmentDirections
-                            .actionNavAlbumToNavAlbumInformation())
+                            .actionNavAlbumToNavAlbumInformation(albumID))
                         true
                     }
 
                     R.id.action_order_date, R.id.action_order_likes -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Ordering images by ${menuItem.title}", Toast.LENGTH_SHORT).show()
-                        viewModel.applyOrder(order = menuItem.itemId)
+                        imagesViewModel.applyOrder(order = menuItem.itemId)
                         true
                     }
 
                     R.id.action_order_ascending, R.id.action_order_descending -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
-                        viewModel.applyOrder(direction = menuItem.itemId)
+                        imagesViewModel.applyOrder(direction = menuItem.itemId)
                         true
                     }
 
                     R.id.action_filter_all, R.id.action_filter_mine -> {
                         menuItem.isChecked = !menuItem.isChecked
                         Toast.makeText(context, "Filtering images: ${menuItem.title}", Toast.LENGTH_SHORT).show()
-                        viewModel.applyFilter(menuItem.itemId)
+                        imagesViewModel.applyFilter(menuItem.itemId)
                         true
                     }
 
@@ -150,9 +161,9 @@ class AlbumFragment : Fragment() {
                 super.onPrepareMenu(menu)
                 menu.removeItem(R.id.action_account)
                 menu.findItem(R.id.action_order)?.subMenu?.removeItem(R.id.action_order_album)
-                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrder.value!!)?.isChecked = true
-                menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrderDirection.value!!)?.isChecked = true
-                menu.findItem(R.id.action_filter)?.subMenu?.findItem(viewModel.currentFilter.value!!)?.isChecked = true
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(imagesViewModel.currentOrder.value!!)?.isChecked = true
+                menu.findItem(R.id.action_order)?.subMenu?.findItem(imagesViewModel.currentOrderDirection.value!!)?.isChecked = true
+                menu.findItem(R.id.action_filter)?.subMenu?.findItem(imagesViewModel.currentFilter.value!!)?.isChecked = true
             }
         }, viewLifecycleOwner)
     }

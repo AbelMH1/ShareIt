@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
@@ -23,10 +24,16 @@ class AlbumInformationFragment : Fragment() {
         fun newInstance() = AlbumInformationFragment()
     }
 
+    private val args: AlbumInformationFragmentArgs by navArgs()
     private var _binding: FragmentAlbumInformationBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumInformationViewModel by activityViewModels()
+    private var albumID: String? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        albumID = args.albumID
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
