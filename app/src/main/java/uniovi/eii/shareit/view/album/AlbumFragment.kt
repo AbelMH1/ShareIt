@@ -42,13 +42,11 @@ class AlbumFragment : Fragment() {
     private lateinit var sectionListAdapter: SectionListAdapter
     private lateinit var imageListAdapter: ImageListAdapter
     private var columnCount = 4
-    private var albumID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         columnCount = args.COLUMNCOUNT
-        albumID = args.albumID
-        albumID?.let { albumViewModel.updateCurrentAlbum(it) }
+        albumViewModel.updateCurrentAlbum(args.albumID, args.albumName, args.albumCoverImage)
     }
 
     override fun onCreateView(
@@ -128,7 +126,7 @@ class AlbumFragment : Fragment() {
 
                     R.id.action_info -> {
                         findNavController().navigate(AlbumFragmentDirections
-                            .actionNavAlbumToNavAlbumInformation(albumID))
+                            .actionNavAlbumToNavAlbumInformation(args.albumID, args.albumName, args.albumCoverImage))
                         true
                     }
 

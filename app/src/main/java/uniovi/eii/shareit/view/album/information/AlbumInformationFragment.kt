@@ -28,11 +28,10 @@ class AlbumInformationFragment : Fragment() {
     private var _binding: FragmentAlbumInformationBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumInformationViewModel by activityViewModels()
-    private var albumID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        albumID = args.albumID
+        viewModel.updateCurrentAlbum(args.albumID, args.albumName, args.albumCoverImage)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

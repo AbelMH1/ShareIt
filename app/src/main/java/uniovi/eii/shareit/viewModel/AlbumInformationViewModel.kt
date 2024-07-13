@@ -10,6 +10,10 @@ class AlbumInformationViewModel : ViewModel() {
     private val _album = MutableLiveData(Album())
     val album: LiveData<Album> = _album
 
+    fun updateCurrentAlbum(albumID: String, albumName: String, albumCoverImage: String) {
+        _album.value = Album(albumID, albumName, albumCoverImage)
+    }
+
     fun saveAlbumInfo(newAlbum: Album) {
         if (newAlbum != album.value) _album.value = newAlbum
     }
