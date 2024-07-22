@@ -25,7 +25,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
-import uniovi.eii.shareit.view.home.HomeFragmentDirections
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home
+                R.id.nav_home, R.id.nav_account
             ), binding.drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -78,7 +77,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         var successNavigation = true
         when (item.itemId) {
-            R.id.log_out -> navController.navigate(HomeFragmentDirections.actionNavHomeToNavLogin())
+            R.id.log_out_to_nav_login -> {
+                Toast.makeText(this, getString(R.string.toast_successful_logout), Toast.LENGTH_SHORT).show()
+                navController.navigate(R.id.log_out_to_nav_login)
+            }
             else -> successNavigation = NavigationUI.onNavDestinationSelected(item, navController)
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)

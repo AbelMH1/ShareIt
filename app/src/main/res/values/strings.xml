@@ -11,6 +11,7 @@
     <string name="menu_album_creation">Create Album</string>
     <string name="menu_album_information">Information</string>
     <string name="menu_album_image">Images</string>
+    <string name="menu_account">My account</string>
     <string name="menu_logOut">Log Out</string>
     <!--    AppBar subtitles    -->
     <string name="menu_album_creation_general">General information</string>
@@ -29,6 +30,7 @@
     <string name="err_empty_field">This field is mandatory</string>
     <string name="err_invalid_date">This is not a valid date</string>
     <string name="err_invalid_later_date">It must be later than the start date</string>
+    <string name="toast_successful_logout">You have logged out from your account</string>
     <!--    Menus    -->
     <string name="action_account">Account</string>
     <string name="action_chat">Chat</string>
