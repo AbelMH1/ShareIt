@@ -22,14 +22,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/message_margin">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/writeMessageLayout"
                 style="?attr/textInputFilledStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fab_margin"
+                android:layout_marginStart="@dimen/fab_send_message_margin"
                 android:layout_marginBottom="@dimen/message_bar_button_margin"
                 android:layout_weight="1"
                 app:hintEnabled="false">
@@ -40,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_write_message"
                     android:inputType="textMultiLine"
-                    android:maxLines="4"
+                    android:maxLines="@integer/message_maxLines"
                     android:paddingVertical="@dimen/remove_hint_space" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -49,7 +50,8 @@
                 android:id="@+id/sendFAB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/fab_margin"
+                android:layout_marginHorizontal="@dimen/fab_send_message_margin"
+                android:layout_marginBottom="@dimen/fab_send_message_margin"
                 android:contentDescription="@string/fab_send_desc"
                 app:srcCompat="@drawable/ic_send_24" />
 

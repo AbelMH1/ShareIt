@@ -10,6 +10,8 @@
     <dimen name="images_padding">10dp</dimen>
     <dimen name="divider_margin">10dp</dimen>
     <dimen name="profile_image_size">48dp</dimen>
+    <dimen name="fab_send_message_margin">16dp</dimen>
+    <item name="message_maxLines" type="integer">4</item>
     <dimen name="remove_hint_space">16dp</dimen>
     <dimen name="message_bar_button_margin">8.5dp</dimen>
     <dimen name="message_side_margin">50dp</dimen>
