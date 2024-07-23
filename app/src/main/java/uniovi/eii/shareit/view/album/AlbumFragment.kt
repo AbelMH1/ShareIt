@@ -80,8 +80,8 @@ class AlbumFragment : Fragment() {
                 setUpSectionRecyclerView(it)
         }
 
-        val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
         albumViewModel.currentAlbum.observe(viewLifecycleOwner) {
+            val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
             toolbar.title = it.name
         }
 
