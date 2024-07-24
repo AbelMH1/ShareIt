@@ -51,8 +51,8 @@ class LoginFragment : Fragment() {
 
         viewModel.loginAttempt.observe(viewLifecycleOwner) {
             if (it.isUserLogged) {
-                Toast.makeText(context, getString(R.string.toast_successful_login), Toast.LENGTH_SHORT).show()
                 findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavHome())
+                Toast.makeText(context, getString(R.string.toast_successful_login), Toast.LENGTH_SHORT).show()
             } else {
                 enableForm(true)
                 updateErrors(it.emailError, it.passwordError)

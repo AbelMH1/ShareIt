@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.MenuCompat
@@ -25,6 +26,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
+import uniovi.eii.shareit.viewModel.LoginViewModel
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var destinationChangedListener: NavController.OnDestinationChangedListener
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +65,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.navView.setupWithNavController(navController)
         binding.navView.setNavigationItemSelectedListener(this)
         configureToolBar()
+
+        loginViewModel.loginAttempt.observe(this) {
+            if (!it.isUserLogged) navController.navigate(R.id.log_out_to_nav_login)
+        }
     }
 
     override fun onResume() {
@@ -78,8 +85,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var successNavigation = true
         when (item.itemId) {
             R.id.log_out_to_nav_login -> {
+                loginViewModel.logOut()
                 Toast.makeText(this, getString(R.string.toast_successful_logout), Toast.LENGTH_SHORT).show()
-                navController.navigate(R.id.log_out_to_nav_login)
             }
             else -> successNavigation = NavigationUI.onNavDestinationSelected(item, navController)
         }

@@ -10,14 +10,11 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeBinding
 import uniovi.eii.shareit.view.adapter.HomeViewPagerAdapter
-import uniovi.eii.shareit.viewModel.LoginViewModel
 
 class HomeFragment : Fragment() {
 
@@ -32,10 +29,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        val viewModel: LoginViewModel by activityViewModels()
-        viewModel.loginAttempt.observe(viewLifecycleOwner) {
-            if (!it.isUserLogged) findNavController().navigate(R.id.log_out_to_nav_login)
-        }
 
         return binding.root
     }
