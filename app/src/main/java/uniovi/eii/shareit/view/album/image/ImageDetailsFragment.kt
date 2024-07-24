@@ -45,6 +45,7 @@ class ImageDetailsFragment : Fragment() {
 
         binding.userName.text = image.author
         binding.dateUpload.text = image.creationDate.toString()
+        binding.numLikes.text = image.likes.size.toString()
 
         return binding.root
     }
