@@ -26,7 +26,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
-import uniovi.eii.shareit.viewModel.LoginViewModel
+import uniovi.eii.shareit.viewModel.MainViewModel
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var destinationChangedListener: NavController.OnDestinationChangedListener
-    private val loginViewModel: LoginViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.navView.setNavigationItemSelectedListener(this)
         configureToolBar()
 
-        loginViewModel.loginAttempt.observe(this) {
-            if (!it.isUserLogged) navController.navigate(R.id.log_out_to_nav_login)
+        mainViewModel.isUserLogged.observe(this) {
+            if (!it) navController.navigate(R.id.log_out_to_nav_login)
         }
     }
 
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var successNavigation = true
         when (item.itemId) {
             R.id.log_out_to_nav_login -> {
-                loginViewModel.logOut()
+                mainViewModel.logOut()
                 Toast.makeText(this, getString(R.string.toast_successful_logout), Toast.LENGTH_SHORT).show()
             }
             else -> successNavigation = NavigationUI.onNavDestinationSelected(item, navController)

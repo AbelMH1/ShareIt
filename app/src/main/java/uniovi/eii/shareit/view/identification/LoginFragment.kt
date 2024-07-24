@@ -8,19 +8,21 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentLoginBinding
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.LoginViewModel
+import uniovi.eii.shareit.viewModel.MainViewModel
 
 
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LoginViewModel by activityViewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -51,6 +53,8 @@ class LoginFragment : Fragment() {
 
         viewModel.loginAttempt.observe(viewLifecycleOwner) {
             if (it.isUserLogged) {
+                val mainViewModel: MainViewModel by activityViewModels()
+                mainViewModel.logIn()
                 findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavHome())
                 Toast.makeText(context, getString(R.string.toast_successful_login), Toast.LENGTH_SHORT).show()
             } else {

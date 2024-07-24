@@ -25,10 +25,6 @@ class LoginViewModel : ViewModel() {
 
     }
 
-    fun logOut() {
-        _loginAttempt.value = LoginResult()
-    }
-
     private fun checkValidData(email: String, password: String): Boolean {
         if (email.isBlank()) {
             _loginAttempt.value = LoginResult(emailError = R.string.err_empty_field)
