@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -48,9 +47,7 @@ class ImageFragment : Fragment() {
 
         viewModel.displayImageList.observe(viewLifecycleOwner) {
             imagePagerAdapter.update(it.toMutableList())
-            binding.pager.doOnPreDraw {
-                binding.pager.currentItem = selectedImage
-            }
+            binding.pager.setCurrentItem(selectedImage, false)
         }
 
         return binding.root
@@ -87,9 +84,7 @@ class ImageFragment : Fragment() {
 
     private fun configureViewPager() {
         binding.pager.adapter = imagePagerAdapter
-        binding.pager.doOnPreDraw {
-            binding.pager.currentItem = selectedImage
-        }
+        binding.pager.setCurrentItem(selectedImage, false)
     }
 
 }
