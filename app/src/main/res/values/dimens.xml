@@ -20,4 +20,7 @@
     <dimen name="message_date_margin_bottom">10dp</dimen>
     <dimen name="album_cover_display_height">100dp</dimen>
     <dimen name="image_corner_radius">15dp</dimen>
+    <dimen name="my_profile_image_size">155dp</dimen>
+    <dimen name="my_edit_profile_image_size">40dp</dimen>
+    <dimen name="default_text_field_width">245dp</dimen>
 </resources>

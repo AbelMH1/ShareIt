@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +28,9 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
+import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.viewModel.MainViewModel
+import uniovi.eii.shareit.viewModel.ProfileViewModel
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -66,8 +70,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.navView.setNavigationItemSelectedListener(this)
         configureToolBar()
 
+        val profileViewModel: ProfileViewModel by viewModels()
         mainViewModel.isUserLogged.observe(this) {
-            if (!it) navController.navigate(R.id.log_out_to_nav_login)
+            if (it) profileViewModel.loadUserProfile()
+            else navController.navigate(R.id.log_out_to_nav_login)
+        }
+
+        profileViewModel.currentUser.observe(this) {
+            updateDrawMenuUser(it)
         }
     }
 
@@ -119,6 +129,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }, this)
+    }
+
+    fun updateDrawMenuUser(user: User) {
+        val header = binding.navView.getHeaderView(0)
+        val imgView = header.findViewById(R.id.imgProfile) as ImageView
+        val nameTv = header.findViewById(R.id.displayName) as TextView
+        val emailTv : TextView = header.findViewById(R.id.email) as TextView
+        nameTv.text = user.name
+        emailTv.text = user.email
     }
 
     class ErrorCleaningTextWatcher (private val etLayout: TextInputLayout) : TextWatcher {

@@ -77,6 +77,16 @@
     <string name="err_password_too_short">Passwords must have at least 6 characters</string>
     <string name="err_invalid_password">1 digit, 1 lower case and 1 upper case letter are required</string>
     <string name="err_passwords_dont_match">Passwords do not match</string>
+    <!--    User Profile    -->
+    <string name="label_user_name">Display name</string>
+    <string name="label_user_email">User email</string>
+    <string name="btn_edit">Edit data</string>
+    <string name="btn_save">Save data</string>
+    <string name="btn_logOut">Log Out</string>
+    <string name="btn_exit">Exit app</string>
+    <string name="err_name_too_long">This name is too long</string>
+    <string name="profile_image_desc">User profile picture</string>
+    <string name="edit_profile_image_desc">Edit user profile picture</string>
     <!--    Album Creation    -->
     <string name="album_name">Album\'s name</string>
     <string name="label_date_selection">Select Date for the Album</string>
