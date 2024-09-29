@@ -1,14 +1,19 @@
 package uniovi.eii.shareit.view.adapter
 
+import android.app.Activity
 import android.util.Log
+import android.view.ContextMenu
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewParticipantBinding
 import uniovi.eii.shareit.model.Participant
 
 class ParticipantsListAdapter(
     private val participantsList: List<Participant> = emptyList(),
+    private var selectedItemPosition: Int = -1
 ) : RecyclerView.Adapter<ParticipantsListAdapter.ParticipantViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParticipantViewHolder {
@@ -24,21 +29,46 @@ class ParticipantsListAdapter(
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
         val participant = participantsList[position]
         Log.i("Lista", "Visualiza elemento: $participant")
-        holder.assignValuesToComponents(participant)
+        holder.assignValuesToComponents(participant, position)
     }
 
+    fun getLastSelectedItemPosition(): Int = selectedItemPosition
+
     inner class ParticipantViewHolder(binding: LineRecyclerViewParticipantBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
         private val name = binding.participantName
         private val mail = binding.participantMail
         private val role = binding.participantRole
         private val image = binding.participantImage
 
-        fun assignValuesToComponents(participant: Participant) {
+        fun assignValuesToComponents(participant: Participant, position: Int) {
             name.text = participant.name
             mail.text = participant.email
             role.text = participant.role
 //            image.setImageURI(participant.imagePath.toUri())
+            itemView.setOnCreateContextMenuListener(this)
+            itemView.setOnClickListener {
+                selectedItemPosition = position
+                it.showContextMenu()
+            }
+            itemView.setOnLongClickListener {
+                selectedItemPosition = position
+                false
+            }
+        }
+
+        override fun onCreateContextMenu(
+            menu: ContextMenu?,
+            v: View?,
+            menuInfo: ContextMenu.ContextMenuInfo?
+        ) {
+            menu?.setHeaderTitle(name.text)
+            val inflater = (v?.context as Activity).menuInflater
+            inflater.inflate(R.menu.album_participant_options, menu)
+            when(role.text) {
+                "Guest" -> menu?.removeItem(R.id.action_demote_to_guest)
+                "Member" -> menu?.removeItem(R.id.action_promote_to_member)
+            }
         }
     }
 }
