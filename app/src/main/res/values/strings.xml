@@ -48,6 +48,11 @@
     <string name="action_filter">Filter By…</string>
     <string name="action_filter_all">All images</string>
     <string name="action_filter_mine">My images</string>
+    <string name="action_most_liked">Most liked</string>
+    <string name="action_choose_one">Choose one</string>
+    <string name="action_promote_to_member">Promote to Member</string>
+    <string name="action_demote_to_guest">Demote to Guest</string>
+    <string name="action_eliminate_participant">Eliminate participant</string>
     <!--    Login and Register    -->
     <string name="label_welcome">Welcome to</string> <!--  TODO: Decide Op1: <string name="label_welcome">Welcome</string> -->
     <string name="label_signUp">Register</string>

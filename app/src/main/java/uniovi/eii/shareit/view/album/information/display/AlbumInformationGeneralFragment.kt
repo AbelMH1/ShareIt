@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.MenuRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.model.LatLng
@@ -54,6 +58,9 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.saveFAB.hide()
             viewModel.saveAlbumInfo(album)
         }
+        binding.coverSettingsButton.setOnClickListener {
+            showMenu(it, R.menu.album_cover_options)
+        }
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) toggleDatesEditTexts(checkedId)
         }
@@ -78,6 +85,30 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.nameEditText.addTextChangedListener(ValidationTextWatcher(binding.nameLayout))
         binding.dateStartEditText.addTextChangedListener(ValidationTextWatcher(binding.dateStartLayout))
         binding.dateEndEditText.addTextChangedListener(ValidationTextWatcher(binding.dateEndLayout))
+    }
+
+    private fun showMenu(v: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(requireContext(), v)
+        popup.menuInflater.inflate(menuRes, popup.menu)
+
+        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+            // Respond to menu item click.
+            when (menuItem.itemId) {
+                R.id.action_most_liked -> {
+                    Toast.makeText(context, "Most liked", Toast.LENGTH_SHORT).show()
+                }
+                R.id.action_choose_one -> {
+                    Toast.makeText(context, "Choose cover", Toast.LENGTH_SHORT).show()
+                }
+                else -> return@setOnMenuItemClickListener false
+            }
+            true
+        }
+        popup.setOnDismissListener {
+            // Respond to popup being dismissed.
+        }
+        // Show the popup menu.
+        popup.show()
     }
 
     private fun toggleDatesEditTexts(checkedId: Int) {
