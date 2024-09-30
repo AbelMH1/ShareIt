@@ -40,28 +40,40 @@ class AlbumInformationSharedFragment : Fragment() {
     }
 
     private fun setUpListeners() {
+        binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.sharedSettings.visibility = View.VISIBLE
+                binding.editFAB.show()
+                binding.saveFAB.hide()
+                val album = checkData() ?: Album()
+                save(album)
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(resources.getString(R.string.warn_disable_shared_title))
+                    .setMessage(resources.getString(R.string.warn_disable_shared_message))
+                    .setCancelable(false)
+                    .setNeutralButton(resources.getString(R.string.warn_disable_shared_cancel)) { _, _ ->
+                        binding.switchSharedAlbum.isChecked = true
+                    }.setPositiveButton(resources.getString(R.string.warn_disable_shared_accept)) { _, _ ->
+                        binding.sharedSettings.visibility = View.GONE
+                        binding.editFAB.hide()
+                        binding.saveFAB.hide()
+                        val album = checkData() ?: Album()
+                        save(album)
+                    }.show()
+            }
+        }
         binding.editFAB.setOnClickListener {
             enableEdition(true)
             binding.editFAB.hide()
             binding.saveFAB.show()
         }
         binding.saveFAB.setOnClickListener {
+            enableEdition(false)
             val album = checkData() ?: return@setOnClickListener
-            if (viewModel.hasDisabledShared(album)) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(resources.getString(R.string.warn_disable_shared_title))
-                    .setMessage(resources.getString(R.string.warn_disable_shared_message))
-                    .setNeutralButton(resources.getString(R.string.warn_disable_shared_cancel)) { _, _ ->
-                        binding.switchSharedAlbum.isChecked = true
-                    }.setPositiveButton(resources.getString(R.string.warn_disable_shared_accept)) { _, _ ->
-                        save(album)
-                    }.show()
-            } else {
-                save(album)
-            }
-        }
-        binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
-            binding.sharedSettings.visibility = if (isChecked) View.VISIBLE else View.GONE
+            save(album)
+            binding.editFAB.show()
+            binding.saveFAB.hide()
         }
         binding.switchInvitationLink.setOnCheckedChangeListener { _, isChecked ->
             binding.invitationLinkLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
@@ -77,14 +89,11 @@ class AlbumInformationSharedFragment : Fragment() {
 
     private fun save(album: Album) {
         enableEdition(false)
-        binding.editFAB.show()
-        binding.saveFAB.hide()
         viewModel.saveAlbumInfo(album)
     }
 
     override fun onResume() {
         super.onResume()
-        binding.editFAB.show()
         updateUI(viewModel.getAlbumInfo())
     }
 
@@ -103,7 +112,6 @@ class AlbumInformationSharedFragment : Fragment() {
     private fun enableEdition(enable: Boolean) {
         val editView = if (enable) View.VISIBLE else View.GONE
         binding.switchInvitationLink.visibility = editView
-        binding.switchSharedAlbum.isEnabled = enable
         binding.guestsChatPermissionLayout.isEnabled = enable
         binding.guestsImagesPermissionLayout.isEnabled = enable
         binding.membersChatPermissionLayout.isEnabled = enable
@@ -147,15 +155,16 @@ class AlbumInformationSharedFragment : Fragment() {
     private fun updateUI(album: Album) {
         binding.switchSharedAlbum.isChecked = album.shared
         if (album.shared) {
-            binding.membersImagesPermissionEditText.setText(album.membersImagesPermission)
-            binding.membersChatPermissionEditText.setText(album.membersChatPermission)
-            binding.guestsImagesPermissionEditText.setText(album.guestsImagesPermission)
-            binding.guestsChatPermissionEditText.setText(album.guestsChatPermission)
+            binding.editFAB.show()
+            binding.membersImagesPermissionEditText.setText(album.membersImagesPermission, false)
+            binding.membersChatPermissionEditText.setText(album.membersChatPermission, false)
+            binding.guestsImagesPermissionEditText.setText(album.guestsImagesPermission, false)
+            binding.guestsChatPermissionEditText.setText(album.guestsChatPermission, false)
         } else {
-            binding.membersImagesPermissionEditText.text = null
-            binding.membersChatPermissionEditText.text = null
-            binding.guestsImagesPermissionEditText.text = null
-            binding.guestsChatPermissionEditText.text = null
+            binding.membersImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
+            binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
+            binding.guestsImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
+            binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
         }
         if (album.shared && album.invitationLinkEnabled) {
             binding.invitationLinkEditText.setText(album.invitationLink)

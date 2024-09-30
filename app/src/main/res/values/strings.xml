@@ -124,6 +124,12 @@
     <string name="label_location_disabled">Location not enabled</string>
     <string name="fab_edit_desc">Edit the information displayed</string>
     <string name="fab_save_desc">Save the modified information</string>
+    <string name="images_permission_see">Solo ver</string>
+    <string name="images_permission_vote">Ver y valorar</string>
+    <string name="images_permission_vote_add">Ver, valorar y añadir</string>
+    <string name="chat_permission_hiden">Oculto</string>
+    <string name="chat_permission_see">Solo ver</string>
+    <string name="chat_permission_see_comment">Ver y comentar</string>
     <string name="warn_disable_shared_title">Disable shared album?</string>
     <string name="warn_disable_shared_message">This will permanently delete all participants from the album and their shared photos.</string>
     <string name="warn_disable_shared_accept">Accept</string>

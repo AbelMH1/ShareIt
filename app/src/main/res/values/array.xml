@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="ImagesPermission">
-        <item>Solo ver</item>
-        <item>Ver y valorar</item>
-        <item>Ver, valorar y añadir</item>
+        <item>@string/images_permission_see</item>
+        <item>@string/images_permission_vote</item>
+        <item>@string/images_permission_vote_add</item>
     </string-array>
     <string-array name="ChatPermission">
-        <item>Oculto </item>
-        <item>Solo ver</item>
-        <item>Ver y comentar</item>
+        <item>@string/chat_permission_hiden</item>
+        <item>@string/chat_permission_see</item>
+        <item>@string/chat_permission_see_comment</item>
     </string-array>
 </resources>
