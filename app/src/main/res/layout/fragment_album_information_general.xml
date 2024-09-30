@@ -43,7 +43,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/text_margin"
-                            android:text="@string/labelName" />
+                            android:text="@string/label_name" />
 
                         <TextView
                             android:id="@+id/albumName"
@@ -86,7 +86,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="@string/labelCover" />
+                                android:text="@string/label_cover" />
 
                             <Button
                                 android:id="@+id/coverSettingsButton"
@@ -106,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:contentDescription="@string/labelCover"
+                    android:contentDescription="@string/label_cover"
                     app:srcCompat="@android:mipmap/sym_def_app_icon"
                     tools:srcCompat="@tools:sample/avatars" />
 
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_margin"
-                android:text="@string/labelDate" />
+                android:text="@string/label_date" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/dateToggleButton"
@@ -158,11 +158,19 @@
                     android:text="@string/date_selection_range" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <TextView
+                android:id="@+id/labelDateNotEnabled"
+                style="?attr/textAppearanceTitleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin"
+                android:text="@string/label_date_disabled" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dateStartLayout"
@@ -224,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:labelFor="@+id/mapView"
-                    android:text="@string/labelLocation" />
+                    android:text="@string/label_location" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/switchLocationSelection"
@@ -232,6 +240,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/labelLocationNotEnabled"
+                style="?attr/textAppearanceTitleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin"
+                android:text="@string/label_location_disabled" />
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"

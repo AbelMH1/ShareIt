@@ -115,11 +115,13 @@
     <string name="label_participants">Participants</string>
     <string name="add_participant">Email del participante</string>
     <!--    Album Information    -->
-    <string name="labelName">Name</string>
-    <string name="labelCover">Album\'s Cover</string>
+    <string name="label_name">Name</string>
+    <string name="label_cover">Album\'s Cover</string>
     <string name="cover_settings_btn_desc">Set your Album\'s cover preferences</string>
-    <string name="labelDate">Date of the album</string>
-    <string name="labelLocation">Location of the Album</string>
+    <string name="label_date">Date of the album</string>
+    <string name="label_date_disabled">Date not enabled</string>
+    <string name="label_location">Location of the Album</string>
+    <string name="label_location_disabled">Location not enabled</string>
     <string name="fab_edit_desc">Edit the information displayed</string>
     <string name="fab_save_desc">Save the modified information</string>
     <string name="warn_disable_shared_title">Disable shared album?</string>

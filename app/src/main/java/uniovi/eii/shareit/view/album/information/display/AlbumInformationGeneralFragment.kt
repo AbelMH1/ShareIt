@@ -73,10 +73,12 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
                 true -> {
+                    binding.labelLocationNotEnabled.visibility = View.GONE
                     binding.mapView.visibility = View.VISIBLE
                 }
 
                 false -> {
+                    binding.labelLocationNotEnabled.visibility = View.VISIBLE
                     binding.mapView.visibility = View.GONE
                 }
             }
@@ -114,16 +116,19 @@ class AlbumInformationGeneralFragment : Fragment() {
     private fun toggleDatesEditTexts(checkedId: Int) {
         when (checkedId) {
             R.id.toggleNone -> {
+                binding.labelDateNotEnabled.visibility = View.VISIBLE
                 binding.dateStartLayout.visibility = View.GONE
                 binding.dateEndLayout.visibility = View.GONE
             }
 
             R.id.toggleSingle -> {
+                binding.labelDateNotEnabled.visibility = View.GONE
                 binding.dateStartLayout.visibility = View.VISIBLE
                 binding.dateEndLayout.visibility = View.GONE
             }
 
             R.id.toggleRange -> {
+                binding.labelDateNotEnabled.visibility = View.GONE
                 binding.dateStartLayout.visibility = View.VISIBLE
                 binding.dateEndLayout.visibility = View.VISIBLE
             }

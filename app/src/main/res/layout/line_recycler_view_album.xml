@@ -16,7 +16,7 @@
             android:id="@+id/albumCover"
             android:layout_width="match_parent"
             android:layout_height="@dimen/album_cover_display_height"
-            android:contentDescription="@string/labelCover"
+            android:contentDescription="@string/label_cover"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_person_24" />
 
