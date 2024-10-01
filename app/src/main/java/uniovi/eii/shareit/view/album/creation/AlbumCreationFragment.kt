@@ -9,11 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationBinding
+import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.AlbumCreationViewModel
 
 class AlbumCreationFragment : Fragment() {
@@ -23,16 +24,12 @@ class AlbumCreationFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val viewModel: AlbumCreationViewModel by activityViewModels()
+    private val viewModel: AlbumCreationViewModel by navGraphViewModels(R.id.navigation_album_creation)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumCreationBinding.inflate(inflater, container, false)
-
-        viewModel.text.observe(viewLifecycleOwner) {
-            binding.nameEditText.setText(it)
-        }
 
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
@@ -57,11 +54,11 @@ class AlbumCreationFragment : Fragment() {
         binding.toggleNone.performClick()
 
         binding.dateStartLayout.setEndIconOnClickListener {
-            // Show date picker
+            // TODO: Show date picker
         }
 
         binding.dateEndLayout.setEndIconOnClickListener {
-            // Show date picker
+            // TODO: Show date picker
         }
 
         binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
@@ -91,14 +88,25 @@ class AlbumCreationFragment : Fragment() {
         }
 
         binding.continueBtn.setOnClickListener {
-            findNavController().navigate(AlbumCreationFragmentDirections
-                .actionNavAlbumCreationToNavAlbumCreationShared())
+            if (validateData()) {
+                findNavController().navigate(
+                    AlbumCreationFragmentDirections.actionNavAlbumCreationToNavAlbumCreationShared()
+                )
+            }
         }
 
         binding.createBtn.setOnClickListener {
-            findNavController().navigate(AlbumCreationFragmentDirections
-                .actionNavAlbumCreationToNavHome())
+            if (validateData()) {
+                findNavController().navigate(
+                    AlbumCreationFragmentDirections.actionNavAlbumCreationToNavHome()
+                )
+                viewModel.createAlbum()
+            }
         }
+
+        binding.nameEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.nameLayout))
+        binding.dateStartEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.dateStartLayout))
+        binding.dateEndEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.dateEndLayout))
 
         return binding.root
     }
@@ -132,6 +140,49 @@ class AlbumCreationFragment : Fragment() {
                 menu.removeItem(R.id.action_account)
             }
         }, viewLifecycleOwner)
+    }
+
+    private fun validateData(): Boolean {
+        enableForm(false)
+        val dataValidationResult = viewModel.validateGeneralData(
+            binding.nameEditText.text?.toString() ?: "",
+            binding.dateStartEditText.text?.toString() ?: "",
+            binding.dateEndEditText.text?.toString() ?: "",
+            binding.dateToggleButton.checkedButtonId
+        )
+        if (!dataValidationResult.isDataValid) {
+            updateErrors(
+                dataValidationResult.nameError,
+                dataValidationResult.dateStartError,
+                dataValidationResult.dateEndError
+            )
+        }
+        enableForm(true)
+        return dataValidationResult.isDataValid
+    }
+
+    private fun enableForm(isEnabled: Boolean) {
+        binding.nameLayout.isEnabled = isEnabled
+        binding.dateToggleButton.isEnabled = isEnabled
+        binding.dateStartLayout.isEnabled = isEnabled
+        binding.dateEndLayout.isEnabled = isEnabled
+        binding.switchLocationSelection.isEnabled = isEnabled
+        binding.switchSharedAlbum.isEnabled = isEnabled
+    }
+
+    private fun updateErrors(nameError: Int?, dateStartError: Int?, dateEndError: Int?) {
+        if (nameError != null) {
+            binding.nameLayout.error = resources.getString(nameError)
+            binding.nameEditText.requestFocus()
+        }
+        if (dateStartError != null) {
+            binding.dateStartLayout.error = resources.getString(dateStartError)
+            binding.dateStartEditText.requestFocus()
+        }
+        if (dateEndError != null) {
+            binding.dateEndLayout.error = resources.getString(dateEndError)
+            binding.dateEndEditText.requestFocus()
+        }
     }
 
 }

@@ -34,6 +34,8 @@ class ParticipantsListAdapter(
 
     fun getLastSelectedItemPosition(): Int = selectedItemPosition
 
+    fun getParticipants(): List<Participant> = participantsList
+
     inner class ParticipantViewHolder(binding: LineRecyclerViewParticipantBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
         private val name = binding.participantName
@@ -65,7 +67,7 @@ class ParticipantsListAdapter(
             menu?.setHeaderTitle(name.text)
             val inflater = (v?.context as Activity).menuInflater
             inflater.inflate(R.menu.album_participant_options, menu)
-            when(role.text) {
+            when (role.text) {
                 "Guest" -> menu?.removeItem(R.id.action_demote_to_guest)
                 "Member" -> menu?.removeItem(R.id.action_promote_to_member)
             }
