@@ -58,17 +58,16 @@ class HomeFragment : Fragment() {
 
     private fun configureTabs() {
         binding.pager.adapter = HomeViewPagerAdapter(this)
-        binding.pager.setCurrentItem(1, false)
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = resources.getString(R.string.tab_images)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
+                    tab.text = resources.getString(R.string.tab_albums)
+                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)
                 }
 
                 1 -> {
-                    tab.text = resources.getString(R.string.tab_albums)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)
+                    tab.text = resources.getString(R.string.tab_images)
+                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
                 }
             }
         }.attach()

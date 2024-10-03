@@ -13,8 +13,8 @@ class HomeViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
     override fun createFragment(position: Int): Fragment {
         // Return a NEW fragment instance in createFragment(int).
         when (position) {
-            0 -> return HomeImagesFragment.newInstance()
-            1 -> return HomeAlbumsFragment.newInstance()
+            0 -> return HomeAlbumsFragment.newInstance()
+            1 -> return HomeImagesFragment.newInstance()
         }
         throw IllegalStateException("Incorrect number of tabs in the ViewPager")
     }
