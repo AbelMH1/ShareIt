@@ -1,8 +1,6 @@
 package uniovi.eii.shareit.view.album.information.display
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +12,7 @@ import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationSharedBinding
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 
 class AlbumInformationSharedFragment : Fragment() {
@@ -81,10 +80,11 @@ class AlbumInformationSharedFragment : Fragment() {
         binding.invitationLinkLayout.setEndIconOnClickListener {
             Toast.makeText(context, "Copy", Toast.LENGTH_SHORT).show()
         }
-        binding.membersImagesPermissionEditText.addTextChangedListener(ValidationTextWatcher(binding.membersImagesPermissionLayout))
-        binding.membersChatPermissionEditText.addTextChangedListener(ValidationTextWatcher(binding.membersChatPermissionLayout))
-        binding.guestsImagesPermissionEditText.addTextChangedListener(ValidationTextWatcher(binding.guestsImagesPermissionLayout))
-        binding.guestsChatPermissionEditText.addTextChangedListener(ValidationTextWatcher(binding.guestsChatPermissionLayout))
+
+        binding.membersImagesPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.membersImagesPermissionLayout))
+        binding.membersChatPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.membersChatPermissionLayout))
+        binding.guestsImagesPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.guestsImagesPermissionLayout))
+        binding.guestsChatPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.guestsChatPermissionLayout))
     }
 
     private fun save(album: Album) {
@@ -172,15 +172,6 @@ class AlbumInformationSharedFragment : Fragment() {
         } else {
             binding.invitationLinkEditText.text = null
             binding.switchInvitationLink.isChecked = false
-        }
-    }
-
-    private class ValidationTextWatcher constructor(private val etLayout: TextInputLayout) :
-        TextWatcher {
-        override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-        override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-        override fun afterTextChanged(editable: Editable) {
-            etLayout.error = null
         }
     }
 }
