@@ -26,6 +26,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
 import uniovi.eii.shareit.model.User
@@ -71,8 +73,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         configureToolBar()
 
         val profileViewModel: ProfileViewModel by viewModels()
-        mainViewModel.isUserLogged.observe(this) {
-            if (it) profileViewModel.loadUserProfile()
+        mainViewModel.loggedUser.observe(this) {
+            if (it != null) profileViewModel.loadUserProfile()
             else navController.navigate(R.id.log_out_to_nav_login)
         }
 
@@ -84,6 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         navController.addOnDestinationChangedListener(destinationChangedListener)
+        Log.d("USUARIO", Firebase.auth.currentUser.toString())
     }
 
     override fun onPause() {

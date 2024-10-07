@@ -13,6 +13,7 @@ import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentSignupBinding
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
+import uniovi.eii.shareit.viewModel.MIN_PASS_LENGTH
 import uniovi.eii.shareit.viewModel.SignUpViewModel
 
 
@@ -60,7 +61,7 @@ class SignUpFragment : Fragment() {
                 findNavController().navigate(SignUpFragmentDirections.actionNavSignupToNavLogin())
             } else {
                 enableForm(true)
-                updateErrors(it.emailError, it.passwordError, it.passwordRepeatError)
+                updateErrors(it.emailError, it.passwordError, it.passwordRepeatError, it.firebaseError)
             }
         }
 
@@ -82,18 +83,26 @@ class SignUpFragment : Fragment() {
         binding.btSwitchToLogin.isEnabled = enabled
     }
 
-    private fun updateErrors(emailError: Int?, passwordError: Int?, passwordRepeatError: Int?) {
+    private fun updateErrors(
+        emailError: Int?,
+        passwordError: Int?,
+        passwordRepeatError: Int?,
+        firebaseError: String?
+    ) {
         if (emailError != null) {
             binding.emailLayout.error = resources.getString(emailError)
             binding.emailEditText.requestFocus()
         }
         if (passwordError != null) {
-            binding.passwordLayout.error = resources.getString(passwordError)
+            binding.passwordLayout.error = resources.getString(passwordError, MIN_PASS_LENGTH)
             binding.passwordEditText.requestFocus()
         }
         if (passwordRepeatError != null) {
             binding.passwordRepeatLayout.error = resources.getString(passwordRepeatError)
             binding.passwordRepeatEditText.requestFocus()
+        }
+        if (firebaseError != null) {
+            Toast.makeText(context, "Authentication failed: $firebaseError", Toast.LENGTH_LONG).show()
         }
     }
 

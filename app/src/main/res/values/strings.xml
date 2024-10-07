@@ -79,7 +79,7 @@
     <string name="toast_successful_signup">Your account has been successfully created</string>
     <string name="help_text_password">Passwords must have at least 1 digit, 1 lower case and 1 upper case letter</string>
     <string name="err_not_an_email">Not recognized as an email</string>
-    <string name="err_password_too_short">Passwords must have at least 6 characters</string>
+    <string name="err_password_too_short">Passwords must have at least %1$d characters</string>
     <string name="err_invalid_password">1 digit, 1 lower case and 1 upper case letter are required</string>
     <string name="err_passwords_dont_match">Passwords do not match</string>
     <!--    User Profile    -->

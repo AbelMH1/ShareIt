@@ -53,13 +53,13 @@ class LoginFragment : Fragment() {
 
         viewModel.loginAttempt.observe(viewLifecycleOwner) {
             if (it.isUserLogged) {
-                val mainViewModel: MainViewModel by activityViewModels()
-                mainViewModel.logIn()
                 findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavHome())
                 Toast.makeText(context, getString(R.string.toast_successful_login), Toast.LENGTH_SHORT).show()
+                val mainViewModel: MainViewModel by activityViewModels()
+                mainViewModel.logIn()
             } else {
                 enableForm(true)
-                updateErrors(it.emailError, it.passwordError)
+                updateErrors(it.emailError, it.passwordError, it.firebaseError)
             }
         }
 
@@ -85,7 +85,7 @@ class LoginFragment : Fragment() {
         binding.btSwitchToSignUp.isEnabled = enabled
     }
 
-    private fun updateErrors(emailError: Int?, passwordError: Int?) {
+    private fun updateErrors(emailError: Int?, passwordError: Int?, firebaseError: String?) {
         if (emailError != null) {
             binding.emailLayout.error = resources.getString(emailError)
             binding.emailEditText.requestFocus()
@@ -93,6 +93,9 @@ class LoginFragment : Fragment() {
         if (passwordError != null) {
             binding.passwordLayout.error = resources.getString(passwordError)
             binding.passwordEditText.requestFocus()
+        }
+        if (firebaseError != null) {
+            Toast.makeText(context, "Authentication failed: $firebaseError", Toast.LENGTH_LONG,).show()
         }
     }
 
