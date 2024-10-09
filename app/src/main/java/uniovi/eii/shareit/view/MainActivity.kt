@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         navController.addOnDestinationChangedListener(destinationChangedListener)
-        Log.d("USUARIO", Firebase.auth.currentUser.toString())
+        Log.d("USUARIO", Firebase.auth.currentUser?.email.toString())
     }
 
     override fun onPause() {
