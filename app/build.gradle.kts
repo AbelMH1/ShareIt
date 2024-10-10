@@ -55,8 +55,11 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
-    // Firebase
-    implementation("com.google.firebase:firebase-auth:23.0.0")
+    // Firebase Android BoM (Bill of Materials), to manage all the Firebase library versions
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    // Firebase library versions
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
     // Tests
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
