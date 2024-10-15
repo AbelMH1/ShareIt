@@ -34,7 +34,7 @@ class ProfileFragment : Fragment() {
 
         binding.btSaveData.setOnClickListener {
             enableEdition(false)
-            viewModel.updateData(
+            viewModel.attemptDataUpdate(
                 binding.etUser.text?.toString() ?: "",
                 binding.etEmail.text?.toString() ?: "",
                 ""

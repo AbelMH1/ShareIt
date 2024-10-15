@@ -1,34 +1,64 @@
 package uniovi.eii.shareit.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.User
+import uniovi.eii.shareit.model.realTimeListener.UserDataListener
+import uniovi.eii.shareit.model.repository.FirestoreProfileService
 
 private const val MAX_NAME_LENGTH = 20
 
 class ProfileViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
-    private val _currentUser = MutableLiveData(User("1", "Abel", "hola@gmail.com"))
+
+    companion object {
+        private const val TAG = "ProfileViewModel"
+    }
+
+    private val _currentUser = MutableLiveData<User>()
     val currentUser: LiveData<User> = _currentUser
 
     private val _dataValidation = MutableLiveData<ValidationResult>()
     val dataValidation: LiveData<ValidationResult> = _dataValidation
 
-    fun loadUserProfile() {
-        _currentUser.value = User("1", "Abel", "hola@gmail.com")
+    private var userDataListenerRegistration: ListenerRegistration? = null
+
+    private fun updateUserData(newUserData: User) {
+        _currentUser.postValue(newUserData)
+    }
+
+    fun registerUserDataListener(userId: String) {
+        Log.d(TAG, "userDataListener: START")
+        val updateEvent: (newData: User) -> Unit = {
+            updateUserData(it)
+        }
+        userDataListenerRegistration =
+            FirestoreProfileService.getUserDataRegistration(userId, UserDataListener(updateEvent))
+    }
+
+    fun unregisterUserDataListener() {
+        Log.d(TAG, "userDataListener: STOP")
+        userDataListenerRegistration?.remove()
+    }
+
+    fun attemptDataUpdate(name: String, email: String, image: String) {
+        if (!validateData(name)) return
+        val newUserData = getChangedData(name, email, image)
+        viewModelScope.launch(Dispatchers.IO) {
+            _dataValidation.postValue(
+                FirestoreProfileService.updateCurrentUserData(_currentUser.value!!.id, newUserData)
+            )
+        }
     }
 
     fun wipeErrors() {
         _dataValidation.value = ValidationResult(true)
-    }
-
-    fun updateData(name: String, email: String, image: String) {
-        if (validateData(name)){
-            _dataValidation.value = ValidationResult(true)
-            _currentUser.value = User("1", name, email, image)
-        }
     }
 
     private fun validateData(name: String): Boolean {
@@ -43,7 +73,17 @@ class ProfileViewModel : ViewModel() {
         return true
     }
 
+    private fun getChangedData(name: String, email: String, image: String): HashMap<String, Any> {
+        with(_currentUser.value!!) {
+            val newUserData = this.getChanges(User(id, name, email, image))
+            Log.d(TAG, "DATACHANGED: $newUserData")
+            return newUserData
+        }
+    }
+
     data class ValidationResult(
-        var isDataValid: Boolean = false, var userError: Int? = null
+        var isDataValid: Boolean = false,
+        var firestoreError: String? = null,
+        var userError: Int? = null
     )
 }

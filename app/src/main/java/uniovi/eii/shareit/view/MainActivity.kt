@@ -74,8 +74,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val profileViewModel: ProfileViewModel by viewModels()
         mainViewModel.loggedUser.observe(this) {
-            if (it != null) profileViewModel.loadUserProfile()
-            else navController.navigate(R.id.log_out_to_nav_login)
+            if (it != null) profileViewModel.registerUserDataListener(it.uid)
+            else {
+                navController.navigate(R.id.log_out_to_nav_login)
+                profileViewModel.unregisterUserDataListener()
+            }
         }
 
         profileViewModel.currentUser.observe(this) {
