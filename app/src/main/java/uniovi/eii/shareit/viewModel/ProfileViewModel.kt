@@ -52,7 +52,7 @@ class ProfileViewModel : ViewModel() {
         val newUserData = getChangedData(name, email, image)
         viewModelScope.launch(Dispatchers.IO) {
             _dataValidation.postValue(
-                FirestoreProfileService.updateCurrentUserData(_currentUser.value!!.id, newUserData)
+                FirestoreProfileService.updateCurrentUserData(_currentUser.value!!.userId, newUserData)
             )
         }
     }
@@ -75,7 +75,7 @@ class ProfileViewModel : ViewModel() {
 
     private fun getChangedData(name: String, email: String, image: String): HashMap<String, Any> {
         with(_currentUser.value!!) {
-            val newUserData = this.getChanges(User(id, name, email, image))
+            val newUserData = this.getChanges(User(userId, name, email, image))
             Log.d(TAG, "DATACHANGED: $newUserData")
             return newUserData
         }

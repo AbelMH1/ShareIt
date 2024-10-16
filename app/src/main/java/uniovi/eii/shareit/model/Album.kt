@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import java.util.Date
 
 data class Album(
-    val albumID: String = "",
+    val albumId: String = "",
     var name: String = "",
     var coverImage: String = "",
     var creatorName: String = "",
