@@ -7,17 +7,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationSharedBinding
 import uniovi.eii.shareit.view.MainActivity
-import uniovi.eii.shareit.view.adapter.ParticipantsListAdapter
-import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
 import uniovi.eii.shareit.viewModel.AlbumCreationViewModel
 
 class AlbumCreationSharedFragment : Fragment() {
@@ -38,11 +36,16 @@ class AlbumCreationSharedFragment : Fragment() {
 
         binding.createBtn.setOnClickListener {
             if (validateData()) {
-                findNavController().navigate(
-                    AlbumCreationSharedFragmentDirections.actionNavAlbumCreationSharedToNavHome()
-                )
                 viewModel.createAlbum()
             }
+        }
+
+        viewModel.isCompletedAlbumCreation.observe(viewLifecycleOwner) {
+            if (it) Toast.makeText(context, "Se ha creado el álbum", Toast.LENGTH_LONG).show()
+            else Toast.makeText(context, "Se ha producido un error al crear el álbum", Toast.LENGTH_LONG).show()
+            findNavController().navigate(
+                AlbumCreationSharedFragmentDirections.actionNavAlbumCreationSharedToNavHome()
+            )
         }
 
         binding.membersImagesPermissionEditText.addTextChangedListener(
@@ -107,8 +110,8 @@ class AlbumCreationSharedFragment : Fragment() {
                 dataValidationResult.guestImagesError,
                 dataValidationResult.guestChatError
             )
+            enableForm(true)
         }
-        enableForm(true)
         return dataValidationResult.isDataValid
     }
 
@@ -117,6 +120,7 @@ class AlbumCreationSharedFragment : Fragment() {
         binding.membersChatPermissionLayout.isEnabled = isEnabled
         binding.guestsImagesPermissionLayout.isEnabled = isEnabled
         binding.guestsChatPermissionLayout.isEnabled = isEnabled
+        binding.createBtn.isEnabled = isEnabled
     }
 
     private fun updateErrors(

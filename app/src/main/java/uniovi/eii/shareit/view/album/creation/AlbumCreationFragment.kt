@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -92,16 +93,21 @@ class AlbumCreationFragment : Fragment() {
                 findNavController().navigate(
                     AlbumCreationFragmentDirections.actionNavAlbumCreationToNavAlbumCreationShared()
                 )
+                enableForm(true)
             }
         }
 
         binding.createBtn.setOnClickListener {
             if (validateData()) {
-                findNavController().navigate(
-                    AlbumCreationFragmentDirections.actionNavAlbumCreationToNavHome()
-                )
                 viewModel.createAlbum()
             }
+        }
+
+        viewModel.isCompletedAlbumCreation.observe(viewLifecycleOwner) {
+            if (it) Toast.makeText(context, "Se ha creado el álbum", Toast.LENGTH_LONG,).show()
+            else Toast.makeText(context, "Se ha producido un error al crear el álbum", Toast.LENGTH_LONG,).show()
+            findNavController().navigate(
+                AlbumCreationFragmentDirections.actionNavAlbumCreationToNavHome())
         }
 
         binding.nameEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.nameLayout))
@@ -157,8 +163,8 @@ class AlbumCreationFragment : Fragment() {
                 dataValidationResult.dateStartError,
                 dataValidationResult.dateEndError
             )
+            enableForm(true)
         }
-        enableForm(true)
         return dataValidationResult.isDataValid
     }
 
@@ -169,6 +175,8 @@ class AlbumCreationFragment : Fragment() {
         binding.dateEndLayout.isEnabled = isEnabled
         binding.switchLocationSelection.isEnabled = isEnabled
         binding.switchSharedAlbum.isEnabled = isEnabled
+        binding.createBtn.isEnabled = isEnabled
+        binding.continueBtn.isEnabled = isEnabled
     }
 
     private fun updateErrors(nameError: Int?, dateStartError: Int?, dateEndError: Int?) {

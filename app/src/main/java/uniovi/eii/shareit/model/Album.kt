@@ -1,14 +1,14 @@
 package uniovi.eii.shareit.model
 
 import com.google.android.gms.maps.model.LatLng
-import java.time.LocalDateTime
 import java.util.Date
 
 data class Album(
-    val albumId: String = "",
+    var albumId: String = "",
+    var creatorId: String = "",
+    var creatorName: String = "",
     var name: String = "",
     var coverImage: String = "",
-    var creatorName: String = "",
     var creationDate: Date? = Date(),
     var lastUpdate: Date? = Date(),
     var startDate: Date? = null,

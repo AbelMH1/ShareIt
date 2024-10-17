@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.User
-import uniovi.eii.shareit.model.realTimeListener.UserDataListener
 import uniovi.eii.shareit.model.repository.FirestoreProfileService
 
 private const val MAX_NAME_LENGTH = 20
@@ -39,7 +38,7 @@ class ProfileViewModel : ViewModel() {
             updateUserData(it)
         }
         userDataListenerRegistration =
-            FirestoreProfileService.getUserDataRegistration(userId, UserDataListener(updateEvent))
+            FirestoreProfileService.getUserDataRegistration(userId, updateEvent)
     }
 
     fun unregisterUserDataListener() {

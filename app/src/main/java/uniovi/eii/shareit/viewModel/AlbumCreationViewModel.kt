@@ -2,20 +2,34 @@ package uniovi.eii.shareit.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
-import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.model.Participant
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Locale
+import uniovi.eii.shareit.model.repository.FirestoreAlbumService
+import uniovi.eii.shareit.model.repository.FirestoreProfileService
+import uniovi.eii.shareit.utils.toDate
+
 
 class AlbumCreationViewModel : ViewModel() {
 
-    private val albumToCreate = MutableLiveData(Album())
+    private val _albumToCreate = Album()
+    val isCompletedAlbumCreation = MutableLiveData<Boolean>()
 
     fun createAlbum() {
-        // TODO: Guardar en base de datos el albunToCreate
+        val currentUser = FirestoreProfileService.getCurrentUserData()
+        if (currentUser == null) {
+            isCompletedAlbumCreation.value = false
+            return
+        }
+        _albumToCreate.creatorId = currentUser.userId
+        _albumToCreate.creatorName = currentUser.name
+        viewModelScope.launch(Dispatchers.IO) {
+            isCompletedAlbumCreation.postValue(
+                FirestoreAlbumService.createAlbum(_albumToCreate)
+            )
+        }
     }
 
     fun validateGeneralData(
@@ -23,13 +37,12 @@ class AlbumCreationViewModel : ViewModel() {
     ): GeneralValidationResult {
         val dataValidation = checkValidData(name, startDate, endDate, toggleDateSelected)
         if (dataValidation.isDataValid) {
-            val updatedAlbum = albumToCreate.value?.apply {
+            _albumToCreate.apply {
                 this.name = name
                 this.startDate = startDate.toDate()
                 this.endDate = endDate.toDate()
                 this.visibility = if (shared) Album.SHARED else Album.PRIVATE
             }
-            albumToCreate.value = updatedAlbum
         }
         return dataValidation
     }
@@ -47,13 +60,12 @@ class AlbumCreationViewModel : ViewModel() {
             guestsChatPermission
         )
         if (dataValidation.isDataValid) {
-            val updatedAlbum = albumToCreate.value?.apply {
+            _albumToCreate.apply {
                 this.membersImagesPermission = membersImagesPermission
                 this.membersChatPermission = membersChatPermission
                 this.guestsImagesPermission = guestsImagesPermission
                 this.guestsChatPermission = guestsChatPermission
             }
-            albumToCreate.value = updatedAlbum
         }
         return dataValidation
     }
