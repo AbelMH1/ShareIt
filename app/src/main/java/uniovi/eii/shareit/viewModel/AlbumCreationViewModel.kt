@@ -19,7 +19,7 @@ class AlbumCreationViewModel : ViewModel() {
     }
 
     fun validateGeneralData(
-        name: String, startDate: String, endDate: String, toggleDateSelected: Int
+        name: String, startDate: String, endDate: String, toggleDateSelected: Int, shared: Boolean
     ): GeneralValidationResult {
         val dataValidation = checkValidData(name, startDate, endDate, toggleDateSelected)
         if (dataValidation.isDataValid) {
@@ -27,6 +27,7 @@ class AlbumCreationViewModel : ViewModel() {
                 this.name = name
                 this.startDate = startDate.toDate()
                 this.endDate = endDate.toDate()
+                this.visibility = if (shared) Album.SHARED else Album.PRIVATE
             }
             albumToCreate.value = updatedAlbum
         }

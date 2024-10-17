@@ -14,7 +14,7 @@ data class Album(
     var startDate: Date? = null,
     var endDate: Date? = null,
     var location: LatLng? = null,
-    var shared: Boolean = false,
+    var visibility: String = PRIVATE,
     var membersImagesPermission: String? = null,
     var membersChatPermission: String? = null,
     var guestsImagesPermission: String? = null,
@@ -34,7 +34,7 @@ data class Album(
         if (startDate != other.startDate) return false
         if (endDate != other.endDate) return false
         if (location != other.location) return false
-        if (shared != other.shared) return false
+        if (visibility != other.visibility) return false
         if (membersImagesPermission != other.membersImagesPermission) return false
         if (membersChatPermission != other.membersChatPermission) return false
         if (guestsImagesPermission != other.guestsImagesPermission) return false
@@ -51,7 +51,7 @@ data class Album(
         result = 31 * result + (startDate?.hashCode() ?: 0)
         result = 31 * result + (endDate?.hashCode() ?: 0)
         result = 31 * result + (location?.hashCode() ?: 0)
-        result = 31 * result + shared.hashCode()
+        result = 31 * result + visibility.hashCode()
         result = 31 * result + (membersImagesPermission?.hashCode() ?: 0)
         result = 31 * result + (membersChatPermission?.hashCode() ?: 0)
         result = 31 * result + (guestsImagesPermission?.hashCode() ?: 0)
@@ -59,5 +59,11 @@ data class Album(
         result = 31 * result + invitationLinkEnabled.hashCode()
         result = 31 * result + (invitationLink?.hashCode() ?: 0)
         return result
+    }
+
+    companion object {
+        const val PUBLIC = "Public"
+        const val PRIVATE = "Private"
+        const val SHARED = "Shared"
     }
 }

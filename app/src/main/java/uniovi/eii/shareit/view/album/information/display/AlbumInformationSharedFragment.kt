@@ -120,9 +120,9 @@ class AlbumInformationSharedFragment : Fragment() {
 
     private fun checkData(): Album? {
         val albumData = viewModel.getAlbumInfo()
-        albumData.shared = binding.switchSharedAlbum.isChecked
         if (binding.switchSharedAlbum.isChecked) {
-            albumData.membersImagesPermission =
+            albumData.visibility = Album.SHARED
+                albumData.membersImagesPermission =
                 validateTextField(binding.membersImagesPermissionLayout) ?: return null
             albumData.membersChatPermission =
                 validateTextField(binding.membersChatPermissionLayout) ?: return null
@@ -133,6 +133,7 @@ class AlbumInformationSharedFragment : Fragment() {
             albumData.invitationLinkEnabled = binding.switchInvitationLink.isChecked
             if (!albumData.invitationLinkEnabled) albumData.invitationLink = null
         } else {
+            albumData.visibility = Album.PRIVATE
             albumData.membersImagesPermission = null
             albumData.membersChatPermission = null
             albumData.guestsImagesPermission = null
@@ -153,8 +154,8 @@ class AlbumInformationSharedFragment : Fragment() {
     }
 
     private fun updateUI(album: Album) {
-        binding.switchSharedAlbum.isChecked = album.shared
-        if (album.shared) {
+        binding.switchSharedAlbum.isChecked = album.visibility == Album.SHARED
+        if (album.visibility == Album.SHARED) {
             binding.editFAB.show()
             binding.membersImagesPermissionEditText.setText(album.membersImagesPermission, false)
             binding.membersChatPermissionEditText.setText(album.membersChatPermission, false)
@@ -166,7 +167,7 @@ class AlbumInformationSharedFragment : Fragment() {
             binding.guestsImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
             binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
         }
-        if (album.shared && album.invitationLinkEnabled) {
+        if (album.visibility == Album.SHARED && album.invitationLinkEnabled) {
             binding.invitationLinkEditText.setText(album.invitationLink)
             binding.switchInvitationLink.isChecked = true
         } else {

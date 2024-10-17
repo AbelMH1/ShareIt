@@ -148,7 +148,8 @@ class AlbumCreationFragment : Fragment() {
             binding.nameEditText.text?.toString() ?: "",
             binding.dateStartEditText.text?.toString() ?: "",
             binding.dateEndEditText.text?.toString() ?: "",
-            binding.dateToggleButton.checkedButtonId
+            binding.dateToggleButton.checkedButtonId,
+            binding.switchSharedAlbum.isChecked
         )
         if (!dataValidationResult.isDataValid) {
             updateErrors(
