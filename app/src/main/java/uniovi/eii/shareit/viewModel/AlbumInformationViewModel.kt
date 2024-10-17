@@ -22,8 +22,8 @@ class AlbumInformationViewModel : ViewModel() {
         return album.value?.copy() ?: Album()
     }
 
-    fun hasDisabledShared(newAlbum: Album): Boolean {
-        return (album.value?.shared ?: false) && !newAlbum.shared
-    }
+//    fun hasDisabledShared(newAlbum: Album): Boolean {
+//        return (album.value?.visibility ?: false) && !newAlbum.visibility
+//    }
 
 }

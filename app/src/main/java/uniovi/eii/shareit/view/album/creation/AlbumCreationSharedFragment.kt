@@ -36,10 +36,6 @@ class AlbumCreationSharedFragment : Fragment() {
         binding.guestsImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
         binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
 
-        binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
-        binding.recyclerParticipants.adapter =
-            ParticipantsListAdapter(PlaceholderContent.getParticipantsList(20))
-
         binding.createBtn.setOnClickListener {
             if (validateData()) {
                 findNavController().navigate(
@@ -102,8 +98,7 @@ class AlbumCreationSharedFragment : Fragment() {
             binding.membersImagesPermissionEditText.text?.toString() ?: "",
             binding.membersChatPermissionEditText.text?.toString() ?: "",
             binding.guestsImagesPermissionEditText.text?.toString() ?: "",
-            binding.guestsChatPermissionEditText.text?.toString() ?: "",
-            (binding.recyclerParticipants.adapter as ParticipantsListAdapter).getParticipants()
+            binding.guestsChatPermissionEditText.text?.toString() ?: ""
         )
         if (!dataValidationResult.isDataValid) {
             updateErrors(
@@ -122,8 +117,6 @@ class AlbumCreationSharedFragment : Fragment() {
         binding.membersChatPermissionLayout.isEnabled = isEnabled
         binding.guestsImagesPermissionLayout.isEnabled = isEnabled
         binding.guestsChatPermissionLayout.isEnabled = isEnabled
-        binding.addParticipantBtn.isEnabled = isEnabled
-        binding.addParticipantLayout.isEnabled = isEnabled
     }
 
     private fun updateErrors(

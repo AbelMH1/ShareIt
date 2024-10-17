@@ -38,8 +38,7 @@ class AlbumCreationViewModel : ViewModel() {
         membersImagesPermission: String,
         membersChatPermission: String,
         guestsImagesPermission: String,
-        guestsChatPermission: String,
-        participants: List<Participant>
+        guestsChatPermission: String
     ): SharedValidationResult {
         val dataValidation = checkValidData(
             membersImagesPermission,
@@ -53,8 +52,6 @@ class AlbumCreationViewModel : ViewModel() {
                 this.membersChatPermission = membersChatPermission
                 this.guestsImagesPermission = guestsImagesPermission
                 this.guestsChatPermission = guestsChatPermission
-                this.participants =
-                    participants.map { participant -> participant.name }.toMutableList()
             }
             albumToCreate.value = updatedAlbum
         }
