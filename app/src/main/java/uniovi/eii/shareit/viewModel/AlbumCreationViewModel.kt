@@ -3,6 +3,7 @@ package uniovi.eii.shareit.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import uniovi.eii.shareit.R
+import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
 import java.text.ParseException
@@ -24,6 +25,8 @@ class AlbumCreationViewModel : ViewModel() {
         if (dataValidation.isDataValid) {
             val updatedAlbum = albumToCreate.value?.apply {
                 this.name = name
+                this.startDate = startDate.toDate()
+                this.endDate = endDate.toDate()
             }
             albumToCreate.value = updatedAlbum
         }
@@ -64,19 +67,11 @@ class AlbumCreationViewModel : ViewModel() {
             return GeneralValidationResult(nameError = R.string.err_empty_field)
         }
         if (toggleDateSelected == R.id.toggleNone) return GeneralValidationResult(true)
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        sdf.isLenient = false
-        val dateStart = try {
-            sdf.parse(startDate.trim())
-        } catch (e: ParseException) {
-            return GeneralValidationResult(dateStartError = R.string.err_invalid_date)
-        }
+        val dateStart = startDate.toDate()
+            ?: return GeneralValidationResult(dateStartError = R.string.err_invalid_date)
         if (toggleDateSelected == R.id.toggleRange) {
-            val dateEnd = try {
-                sdf.parse(endDate.trim())
-            } catch (e: ParseException) {
-                return GeneralValidationResult(dateEndError = R.string.err_invalid_date)
-            }
+            val dateEnd = endDate.toDate()
+                ?: return GeneralValidationResult(dateEndError = R.string.err_invalid_date)
             if (!dateEnd.after(dateStart)) {
                 return GeneralValidationResult(dateEndError = R.string.err_invalid_later_date)
             }
