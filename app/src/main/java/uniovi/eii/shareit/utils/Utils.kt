@@ -14,3 +14,8 @@ fun String.toDate(): Date? {
         null
     }
 }
+
+fun Date.toFormattedString(): String {
+    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    return sdf.format(this)
+}

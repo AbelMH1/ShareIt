@@ -8,15 +8,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.util.Pair
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.datepicker.MaterialDatePicker
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationBinding
+import uniovi.eii.shareit.utils.toDate
+import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.AlbumCreationViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AlbumCreationFragment : Fragment() {
 
@@ -33,34 +40,9 @@ class AlbumCreationFragment : Fragment() {
         _binding = FragmentAlbumCreationBinding.inflate(inflater, container, false)
 
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (isChecked) {
-                when (checkedId) {
-                    R.id.toggleNone -> {
-                        binding.dateStartLayout.visibility = View.GONE
-                        binding.dateEndLayout.visibility = View.GONE
-                    }
-
-                    R.id.toggleSingle -> {
-                        binding.dateStartLayout.visibility = View.VISIBLE
-                        binding.dateEndLayout.visibility = View.GONE
-                    }
-
-                    R.id.toggleRange -> {
-                        binding.dateStartLayout.visibility = View.VISIBLE
-                        binding.dateEndLayout.visibility = View.VISIBLE
-                    }
-                }
-            }
+            if (isChecked) toggleDatesEditTexts(checkedId)
         }
         binding.toggleNone.performClick()
-
-        binding.dateStartLayout.setEndIconOnClickListener {
-            // TODO: Show date picker
-        }
-
-        binding.dateEndLayout.setEndIconOnClickListener {
-            // TODO: Show date picker
-        }
 
         binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
@@ -104,8 +86,8 @@ class AlbumCreationFragment : Fragment() {
         }
 
         viewModel.isCompletedAlbumCreation.observe(viewLifecycleOwner) {
-            if (it) Toast.makeText(context, "Se ha creado el álbum", Toast.LENGTH_LONG,).show()
-            else Toast.makeText(context, "Se ha producido un error al crear el álbum", Toast.LENGTH_LONG,).show()
+            if (it) Toast.makeText(context, "Se ha creado el álbum", Toast.LENGTH_LONG).show()
+            else Toast.makeText(context, "Se ha producido un error al crear el álbum", Toast.LENGTH_LONG).show()
             findNavController().navigate(
                 AlbumCreationFragmentDirections.actionNavAlbumCreationToNavHome())
         }
@@ -146,6 +128,68 @@ class AlbumCreationFragment : Fragment() {
                 menu.removeItem(R.id.action_account)
             }
         }, viewLifecycleOwner)
+    }
+
+    private fun toggleDatesEditTexts(checkedId: Int) {
+        when (checkedId) {
+            R.id.toggleNone -> {
+                binding.dateStartLayout.visibility = View.GONE
+                binding.dateEndLayout.visibility = View.GONE
+            }
+
+            R.id.toggleSingle -> {
+                binding.dateStartLayout.visibility = View.VISIBLE
+                binding.dateEndLayout.visibility = View.GONE
+                setDatePicker()
+            }
+
+            R.id.toggleRange -> {
+                binding.dateStartLayout.visibility = View.VISIBLE
+                binding.dateEndLayout.visibility = View.VISIBLE
+                setDateRangePicker()
+            }
+        }
+    }
+
+    private fun setDatePicker() {
+        val startDate = binding.dateStartEditText.text.toString().toDate()?.time
+            ?: MaterialDatePicker.todayInUtcMilliseconds()
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(startDate)
+                .setTextInputFormat(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()))
+                .build()
+        datePicker.addOnPositiveButtonClickListener {
+            binding.dateStartEditText.setText(Date(it).toFormattedString())
+        }
+        binding.dateStartLayout.setEndIconOnClickListener {
+            datePicker.show(childFragmentManager, "AlbumCreationFragment")
+        }
+    }
+
+    private fun setDateRangePicker() {
+        val startDate = binding.dateStartEditText.text.toString().toDate()?.time
+            ?: MaterialDatePicker.todayInUtcMilliseconds()
+        var endDate = binding.dateEndEditText.text.toString().toDate()?.time
+        if (endDate == null || endDate <= startDate)
+            endDate = startDate + (86400000 * 3) // Tres días después de startDate
+        val dateRangePicker =
+            MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select dates")
+                .setSelection(Pair(startDate, endDate))
+                .setTextInputFormat(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()))
+                .build()
+        dateRangePicker.addOnPositiveButtonClickListener {
+            binding.dateStartEditText.setText(Date(it.first).toFormattedString())
+            binding.dateEndEditText.setText(Date(it.second).toFormattedString())
+        }
+        binding.dateStartLayout.setEndIconOnClickListener {
+            dateRangePicker.show(childFragmentManager, "AlbumCreationFragment")
+        }
+        binding.dateEndLayout.setEndIconOnClickListener {
+            dateRangePicker.show(childFragmentManager, "AlbumCreationFragment")
+        }
     }
 
     private fun validateData(): Boolean {

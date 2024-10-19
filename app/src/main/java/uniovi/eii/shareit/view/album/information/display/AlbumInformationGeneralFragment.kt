@@ -10,13 +10,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationGeneralBinding
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.utils.toDate
+import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -45,6 +49,24 @@ class AlbumInformationGeneralFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.editFAB.show()
+        updateUI(viewModel.getAlbumInfo())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        enableEdition(false)
+        binding.saveFAB.hide()
+        binding.editFAB.hide()
+    }
+
     private fun setUpListeners() {
         binding.editFAB.setOnClickListener {
             enableEdition(true)
@@ -63,12 +85,6 @@ class AlbumInformationGeneralFragment : Fragment() {
         }
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) toggleDatesEditTexts(checkedId)
-        }
-        binding.dateStartLayout.setEndIconOnClickListener {
-            // Show date picker
-        }
-        binding.dateEndLayout.setEndIconOnClickListener {
-            // Show date picker
         }
         binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
@@ -125,32 +141,56 @@ class AlbumInformationGeneralFragment : Fragment() {
                 binding.labelDateNotEnabled.visibility = View.GONE
                 binding.dateStartLayout.visibility = View.VISIBLE
                 binding.dateEndLayout.visibility = View.GONE
+                setDatePicker()
             }
 
             R.id.toggleRange -> {
                 binding.labelDateNotEnabled.visibility = View.GONE
                 binding.dateStartLayout.visibility = View.VISIBLE
                 binding.dateEndLayout.visibility = View.VISIBLE
+                setDateRangePicker()
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.editFAB.show()
-        updateUI(viewModel.getAlbumInfo())
+    private fun setDatePicker() {
+        val startDate = binding.dateStartEditText.text.toString().toDate()?.time
+            ?: MaterialDatePicker.todayInUtcMilliseconds()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select date")
+            .setSelection(startDate)
+            .setTextInputFormat(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()))
+            .build()
+        datePicker.addOnPositiveButtonClickListener {
+            binding.dateStartEditText.setText(Date(it).toFormattedString())
+        }
+        binding.dateStartLayout.setEndIconOnClickListener {
+            datePicker.show(childFragmentManager, "AlbumCreationFragment")
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onPause() {
-        super.onPause()
-        enableEdition(false)
-        binding.saveFAB.hide()
-        binding.editFAB.hide()
+    private fun setDateRangePicker() {
+        val startDate = binding.dateStartEditText.text.toString().toDate()?.time
+            ?: MaterialDatePicker.todayInUtcMilliseconds()
+        var endDate = binding.dateEndEditText.text.toString().toDate()?.time
+        if (endDate == null || endDate <= startDate)
+            endDate = startDate + (86400000 * 3) // Tres días después de startDate
+        val dateRangePicker =
+            MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select dates")
+                .setSelection(Pair(startDate, endDate))
+                .setTextInputFormat(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()))
+                .build()
+        dateRangePicker.addOnPositiveButtonClickListener {
+            binding.dateStartEditText.setText(Date(it.first).toFormattedString())
+            binding.dateEndEditText.setText(Date(it.second).toFormattedString())
+        }
+        binding.dateStartLayout.setEndIconOnClickListener {
+            dateRangePicker.show(childFragmentManager, "AlbumCreationFragment")
+        }
+        binding.dateEndLayout.setEndIconOnClickListener {
+            dateRangePicker.show(childFragmentManager, "AlbumCreationFragment")
+        }
     }
 
     private fun enableEdition(enable: Boolean) {
