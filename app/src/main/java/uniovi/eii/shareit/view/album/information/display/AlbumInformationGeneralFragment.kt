@@ -1,8 +1,6 @@
 package uniovi.eii.shareit.view.album.information.display
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +19,7 @@ import uniovi.eii.shareit.databinding.FragmentAlbumInformationGeneralBinding
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.utils.toFormattedString
+import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -100,9 +99,9 @@ class AlbumInformationGeneralFragment : Fragment() {
             }
         }
         // To remove error messages
-        binding.nameEditText.addTextChangedListener(ValidationTextWatcher(binding.nameLayout))
-        binding.dateStartEditText.addTextChangedListener(ValidationTextWatcher(binding.dateStartLayout))
-        binding.dateEndEditText.addTextChangedListener(ValidationTextWatcher(binding.dateEndLayout))
+        binding.nameEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.nameLayout))
+        binding.dateStartEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.dateStartLayout))
+        binding.dateEndEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.dateEndLayout))
     }
 
     private fun showMenu(v: View, @MenuRes menuRes: Int) {
@@ -293,15 +292,6 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.dateStartEditText.setText("")
             binding.dateEndEditText.setText("")
             binding.dateToggleButton.check(R.id.toggleNone)
-        }
-    }
-
-    private class ValidationTextWatcher (private val etLayout: TextInputLayout) :
-        TextWatcher {
-        override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-        override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-        override fun afterTextChanged(editable: Editable) {
-            etLayout.error = null
         }
     }
 }
