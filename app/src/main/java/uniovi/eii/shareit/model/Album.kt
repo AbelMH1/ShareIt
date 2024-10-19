@@ -20,9 +20,14 @@ data class Album(
     var guestsImagesPermission: String? = null,
     var guestsChatPermission: String? = null,
     var invitationLinkEnabled: Boolean = false,
-    var invitationLink: String? = null,
-    var participants: MutableList<String>? = null
+    var invitationLink: String? = null
 ) {
+
+    fun toUserAlbum(): UserAlbum {
+        return UserAlbum(
+            albumId, creatorId, creatorName, name, coverImage, creationDate, lastUpdate
+        )
+    }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -61,7 +66,7 @@ data class Album(
         return result
     }
 
-    companion object {
+    companion object Visibility {
         const val PUBLIC = "Public"
         const val PRIVATE = "Private"
         const val SHARED = "Shared"

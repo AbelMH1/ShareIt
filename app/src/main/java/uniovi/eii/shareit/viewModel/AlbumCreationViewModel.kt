@@ -23,11 +23,9 @@ class AlbumCreationViewModel : ViewModel() {
             isCompletedAlbumCreation.value = false
             return
         }
-        _albumToCreate.creatorId = currentUser.userId
-        _albumToCreate.creatorName = currentUser.name
         viewModelScope.launch(Dispatchers.IO) {
             isCompletedAlbumCreation.postValue(
-                FirestoreAlbumService.createAlbum(_albumToCreate)
+                FirestoreAlbumService.createAlbum(_albumToCreate, currentUser)
             )
         }
     }

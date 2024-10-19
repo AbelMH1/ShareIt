@@ -114,7 +114,7 @@ class HomeAlbumsFragment : Fragment() {
         Toast.makeText(context, "Item Clicked ${album.name}", Toast.LENGTH_SHORT).show()
         // TODO: Pasar id del album a abrir
         findNavController().navigate(HomeFragmentDirections
-            .actionNavHomeToNavAlbum(album.albumID, album.name, album.coverImage))
+            .actionNavHomeToNavAlbum(album.albumId, album.name, album.coverImage))
     }
 
     fun clickOnInfoButtonItem(album: UserAlbum, position: Int) {
@@ -122,7 +122,7 @@ class HomeAlbumsFragment : Fragment() {
         Toast.makeText(context, "Info Clicked ${album.name}", Toast.LENGTH_SHORT).show()
         // TODO: Pasar id del album a abrir
         findNavController().navigate(HomeFragmentDirections
-            .actionNavHomeToNavAlbumInformation(album.albumID, album.name, album.coverImage))
+            .actionNavHomeToNavAlbumInformation(album.albumId, album.name, album.coverImage))
     }
 
 }

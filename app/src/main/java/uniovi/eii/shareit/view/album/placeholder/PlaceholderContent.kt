@@ -6,6 +6,7 @@ import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.UserAlbum
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.util.Date
 
 class PlaceholderContent {
 
@@ -18,11 +19,12 @@ class PlaceholderContent {
                 items.add(
                     UserAlbum(
                         "$i",
+                        "a$i",
+                        "Author$i",
                         "Coolname$i",
                         "",
-                        "Author$i",
-                        LocalDateTime.ofEpochSecond(time * i, 0, ZoneOffset.UTC),
-                        LocalDateTime.ofEpochSecond(time * (count - i), 0, ZoneOffset.UTC)
+                        Date(time * i),
+                        Date(time * (count - i))
                     )
                 )
             }
@@ -42,7 +44,7 @@ class PlaceholderContent {
         fun getParticipantsList(count: Int): MutableList<Participant> {
             val items: MutableList<Participant> = ArrayList()
             for (i in 1..count) {
-                items.add(Participant("Participant $i", "participant$i@gmail.com", "Guest"))
+                items.add(Participant("$i","Participant $i", "participant$i@gmail.com", "","Guest"))
             }
             return items
         }

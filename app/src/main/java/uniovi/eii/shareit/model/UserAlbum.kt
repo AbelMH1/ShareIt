@@ -1,12 +1,13 @@
 package uniovi.eii.shareit.model
 
-import java.time.LocalDateTime
+import java.util.Date
 
 data class UserAlbum(
-    val albumID: String = "",
+    var albumId: String = "",
+    var creatorId: String = "",
+    var creatorName: String = "",
     var name: String = "",
     var coverImage: String = "",
-    var creatorName: String = "",
-    var creationDate: LocalDateTime = LocalDateTime.now(),
-    var lastUpdate: LocalDateTime = LocalDateTime.now(),
+    var creationDate: Date? = Date(),
+    var lastUpdate: Date? = Date()
 )
