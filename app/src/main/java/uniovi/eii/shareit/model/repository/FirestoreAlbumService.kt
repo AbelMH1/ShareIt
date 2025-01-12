@@ -2,12 +2,15 @@ package uniovi.eii.shareit.model.repository
 
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.model.UserAlbum
+import uniovi.eii.shareit.model.realTimeListener.AlbumDataListener
+import uniovi.eii.shareit.viewModel.AlbumInformationViewModel.GeneralValidationResult
 import java.util.Date
 
 object FirestoreAlbumService {
@@ -76,6 +79,41 @@ object FirestoreAlbumService {
         } catch (e: Exception) {
             Log.e(TAG, "createUserAlbumDenormalizedData:failure")
             throw e
+        }
+    }
+
+    /**
+     * Enlazamiento de un objeto de escucha en tiempo real para el album [albumId] con el viewmodel
+     * correspondiente según lo especificado mediante la función [updateVMEvent].
+     * Se hace uso de la clase [AlbumDataListener].
+     */
+    fun getAlbumDataRegistration(
+        albumId: String, updateVMEvent: (newData: Album) -> Unit
+    ): ListenerRegistration {
+        val db = Firebase.firestore
+        return db.collection("albums")
+            .document(albumId)
+            .addSnapshotListener(AlbumDataListener(updateVMEvent))
+    }
+
+    /**
+     * Actualización de los campos especificados en [newAlbumData] para el álbum [albumId] en firestore.
+     */
+    suspend fun updateCurrentAlbumData(
+        albumId: String, newAlbumData: HashMap<String, Any?>
+    ): GeneralValidationResult {
+        val db = Firebase.firestore
+        Log.d(TAG, "updatingCurrentAlbumData:\n Album: $albumId \n Data: $newAlbumData")
+        return try {
+            with(
+                db.collection("albums").document(albumId).update(newAlbumData).await()
+            ) {
+                Log.d(TAG, "updateCurrentAlbumData:success")
+                GeneralValidationResult(true)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "updateCurrentAlbumData:failure", e)
+            GeneralValidationResult(firestoreError = e.message)
         }
     }
 }

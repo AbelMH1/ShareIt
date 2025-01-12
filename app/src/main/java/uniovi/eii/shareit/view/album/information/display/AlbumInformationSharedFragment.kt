@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationSharedBinding
 import uniovi.eii.shareit.model.Album
@@ -42,10 +41,7 @@ class AlbumInformationSharedFragment : Fragment() {
         binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.sharedSettings.visibility = View.VISIBLE
-                binding.editFAB.show()
-                binding.saveFAB.hide()
-                val album = checkData() ?: Album()
-                save(album)
+                saveData()
             } else {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(resources.getString(R.string.warn_disable_shared_title))
@@ -55,10 +51,8 @@ class AlbumInformationSharedFragment : Fragment() {
                         binding.switchSharedAlbum.isChecked = true
                     }.setPositiveButton(resources.getString(R.string.warn_disable_shared_accept)) { _, _ ->
                         binding.sharedSettings.visibility = View.GONE
+                        saveData()
                         binding.editFAB.hide()
-                        binding.saveFAB.hide()
-                        val album = checkData() ?: Album()
-                        save(album)
                     }.show()
             }
         }
@@ -68,17 +62,14 @@ class AlbumInformationSharedFragment : Fragment() {
             binding.saveFAB.show()
         }
         binding.saveFAB.setOnClickListener {
-            enableEdition(false)
-            val album = checkData() ?: return@setOnClickListener
-            save(album)
-            binding.editFAB.show()
-            binding.saveFAB.hide()
+            saveData()
         }
         binding.switchInvitationLink.setOnCheckedChangeListener { _, isChecked ->
             binding.invitationLinkLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         binding.invitationLinkLayout.setEndIconOnClickListener {
             Toast.makeText(context, "Copy", Toast.LENGTH_SHORT).show()
+            // TODO: Copy to clipboard
         }
 
         binding.membersImagesPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.membersImagesPermissionLayout))
@@ -87,13 +78,58 @@ class AlbumInformationSharedFragment : Fragment() {
         binding.guestsChatPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.guestsChatPermissionLayout))
     }
 
-    private fun save(album: Album) {
+    private fun saveData() {
         enableEdition(false)
-        viewModel.saveAlbumInfo(album)
+        val dataValidationResult = viewModel.saveSharedData(
+            binding.switchSharedAlbum.isChecked,
+            binding.membersImagesPermissionEditText.text?.toString() ?: "",
+            binding.membersChatPermissionEditText.text?.toString() ?: "",
+            binding.guestsImagesPermissionEditText.text?.toString() ?: "",
+            binding.guestsChatPermissionEditText.text?.toString() ?: "",
+            binding.switchInvitationLink.isChecked
+        )
+        if (dataValidationResult.isDataValid) {
+            binding.editFAB.show()
+            binding.saveFAB.hide()
+        }
+        else {
+            updateErrors(
+                dataValidationResult.membersImagesPermissionError,
+                dataValidationResult.membersChatPermissionError,
+                dataValidationResult.guestsImagesPermissionError,
+                dataValidationResult.guestsChatPermissionError,
+            )
+            enableEdition(true)
+        }
+    }
+
+    private fun updateErrors(
+        membersImagesPermissionError: Int?,
+        membersChatPermissionError: Int?,
+        guestsImagesPermissionError: Int?,
+        guestsChatPermissionError: Int?
+    ) {
+        if (membersImagesPermissionError != null) {
+            binding.membersImagesPermissionLayout.error = resources.getString(membersImagesPermissionError)
+            binding.membersImagesPermissionEditText.requestFocus()
+        }
+        if (membersChatPermissionError != null) {
+            binding.membersChatPermissionLayout.error = resources.getString(membersChatPermissionError)
+            binding.membersChatPermissionEditText.requestFocus()
+        }
+        if (guestsImagesPermissionError != null) {
+            binding.guestsImagesPermissionLayout.error = resources.getString(guestsImagesPermissionError)
+            binding.guestsImagesPermissionEditText.requestFocus()
+        }
+        if (guestsChatPermissionError != null) {
+            binding.guestsChatPermissionLayout.error = resources.getString(guestsChatPermissionError)
+            binding.guestsChatPermissionEditText.requestFocus()
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        enableEdition(false)
         updateUI(viewModel.getAlbumInfo())
     }
 
@@ -116,41 +152,6 @@ class AlbumInformationSharedFragment : Fragment() {
         binding.guestsImagesPermissionLayout.isEnabled = enable
         binding.membersChatPermissionLayout.isEnabled = enable
         binding.membersImagesPermissionLayout.isEnabled = enable
-    }
-
-    private fun checkData(): Album? {
-        val albumData = viewModel.getAlbumInfo()
-        if (binding.switchSharedAlbum.isChecked) {
-            albumData.visibility = Album.SHARED
-                albumData.membersImagesPermission =
-                validateTextField(binding.membersImagesPermissionLayout) ?: return null
-            albumData.membersChatPermission =
-                validateTextField(binding.membersChatPermissionLayout) ?: return null
-            albumData.guestsImagesPermission =
-                validateTextField(binding.guestsImagesPermissionLayout) ?: return null
-            albumData.guestsChatPermission =
-                validateTextField(binding.guestsChatPermissionLayout) ?: return null
-            albumData.invitationLinkEnabled = binding.switchInvitationLink.isChecked
-            if (!albumData.invitationLinkEnabled) albumData.invitationLink = null
-        } else {
-            albumData.visibility = Album.PRIVATE
-            albumData.membersImagesPermission = null
-            albumData.membersChatPermission = null
-            albumData.guestsImagesPermission = null
-            albumData.guestsChatPermission = null
-            albumData.invitationLinkEnabled = false
-            albumData.invitationLink = null
-        }
-        return albumData
-    }
-
-    private fun validateTextField(etLayout: TextInputLayout): String? {
-        val str = etLayout.editText?.text?.toString()?.trim()
-        if (str.isNullOrBlank()) {
-            etLayout.error = resources.getString(R.string.err_empty_field)
-            return null
-        }
-        return str
     }
 
     private fun updateUI(album: Album) {

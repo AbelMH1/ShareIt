@@ -11,9 +11,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.textfield.TextInputLayout
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationGeneralBinding
 import uniovi.eii.shareit.model.Album
@@ -21,7 +19,6 @@ import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -73,11 +70,7 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.saveFAB.show()
         }
         binding.saveFAB.setOnClickListener {
-            val album = checkData() ?: return@setOnClickListener
-            enableEdition(false)
-            binding.editFAB.show()
-            binding.saveFAB.hide()
-            viewModel.saveAlbumInfo(album)
+            saveData()
         }
         binding.coverSettingsButton.setOnClickListener {
             showMenu(it, R.menu.album_cover_options)
@@ -214,61 +207,42 @@ class AlbumInformationGeneralFragment : Fragment() {
         }
     }
 
-    private fun checkData(): Album? {
-        val albumData = viewModel.getAlbumInfo()
-        albumData.name = validateTextField(binding.nameLayout) ?: return null
-        when (binding.dateToggleButton.checkedButtonId) {
-            R.id.toggleNone -> {
-                albumData.startDate = null
-                albumData.endDate = null
-            }
-
-            R.id.toggleSingle -> {
-                albumData.startDate = validateDate(binding.dateStartLayout) ?: return null
-                albumData.endDate = null
-            }
-
-            R.id.toggleRange -> {
-                val dateStart = validateDate(binding.dateStartLayout) ?: return null
-                val dateEnd = validateDate(binding.dateEndLayout) ?: return null
-                if (!dateEnd.after(dateStart)) {
-                    binding.dateEndLayout.error =
-                        resources.getString(R.string.err_invalid_later_date)
-                    binding.dateEndEditText.requestFocus()
-                    return null
-                }
-                albumData.startDate = dateStart
-                albumData.endDate = dateEnd
-            }
+    private fun saveData() {
+        enableEdition(false)
+        val dataValidationResult = viewModel.saveGeneralData(
+            binding.nameEditText.text?.toString() ?: "",
+            binding.dateStartEditText.text?.toString() ?: "",
+            binding.dateEndEditText.text?.toString() ?: "",
+            binding.dateToggleButton.checkedButtonId,
+            binding.switchLocationSelection.isChecked
+        )
+        if (dataValidationResult.isDataValid) {
+            binding.editFAB.show()
+            binding.saveFAB.hide()
         }
-        if (binding.switchLocationSelection.isChecked) {
-            // TODO: Obtener ubicación del mapa
-            albumData.location = LatLng(0.0, 0.0)
-        } else albumData.location = null
-        return albumData
+        else {
+            updateErrors(
+                dataValidationResult.nameError,
+                dataValidationResult.dateStartError,
+                dataValidationResult.dateEndError
+            )
+            enableEdition(true)
+        }
     }
 
-    private fun validateDate(etLayout: TextInputLayout): Date? {
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        sdf.isLenient = false
-        val date: Date? = try {
-            sdf.parse(etLayout.editText?.text.toString().trim())
-        } catch (e: ParseException) {
-            etLayout.error = resources.getString(R.string.err_invalid_date)
-            etLayout.editText?.requestFocus()
-            return null
+    private fun updateErrors(nameError: Int?, dateStartError: Int?, dateEndError: Int?) {
+        if (nameError != null) {
+            binding.nameLayout.error = resources.getString(nameError)
+            binding.nameEditText.requestFocus()
         }
-        return date
-    }
-
-    private fun validateTextField(etLayout: TextInputLayout): String? {
-        val str = etLayout.editText?.text?.toString()?.trim()
-        if (str.isNullOrBlank()) {
-            etLayout.error = resources.getString(R.string.err_empty_field)
-            etLayout.editText?.requestFocus()
-            return null
+        if (dateStartError != null) {
+            binding.dateStartLayout.error = resources.getString(dateStartError)
+            binding.dateStartEditText.requestFocus()
         }
-        return str
+        if (dateEndError != null) {
+            binding.dateEndLayout.error = resources.getString(dateEndError)
+            binding.dateEndEditText.requestFocus()
+        }
     }
 
     private fun updateUI(album: Album) {
@@ -278,14 +252,12 @@ class AlbumInformationGeneralFragment : Fragment() {
         if (album.location != null) {
             // TODO: Establecer ubicación en el mapa
         }
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        sdf.isLenient = false
         if (album.endDate != null && album.startDate != null) {
-            binding.dateStartEditText.setText(sdf.format(album.startDate!!))
-            binding.dateEndEditText.setText(sdf.format(album.endDate!!))
+            binding.dateStartEditText.setText(album.startDate!!.toFormattedString())
+            binding.dateEndEditText.setText(album.endDate!!.toFormattedString())
             binding.dateToggleButton.check(R.id.toggleRange)
         } else if (album.startDate != null) {
-            binding.dateStartEditText.setText(sdf.format(album.startDate!!))
+            binding.dateStartEditText.setText(album.startDate!!.toFormattedString())
             binding.dateEndEditText.setText("")
             binding.dateToggleButton.check(R.id.toggleSingle)
         } else {
