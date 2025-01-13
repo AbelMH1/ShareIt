@@ -44,6 +44,10 @@ class AlbumInformationViewModel : ViewModel() {
         return currentUser?.role ?: "None"
     }
 
+    fun isCurrentUserOwner(): Boolean {
+        return getCurrentUserRoleInAlbum() == Participant.OWNER
+    }
+
     private fun updateAlbumData(newAlbumData: Album) {
         _album.postValue(newAlbumData)
     }

@@ -32,12 +32,12 @@ class AlbumInformationParticipantsFragment : Fragment() {
     ): View {
         _binding = FragmentAlbumInformationParticipantsBinding.inflate(inflater, container, false)
 
-        val userRole = viewModel.getCurrentUserRoleInAlbum()
+        val isUserOwner = viewModel.isCurrentUserOwner()
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
         binding.recyclerParticipants.adapter =
-            ParticipantsListAdapter(viewModel.getAlbumInfo().creatorId, userRole)
+            ParticipantsListAdapter(viewModel.getAlbumInfo().creatorId, isUserOwner)
 
-        binding.ownerAddingLayout.isVisible = userRole == Participant.OWNER
+        binding.ownerAddingLayout.isVisible = isUserOwner
 
         viewModel.participants.observe(viewLifecycleOwner) {
             updateUI(it)

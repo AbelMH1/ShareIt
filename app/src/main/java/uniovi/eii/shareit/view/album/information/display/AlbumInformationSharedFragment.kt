@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,7 +30,8 @@ class AlbumInformationSharedFragment : Fragment() {
     ): View {
         _binding = FragmentAlbumInformationSharedBinding.inflate(inflater, container, false)
         enableEdition(false)
-        setUpListeners()
+        setUpListeners(viewModel.isCurrentUserOwner())
+        binding.switchSharedAlbum.isEnabled = viewModel.isCurrentUserOwner()
         viewModel.album.observe(viewLifecycleOwner) {
             updateUI(it)
         }
@@ -37,7 +39,20 @@ class AlbumInformationSharedFragment : Fragment() {
         return binding.root
     }
 
-    private fun setUpListeners() {
+    private fun setUpListeners(currentUserOwner: Boolean) {
+        binding.switchInvitationLink.setOnCheckedChangeListener { _, isChecked ->
+            binding.invitationLinkLayout.isVisible = isChecked
+        }
+        binding.invitationLinkLayout.setEndIconOnClickListener {
+            Toast.makeText(context, "Copy", Toast.LENGTH_SHORT).show()
+            // TODO: Copy to clipboard
+        }
+        if(!currentUserOwner) {
+            binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
+                binding.sharedSettings.isVisible = isChecked
+            }
+            return
+        }
         binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.sharedSettings.visibility = View.VISIBLE
@@ -63,13 +78,6 @@ class AlbumInformationSharedFragment : Fragment() {
         }
         binding.saveFAB.setOnClickListener {
             saveData()
-        }
-        binding.switchInvitationLink.setOnCheckedChangeListener { _, isChecked ->
-            binding.invitationLinkLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
-        }
-        binding.invitationLinkLayout.setEndIconOnClickListener {
-            Toast.makeText(context, "Copy", Toast.LENGTH_SHORT).show()
-            // TODO: Copy to clipboard
         }
 
         binding.membersImagesPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.membersImagesPermissionLayout))
@@ -157,7 +165,7 @@ class AlbumInformationSharedFragment : Fragment() {
     private fun updateUI(album: Album) {
         binding.switchSharedAlbum.isChecked = album.visibility == Album.SHARED
         if (album.visibility == Album.SHARED) {
-            binding.editFAB.show()
+            if (viewModel.isCurrentUserOwner()) binding.editFAB.show()
             binding.membersImagesPermissionEditText.setText(album.membersImagesPermission, false)
             binding.membersChatPermissionEditText.setText(album.membersChatPermission, false)
             binding.guestsImagesPermissionEditText.setText(album.guestsImagesPermission, false)

@@ -38,7 +38,7 @@ class AlbumInformationGeneralFragment : Fragment() {
     ): View {
         _binding = FragmentAlbumInformationGeneralBinding.inflate(inflater, container, false)
         enableEdition(false)
-        setUpListeners()
+        setUpListeners(viewModel.isCurrentUserOwner())
         viewModel.album.observe(viewLifecycleOwner) {
             updateUI(it)
         }
@@ -47,7 +47,7 @@ class AlbumInformationGeneralFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.editFAB.show()
+        if (viewModel.isCurrentUserOwner()) binding.editFAB.show()
         updateUI(viewModel.getAlbumInfo())
     }
 
@@ -63,18 +63,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.editFAB.hide()
     }
 
-    private fun setUpListeners() {
-        binding.editFAB.setOnClickListener {
-            enableEdition(true)
-            binding.editFAB.hide()
-            binding.saveFAB.show()
-        }
-        binding.saveFAB.setOnClickListener {
-            saveData()
-        }
-        binding.coverSettingsButton.setOnClickListener {
-            showMenu(it, R.menu.album_cover_options)
-        }
+    private fun setUpListeners(currentUserOwner: Boolean) {
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) toggleDatesEditTexts(checkedId)
         }
@@ -91,6 +80,19 @@ class AlbumInformationGeneralFragment : Fragment() {
                 }
             }
         }
+        if (!currentUserOwner) return
+        binding.editFAB.setOnClickListener {
+            enableEdition(true)
+            binding.editFAB.hide()
+            binding.saveFAB.show()
+        }
+        binding.saveFAB.setOnClickListener {
+            saveData()
+        }
+        binding.coverSettingsButton.setOnClickListener {
+            showMenu(it, R.menu.album_cover_options)
+        }
+
         // To remove error messages
         binding.nameEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.nameLayout))
         binding.dateStartEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.dateStartLayout))
@@ -202,7 +204,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         } else {
             binding.dateStartLayout.endIconDrawable = null
             binding.dateEndLayout.endIconDrawable = null
-            binding.editFAB.show()
+            if (viewModel.isCurrentUserOwner()) binding.editFAB.show()
             binding.saveFAB.hide()
         }
     }

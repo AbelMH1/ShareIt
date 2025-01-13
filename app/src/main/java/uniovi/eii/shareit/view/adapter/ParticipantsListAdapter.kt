@@ -14,7 +14,7 @@ import uniovi.eii.shareit.model.Participant
 
 class ParticipantsListAdapter(
     private val creatorId: String = "",
-    private val userRole: String = "",
+    private val isUserOwner: Boolean = false,
     private var participantsList: List<Participant> = emptyList(),
     private var selectedItemPosition: Int = -1
 ) : RecyclerView.Adapter<ParticipantsListAdapter.ParticipantViewHolder>() {
@@ -38,7 +38,7 @@ class ParticipantsListAdapter(
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
         val participant = participantsList[position]
         Log.i("Lista", "Visualiza elemento: $participant")
-        holder.assignValuesToComponents(participant, position, creatorId, userRole)
+        holder.assignValuesToComponents(participant, position, creatorId, isUserOwner)
     }
 
     fun getLastSelectedItemPosition(): Int = selectedItemPosition
@@ -56,13 +56,13 @@ class ParticipantsListAdapter(
             participant: Participant,
             position: Int,
             creatorId: String,
-            userRole: String
+            isUserOwner: Boolean
         ) {
             name.text = participant.name
             mail.text = participant.email
             role.text = participant.role
 //            image.setImageURI(participant.imagePath.toUri())
-            if (userRole == Participant.OWNER && participant.participantId != creatorId) {
+            if (isUserOwner && participant.participantId != creatorId) {
                 itemView.setOnCreateContextMenuListener(this)
                 itemView.setOnClickListener {
                     selectedItemPosition = position
