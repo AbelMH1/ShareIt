@@ -6,13 +6,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationParticipantsBinding
+import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.view.adapter.ParticipantsListAdapter
-import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 
 class AlbumInformationParticipantsFragment : Fragment() {
@@ -31,11 +32,21 @@ class AlbumInformationParticipantsFragment : Fragment() {
     ): View {
         _binding = FragmentAlbumInformationParticipantsBinding.inflate(inflater, container, false)
 
+        val userRole = viewModel.getCurrentUserRoleInAlbum()
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
         binding.recyclerParticipants.adapter =
-            ParticipantsListAdapter(PlaceholderContent.getParticipantsList(20))
+            ParticipantsListAdapter(viewModel.getAlbumInfo().creatorId, userRole)
 
+        binding.ownerAddingLayout.isVisible = userRole == Participant.OWNER
+
+        viewModel.participants.observe(viewLifecycleOwner) {
+            updateUI(it)
+        }
         return binding.root
+    }
+
+    private fun updateUI(participants: List<Participant>) {
+        (binding.recyclerParticipants.adapter as ParticipantsListAdapter).update(participants)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {

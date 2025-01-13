@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.view.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import android.view.ContextMenu
@@ -12,9 +13,17 @@ import uniovi.eii.shareit.databinding.LineRecyclerViewParticipantBinding
 import uniovi.eii.shareit.model.Participant
 
 class ParticipantsListAdapter(
-    private val participantsList: List<Participant> = emptyList(),
+    private val creatorId: String = "",
+    private val userRole: String = "",
+    private var participantsList: List<Participant> = emptyList(),
     private var selectedItemPosition: Int = -1
 ) : RecyclerView.Adapter<ParticipantsListAdapter.ParticipantViewHolder>() {
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun update(participantsList: List<Participant>) {
+        this.participantsList = participantsList
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParticipantViewHolder {
         return ParticipantViewHolder(
@@ -29,7 +38,7 @@ class ParticipantsListAdapter(
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
         val participant = participantsList[position]
         Log.i("Lista", "Visualiza elemento: $participant")
-        holder.assignValuesToComponents(participant, position)
+        holder.assignValuesToComponents(participant, position, creatorId, userRole)
     }
 
     fun getLastSelectedItemPosition(): Int = selectedItemPosition
@@ -43,19 +52,26 @@ class ParticipantsListAdapter(
         private val role = binding.participantRole
         private val image = binding.participantImage
 
-        fun assignValuesToComponents(participant: Participant, position: Int) {
+        fun assignValuesToComponents(
+            participant: Participant,
+            position: Int,
+            creatorId: String,
+            userRole: String
+        ) {
             name.text = participant.name
             mail.text = participant.email
             role.text = participant.role
 //            image.setImageURI(participant.imagePath.toUri())
-            itemView.setOnCreateContextMenuListener(this)
-            itemView.setOnClickListener {
-                selectedItemPosition = position
-                it.showContextMenu()
-            }
-            itemView.setOnLongClickListener {
-                selectedItemPosition = position
-                false
+            if (userRole == Participant.OWNER && participant.participantId != creatorId) {
+                itemView.setOnCreateContextMenuListener(this)
+                itemView.setOnClickListener {
+                    selectedItemPosition = position
+                    it.showContextMenu()
+                }
+                itemView.setOnLongClickListener {
+                    selectedItemPosition = position
+                    false
+                }
             }
         }
 
@@ -68,8 +84,8 @@ class ParticipantsListAdapter(
             val inflater = (v?.context as Activity).menuInflater
             inflater.inflate(R.menu.album_participant_options, menu)
             when (role.text) {
-                "Guest" -> menu?.removeItem(R.id.action_demote_to_guest)
-                "Member" -> menu?.removeItem(R.id.action_promote_to_member)
+                Participant.GUEST -> menu?.removeItem(R.id.action_demote_to_guest)
+                Participant.MEMBER -> menu?.removeItem(R.id.action_promote_to_member)
             }
         }
     }

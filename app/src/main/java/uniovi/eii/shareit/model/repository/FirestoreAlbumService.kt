@@ -10,6 +10,7 @@ import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.model.realTimeListener.AlbumDataListener
+import uniovi.eii.shareit.model.realTimeListener.AlbumParticipantsListener
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel.GeneralValidationResult
 import java.util.Date
 
@@ -94,6 +95,21 @@ object FirestoreAlbumService {
         return db.collection("albums")
             .document(albumId)
             .addSnapshotListener(AlbumDataListener(updateVMEvent))
+    }
+
+    /**
+     * Enlazamiento de un objeto de escucha en tiempo real para los participantes del
+     * album [albumId] con el viewmodel correspondiente según lo especificado mediante
+     * la función [updateVMEvent]. Se hace uso de la clase [AlbumParticipantsListener].
+     */
+    fun getAlbumParticipantsRegistration(
+        albumId: String, updateVMEvent: (newAlbumParticipants: List<Participant>) -> Unit
+    ): ListenerRegistration {
+        val db = Firebase.firestore
+        return db.collection("albums")
+            .document(albumId)
+            .collection("participants")
+            .addSnapshotListener(AlbumParticipantsListener(updateVMEvent))
     }
 
     /**

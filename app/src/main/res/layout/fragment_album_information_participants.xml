@@ -19,6 +19,7 @@
             android:text="@string/label_participants" />
 
         <LinearLayout
+            android:id="@+id/ownerAddingLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -51,6 +52,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerParticipants"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/line_recycler_view_participant" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

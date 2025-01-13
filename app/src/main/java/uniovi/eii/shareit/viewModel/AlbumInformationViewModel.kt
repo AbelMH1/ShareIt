@@ -10,7 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
+import uniovi.eii.shareit.model.repository.FirestoreProfileService
 import uniovi.eii.shareit.utils.toDate
 
 class AlbumInformationViewModel : ViewModel() {
@@ -21,8 +23,12 @@ class AlbumInformationViewModel : ViewModel() {
 
     private val _album = MutableLiveData(Album())
     val album: LiveData<Album> = _album
+    private val _participants = MutableLiveData(emptyList<Participant>())
+    val participants: LiveData<List<Participant>> = _participants
+
 
     private var albumDataListenerRegistration: ListenerRegistration? = null
+    private var albumParticipantsListenerRegistration: ListenerRegistration? = null
 
     fun updateCurrentAlbum(albumID: String, albumName: String, albumCoverImage: String) {
         _album.value = Album(albumID, albumName, albumCoverImage)
@@ -32,8 +38,18 @@ class AlbumInformationViewModel : ViewModel() {
         return album.value?.copy() ?: Album()
     }
 
+    fun getCurrentUserRoleInAlbum(): String {
+        val currentUserId = FirestoreProfileService.getCurrentUserData()?.userId ?: ""
+        val currentUser = participants.value!!.find { participant -> participant.participantId == currentUserId }
+        return currentUser?.role ?: "None"
+    }
+
     private fun updateAlbumData(newAlbumData: Album) {
         _album.postValue(newAlbumData)
+    }
+
+    private fun updateAlbumParticipants(newAlbumParticipants: List<Participant>) {
+        _participants.postValue(newAlbumParticipants)
     }
 
     fun registerAlbumDataListener(
@@ -49,6 +65,21 @@ class AlbumInformationViewModel : ViewModel() {
     fun unregisterAlbumDataListener() {
         Log.d(TAG, "albumDataListener: STOP")
         albumDataListenerRegistration?.remove()
+    }
+
+    fun registerAlbumParticipantsListener(
+        albumId: String
+    ) {
+        Log.d(TAG, "albumParticipantsListener: START")
+        val updateEvent: (newAlbumParticipants: List<Participant>) -> Unit = {
+            updateAlbumParticipants(it)
+        }
+        albumParticipantsListenerRegistration = FirestoreAlbumService.getAlbumParticipantsRegistration(albumId, updateEvent)
+    }
+
+    fun unregisterAlbumParticipantsListener() {
+        Log.d(TAG, "albumParticipantsListener: STOP")
+        albumParticipantsListenerRegistration?.remove()
     }
 
     fun saveGeneralData(

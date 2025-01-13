@@ -39,6 +39,7 @@ class AlbumInformationFragment : Fragment() {
         _binding = FragmentAlbumInformationBinding.inflate(inflater, container, false)
 
         viewModel.registerAlbumDataListener(args.albumID)
+        viewModel.registerAlbumParticipantsListener(args.albumID)
 
         return binding.root
     }
@@ -52,6 +53,7 @@ class AlbumInformationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.unregisterAlbumDataListener()
+        viewModel.unregisterAlbumParticipantsListener()
         _binding = null
     }
 
