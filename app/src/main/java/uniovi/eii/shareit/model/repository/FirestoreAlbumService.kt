@@ -11,6 +11,7 @@ import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.model.realTimeListener.AlbumDataListener
 import uniovi.eii.shareit.model.realTimeListener.AlbumParticipantsListener
+import uniovi.eii.shareit.viewModel.AlbumInformationViewModel.ParticipantValidationResult
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel.GeneralValidationResult
 import java.util.Date
 
@@ -34,8 +35,13 @@ object FirestoreAlbumService {
                 lastUpdate = Date()
             }
             with(docRef.set(album).await()) {
-                addUserAsOwnerInAlbum(album.albumId, currentUser.toParticipant())
-                createUserAlbumDenormalizedData(album.toUserAlbum())
+                val owner = currentUser.toParticipant()
+                owner.role = Participant.OWNER
+                var error = addParticipantToAlbum(album.albumId, owner)
+                if (error != null) throw Exception(error)
+                val userAlbum = album.toUserAlbum()
+                error = createUserAlbumDenormalizedData(userAlbum, userAlbum.creatorId)
+                if (error != null) throw Exception(error)
                 Log.d(TAG, "createAlbum:success")
                 true
             }
@@ -46,40 +52,89 @@ object FirestoreAlbumService {
     }
 
     /**
-     * Adición del usuario ([owner]) con rol de propietario bajo la colección de participantes del
-     * álbum con el [albumId] dado en firestore.
+     * Adición del usuario con email [participantEmail] y con rol de miembro a los participantes
+     * del [album] dado en firestore.
      */
-    private suspend fun addUserAsOwnerInAlbum(albumId: String, owner: Participant) {
+    suspend fun addNewMemberToAlbum(album: Album, participantEmail: String) : ParticipantValidationResult {
+        val participantResult = searchUserByEmail(participantEmail)
+        if (participantResult.value == null) {
+            return ParticipantValidationResult(firestoreError = participantResult.firestoreError)
+        }
+        val participant = participantResult.value!!.toParticipant()
+        participant.role = Participant.MEMBER
+        var error = addParticipantToAlbum(album.albumId, participant)
+        if (error != null) return ParticipantValidationResult(firestoreError = error)
+        error = createUserAlbumDenormalizedData(album.toUserAlbum(), participant.participantId)
+        if (error != null) return ParticipantValidationResult(firestoreError = error)
+        return ParticipantValidationResult(true)
+    }
+
+    /**
+     * Adición del participante [participant] bajo la subcolección de participantes del álbum
+     * con el [albumId] dado en firestore.
+     */
+    private suspend fun addParticipantToAlbum(albumId: String, participant: Participant) : String? {
         val db = Firebase.firestore
-        owner.role = Participant.OWNER
-        try {
+        return try {
             db.collection("albums")
                 .document(albumId)
                 .collection("participants")
-                .document(owner.participantId)
-                .set(owner).await()
-            Log.d(TAG, "addUserAsOwnerInAlbum:success")
+                .document(participant.participantId)
+                .set(participant).await()
+            Log.d(TAG, "addParticipantToAlbum:success")
+            null
         } catch (e: Exception) {
-            Log.e(TAG, "addUserAsOwnerInAlbum:failure")
-            throw e
+            Log.e(TAG, "addParticipantToAlbum:failure")
+            e.message
         }
     }
 
     /**
-     * Adición del álbum ([userAlbum]) bajo la colección de álbumes del usuario en firestore
+     * Busca y devuelve en un [SearchUserResult] el resultado de buscar un usuario por su [userEmail].
+     * En caso de no encontrarlo devuelve el error encontrado también dentro del objeto mencionado.
      */
-    private suspend fun createUserAlbumDenormalizedData(userAlbum: UserAlbum) {
+    private suspend fun searchUserByEmail(userEmail : String) : SearchUserResult {
         val db = Firebase.firestore
-        try {
+        Log.d(TAG, "searchingUserByEmail: $userEmail")
+        return try {
+            with(
+                db.collection("users").whereEqualTo("email", userEmail).get().await()
+            ) {
+                if(this.isEmpty) {
+                    Log.d(TAG, "searchUserByEmail: notFound")
+                    SearchUserResult(firestoreError = "User not found")
+                } else {
+                    Log.d(TAG, "searchUserByEmail: success")
+                    SearchUserResult(this.documents.first().toObject(User::class.java))
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "searchUserByEmail:failure", e)
+            SearchUserResult(firestoreError = e.message)
+        }
+    }
+
+    data class SearchUserResult(
+        var value: User? = null,
+        var firestoreError: String? = null
+    )
+
+    /**
+     * Adición del álbum ([userAlbum]) bajo la colección de álbumes del usuario en firestore.
+     */
+    private suspend fun createUserAlbumDenormalizedData(userAlbum: UserAlbum, userId: String) : String? {
+        val db = Firebase.firestore
+        return try {
             db.collection("users")
-                .document(userAlbum.creatorId)
+                .document(userId)
                 .collection("albums")
                 .document(userAlbum.albumId)
                 .set(userAlbum).await()
             Log.d(TAG, "createUserAlbumDenormalizedData:success")
+            null
         } catch (e: Exception) {
             Log.e(TAG, "createUserAlbumDenormalizedData:failure")
-            throw e
+            e.message
         }
     }
 

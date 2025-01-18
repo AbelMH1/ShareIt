@@ -135,6 +135,8 @@
     <string name="warn_disable_shared_accept">Accept</string>
     <string name="warn_disable_shared_cancel">Cancel</string>
     <string name="participant_profile_image_desc">Participant profile image</string>
+    <string name="progress_add_participant_btn_desc">Trying to add a participant to the album</string>
+    <string name="err_participant_already_in_album">Participant already in album</string>
     <!--    Image Display    -->
     <string name="author_profile_image_desc">Image\'s author profile picture</string>
     <string name="upload_image_desc">Image uploaded to the album</string>

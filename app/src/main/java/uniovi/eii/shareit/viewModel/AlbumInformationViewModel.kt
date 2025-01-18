@@ -1,6 +1,7 @@
 package uniovi.eii.shareit.viewModel
 
 import android.util.Log
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,8 @@ class AlbumInformationViewModel : ViewModel() {
     private val _participants = MutableLiveData(emptyList<Participant>())
     val participants: LiveData<List<Participant>> = _participants
 
+    private val _addParticipantAttempt = MutableLiveData(ParticipantValidationResult())
+    val addParticipantAttempt: LiveData<ParticipantValidationResult> = _addParticipantAttempt
 
     private var albumDataListenerRegistration: ListenerRegistration? = null
     private var albumParticipantsListenerRegistration: ListenerRegistration? = null
@@ -122,6 +125,18 @@ class AlbumInformationViewModel : ViewModel() {
         return dataValidation
     }
 
+    fun addNewParticipant(
+        participantEmail: String
+    ) {
+        if (checkValidData(participantEmail)) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _addParticipantAttempt.postValue(
+                    FirestoreAlbumService.addNewMemberToAlbum(album.value!!, participantEmail)
+                )
+            }
+        }
+    }
+
     private fun checkValidData(
         name: String, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
     ): GeneralValidationResult {
@@ -199,6 +214,23 @@ class AlbumInformationViewModel : ViewModel() {
         return SharedValidationResult(true, dataToUpdate=dataToUpdate)
     }
 
+    private fun checkValidData(participantEmail: String): Boolean {
+        if (participantEmail.isBlank()) {
+            _addParticipantAttempt.value = ParticipantValidationResult(emailError = R.string.err_empty_field)
+            return false
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(participantEmail).matches()) {
+            _addParticipantAttempt.value = ParticipantValidationResult(emailError = R.string.err_not_an_email)
+            return false
+        }
+        val existingParticipant = participants.value!!.find { participant -> participant.email == participantEmail }
+        if (existingParticipant != null) {
+            _addParticipantAttempt.value = ParticipantValidationResult(emailError = R.string.err_participant_already_in_album)
+            return false
+        }
+        return true
+    }
+
     data class GeneralValidationResult(
         var isDataValid: Boolean = false,
         var nameError: Int? = null,
@@ -218,4 +250,9 @@ class AlbumInformationViewModel : ViewModel() {
         var dataToUpdate: HashMap<String, Any?> = HashMap()
     )
 
+    data class ParticipantValidationResult(
+        var isDataValid: Boolean = false,
+        var emailError: Int? = null,
+        var firestoreError: String? = null
+    )
 }
