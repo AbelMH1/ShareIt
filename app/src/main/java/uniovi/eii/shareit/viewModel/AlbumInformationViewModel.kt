@@ -13,7 +13,7 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
-import uniovi.eii.shareit.model.repository.FirestoreProfileService
+import uniovi.eii.shareit.model.repository.FirestoreUserService
 import uniovi.eii.shareit.utils.toDate
 
 class AlbumInformationViewModel : ViewModel() {
@@ -42,7 +42,7 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     fun getCurrentUserRoleInAlbum(): String {
-        val currentUserId = FirestoreProfileService.getCurrentUserData()?.userId ?: ""
+        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
         val currentUser = participants.value!!.find { participant -> participant.participantId == currentUserId }
         return currentUser?.role ?: "None"
     }

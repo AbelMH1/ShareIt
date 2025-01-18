@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
-import uniovi.eii.shareit.model.repository.FirestoreProfileService
+import uniovi.eii.shareit.model.repository.FirestoreUserService
 import uniovi.eii.shareit.utils.toDate
 
 
@@ -18,7 +18,7 @@ class AlbumCreationViewModel : ViewModel() {
     val isCompletedAlbumCreation = MutableLiveData<Boolean>()
 
     fun createAlbum() {
-        val currentUser = FirestoreProfileService.getCurrentUserData()
+        val currentUser = FirestoreUserService.getCurrentUserData()
         if (currentUser == null) {
             isCompletedAlbumCreation.value = false
             return

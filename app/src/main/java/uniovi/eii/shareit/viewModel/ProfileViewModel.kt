@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.User
-import uniovi.eii.shareit.model.repository.FirestoreProfileService
+import uniovi.eii.shareit.model.repository.FirestoreUserService
 
 private const val MAX_NAME_LENGTH = 20
 
@@ -38,7 +38,7 @@ class ProfileViewModel : ViewModel() {
             updateUserData(it)
         }
         userDataListenerRegistration =
-            FirestoreProfileService.getUserDataRegistration(userId, updateEvent)
+            FirestoreUserService.getUserDataRegistration(userId, updateEvent)
     }
 
     fun unregisterUserDataListener() {
@@ -51,7 +51,7 @@ class ProfileViewModel : ViewModel() {
         val newUserData = getChangedData(name, email, image)
         viewModelScope.launch(Dispatchers.IO) {
             _dataValidation.postValue(
-                FirestoreProfileService.updateCurrentUserData(_currentUser.value!!.userId, newUserData)
+                FirestoreUserService.updateCurrentUserData(_currentUser.value!!.userId, newUserData)
             )
         }
     }

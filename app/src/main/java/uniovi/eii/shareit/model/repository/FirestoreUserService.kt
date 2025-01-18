@@ -10,9 +10,9 @@ import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.model.realTimeListener.UserDataListener
 import uniovi.eii.shareit.viewModel.ProfileViewModel.ValidationResult
 
-object FirestoreProfileService {
+object FirestoreUserService {
 
-    private const val TAG = "FirestoreProfileService"
+    private const val TAG = "FirestoreUserService"
     private val auth = Firebase.auth
     private var currentUserData: User = User()
 
