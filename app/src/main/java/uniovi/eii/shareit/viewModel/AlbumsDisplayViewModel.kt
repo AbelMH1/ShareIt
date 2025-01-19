@@ -1,16 +1,22 @@
 package uniovi.eii.shareit.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.ListenerRegistration
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.UserAlbum
-import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
+import uniovi.eii.shareit.model.repository.FirebaseAuthService
+import uniovi.eii.shareit.model.repository.FirestoreUserService
 
 class AlbumsDisplayViewModel : ViewModel() {
 
-    private val _albumList = MutableLiveData<List<UserAlbum>>(emptyList())
-    val albumList: LiveData<List<UserAlbum>> = _albumList
+    companion object {
+        private const val TAG = "AlbumsDisplayViewModel"
+    }
+
+    private var _albumList = emptyList<UserAlbum>()
     private val _displayAlbumList = MutableLiveData<List<UserAlbum>>(emptyList())
     val displayAlbumList: LiveData<List<UserAlbum>> = _displayAlbumList
 
@@ -19,17 +25,29 @@ class AlbumsDisplayViewModel : ViewModel() {
     private val _currentOrderDirection = MutableLiveData(R.id.action_order_ascending)
     val currentOrderDirection: LiveData<Int> = _currentOrderDirection
 
-    init {
-        updateAlbumList(PlaceholderContent.getAlbumList(25))
-    }
+    private var userAlbumsListenerRegistration: ListenerRegistration? = null
 
-    fun updateAlbumList(newAlbums: List<UserAlbum>) {
-        _albumList.value = newAlbums
+    private fun updateAlbumList(newAlbums: List<UserAlbum>) {
+        _albumList = newAlbums
         updateDisplayAlbumList(orderAlbumList(currentOrder.value!!, currentOrderDirection.value!!, newAlbums))
     }
 
-    fun updateDisplayAlbumList(newAlbums: List<UserAlbum>) {
+    private fun updateDisplayAlbumList(newAlbums: List<UserAlbum>) {
         _displayAlbumList.value = newAlbums
+    }
+
+    fun registerUserAlbumsListener() {
+        Log.d(TAG, "userAlbumsListener: START")
+        val updateEvent: (newUserAlbums: List<UserAlbum>) -> Unit = {
+            updateAlbumList(it)
+        }
+        val userId = FirebaseAuthService.getCurrentUser()!!.uid
+        userAlbumsListenerRegistration = FirestoreUserService.getUserAlbumsRegistration(userId, updateEvent)
+    }
+
+    fun unregisterUserAlbumsListener() {
+        Log.d(TAG, "userAlbumsListener: STOP")
+        userAlbumsListenerRegistration?.remove()
     }
 
     fun applyOrder(order: Int = currentOrder.value!!, direction: Int = currentOrderDirection.value!!) {

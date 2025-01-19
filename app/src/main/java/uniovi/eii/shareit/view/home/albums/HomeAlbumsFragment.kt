@@ -62,6 +62,8 @@ class HomeAlbumsFragment : Fragment() {
             albumListAdapter.update(it)
         }
 
+        viewModel.registerUserAlbumsListener()
+
         return binding.root
     }
 
@@ -72,6 +74,7 @@ class HomeAlbumsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.unregisterUserAlbumsListener()
         _binding = null
     }
 

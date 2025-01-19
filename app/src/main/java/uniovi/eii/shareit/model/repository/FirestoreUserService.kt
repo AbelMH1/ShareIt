@@ -7,6 +7,8 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.User
+import uniovi.eii.shareit.model.UserAlbum
+import uniovi.eii.shareit.model.realTimeListener.UserAlbumsListener
 import uniovi.eii.shareit.model.realTimeListener.UserDataListener
 import uniovi.eii.shareit.viewModel.ProfileViewModel.ValidationResult
 
@@ -41,6 +43,19 @@ object FirestoreUserService {
         }
         return db.collection("users").document(userId)
             .addSnapshotListener(UserDataListener(updateServiceEvent))
+    }
+
+    fun getUserAlbumsRegistration(
+        userId: String,
+        updateVMEvent: (newUserAlbums: List<UserAlbum>) -> Unit
+    ): ListenerRegistration {
+        val db = Firebase.firestore
+        return db.collection("users")
+            .document(userId)
+            .collection("albums")
+            .addSnapshotListener(
+            UserAlbumsListener(updateVMEvent)
+        )
     }
 
     suspend fun updateCurrentUserData(
