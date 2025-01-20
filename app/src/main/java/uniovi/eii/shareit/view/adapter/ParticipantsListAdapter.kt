@@ -43,6 +43,10 @@ class ParticipantsListAdapter(
 
     fun getLastSelectedItemPosition(): Int = selectedItemPosition
 
+    fun getLastSelectedItem(): Participant {
+        return participantsList[selectedItemPosition]
+    }
+
     fun getParticipants(): List<Participant> = participantsList
 
     inner class ParticipantViewHolder(binding: LineRecyclerViewParticipantBinding) :

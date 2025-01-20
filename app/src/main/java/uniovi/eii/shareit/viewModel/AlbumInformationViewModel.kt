@@ -137,6 +137,12 @@ class AlbumInformationViewModel : ViewModel() {
         }
     }
 
+    fun eliminateParticipant(participant: Participant) {
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreAlbumService.eliminateParticipantFromAlbum(album.value!!.albumId, participant)
+        }
+    }
+
     private fun checkValidData(
         name: String, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
     ): GeneralValidationResult {

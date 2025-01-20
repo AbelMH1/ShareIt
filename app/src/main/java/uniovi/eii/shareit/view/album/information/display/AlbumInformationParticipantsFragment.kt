@@ -72,21 +72,20 @@ class AlbumInformationParticipantsFragment : Fragment() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val position =
-            (binding.recyclerParticipants.adapter as ParticipantsListAdapter).getLastSelectedItemPosition()
+        val recyclerViewAdapter = (binding.recyclerParticipants.adapter as ParticipantsListAdapter)
+        val participant = recyclerViewAdapter.getLastSelectedItem()
         when (item.itemId) {
             R.id.action_promote_to_member -> {
-                Toast.makeText(context, "Member promoted ${position + 1}", Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(context, "Member promoted ${position + 1}", Toast.LENGTH_SHORT)
+//                    .show()
             }
 
             R.id.action_demote_to_guest -> {
-                Toast.makeText(context, "Member demoted ${position + 1}", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Member demoted ${position + 1}", Toast.LENGTH_SHORT).show()
             }
 
             R.id.action_eliminate_participant -> {
-                Toast.makeText(context, "Member eliminated ${position + 1}", Toast.LENGTH_SHORT)
-                    .show()
+                eliminateParticipant(participant)
             }
 
             else -> return super.onContextItemSelected(item)
@@ -96,13 +95,6 @@ class AlbumInformationParticipantsFragment : Fragment() {
 
     private fun updateUI(participants: List<Participant>) {
         (binding.recyclerParticipants.adapter as ParticipantsListAdapter).update(participants)
-    }
-
-    private fun addNewParticipant() {
-        enableForm(false)
-        viewModel.addNewParticipant(
-            binding.addParticipantEditText.text?.toString() ?: ""
-        )
     }
 
     private fun enableForm(enabled: Boolean) {
@@ -124,5 +116,18 @@ class AlbumInformationParticipantsFragment : Fragment() {
             Toast.makeText(context, "Error adding participant: $firestoreError", Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    private fun addNewParticipant() {
+        enableForm(false)
+        viewModel.addNewParticipant(
+            binding.addParticipantEditText.text?.toString() ?: ""
+        )
+    }
+
+    private fun eliminateParticipant(participant: Participant) {
+        viewModel.eliminateParticipant(participant)
+        Toast.makeText(context, "Participant eliminated: ${participant.name}", Toast.LENGTH_SHORT)
+            .show()
     }
 }

@@ -139,6 +139,33 @@ object FirestoreAlbumService {
     }
 
     /**
+     * Eliminación del participante [participant] pasado como parámetro de la subcolección de
+     * participantes del álbum con el [albumId] dado en firestore.
+     */
+    fun eliminateParticipantFromAlbum(albumId: String, participant: Participant) {
+        val db = Firebase.firestore
+        try {
+            db.collection("albums")
+                .document(albumId)
+                .collection("participants")
+                .document(participant.participantId)
+                .delete()
+                .addOnSuccessListener { Log.d(TAG, "eliminateParticipantFromAlbum:success") }
+                .addOnFailureListener { e -> Log.w(TAG, "eliminateParticipantFromAlbum:failure", e) }
+//            db.collection("users")
+//                .document(participant.participantId)
+//                .collection("albums")
+//                .document(albumId)
+//                .delete()
+//                .addOnSuccessListener { Log.d(TAG, "eliminateDenormalizedUserAlbum:success") }
+//                .addOnFailureListener { e -> Log.w(TAG, "eliminateDenormalizedUserAlbum:failure", e) }
+        } catch (e: Exception) {
+            Log.e(TAG, "eliminateParticipantFromAlbum:failure", e)
+            e.message
+        }
+    }
+
+    /**
      * Enlazamiento de un objeto de escucha en tiempo real para el album [albumId] con el viewmodel
      * correspondiente según lo especificado mediante la función [updateVMEvent].
      * Se hace uso de la clase [AlbumDataListener].
