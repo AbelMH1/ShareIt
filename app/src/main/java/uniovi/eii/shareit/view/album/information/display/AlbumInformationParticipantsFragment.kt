@@ -75,19 +75,9 @@ class AlbumInformationParticipantsFragment : Fragment() {
         val recyclerViewAdapter = (binding.recyclerParticipants.adapter as ParticipantsListAdapter)
         val participant = recyclerViewAdapter.getLastSelectedItem()
         when (item.itemId) {
-            R.id.action_promote_to_member -> {
-//                Toast.makeText(context, "Member promoted ${position + 1}", Toast.LENGTH_SHORT)
-//                    .show()
-            }
-
-            R.id.action_demote_to_guest -> {
-//                Toast.makeText(context, "Member demoted ${position + 1}", Toast.LENGTH_SHORT).show()
-            }
-
-            R.id.action_eliminate_participant -> {
-                eliminateParticipant(participant)
-            }
-
+            R.id.action_promote_to_member -> promoteParticipant(participant)
+            R.id.action_demote_to_guest -> demoteParticipant(participant)
+            R.id.action_eliminate_participant -> eliminateParticipant(participant)
             else -> return super.onContextItemSelected(item)
         }
         return true
@@ -128,6 +118,18 @@ class AlbumInformationParticipantsFragment : Fragment() {
     private fun eliminateParticipant(participant: Participant) {
         viewModel.eliminateParticipant(participant)
         Toast.makeText(context, "Participant eliminated: ${participant.name}", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun promoteParticipant(participant: Participant) {
+        viewModel.promoteParticipant(participant)
+        Toast.makeText(context, "Participant promoted ${participant.name}", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun demoteParticipant(participant: Participant) {
+        viewModel.demoteParticipant(participant)
+        Toast.makeText(context, "Participant demoted: ${participant.name}", Toast.LENGTH_SHORT)
             .show()
     }
 }

@@ -143,6 +143,25 @@ class AlbumInformationViewModel : ViewModel() {
         }
     }
 
+    fun promoteParticipant(participant: Participant) {
+        participant.role = Participant.MEMBER
+        updateParticipantRole(participant)
+    }
+
+    fun demoteParticipant(participant: Participant) {
+        participant.role = Participant.GUEST
+        updateParticipantRole(participant)
+    }
+
+    private fun updateParticipantRole(participant: Participant) {
+        val newRole = hashMapOf<String,Any?>(
+            "role" to participant.role
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreAlbumService.updateParticipantRoleInAlbum(album.value!!.albumId, participant.participantId, newRole)
+        }
+    }
+
     private fun checkValidData(
         name: String, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
     ): GeneralValidationResult {

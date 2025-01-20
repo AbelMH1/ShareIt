@@ -166,6 +166,26 @@ object FirestoreAlbumService {
     }
 
     /**
+     * Actualización del rol del participante [participant] pasado como parámetro de la subcolección de
+     * participantes del álbum con el [albumId] dado al nuevo valor especificado en [newRole], en firestore.
+     */
+    fun updateParticipantRoleInAlbum(albumId: String, participantId: String, newRole: HashMap<String, Any?>) {
+        val db = Firebase.firestore
+        try {
+            db.collection("albums")
+                .document(albumId)
+                .collection("participants")
+                .document(participantId)
+                .update(newRole)
+                .addOnSuccessListener { Log.d(TAG, "updateParticipantRoleInAlbum:success") }
+                .addOnFailureListener { e -> Log.w(TAG, "updateParticipantRoleInAlbum:failure", e) }
+        } catch (e: Exception) {
+            Log.e(TAG, "updateParticipantRoleInAlbum:failure", e)
+            e.message
+        }
+    }
+
+    /**
      * Enlazamiento de un objeto de escucha en tiempo real para el album [albumId] con el viewmodel
      * correspondiente según lo especificado mediante la función [updateVMEvent].
      * Se hace uso de la clase [AlbumDataListener].
