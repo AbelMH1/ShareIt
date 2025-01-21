@@ -3,6 +3,7 @@ package uniovi.eii.shareit.model.repository
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.Album
@@ -139,26 +140,19 @@ object FirestoreAlbumService {
     }
 
     /**
-     * Eliminación del participante [participant] pasado como parámetro de la subcolección de
+     * Eliminación del participante con el [participantId] pasado como parámetro de la subcolección de
      * participantes del álbum con el [albumId] dado en firestore.
      */
-    fun eliminateParticipantFromAlbum(albumId: String, participant: Participant) {
+    fun eliminateParticipantFromAlbum(albumId: String, participantId: String) {
         val db = Firebase.firestore
         try {
             db.collection("albums")
                 .document(albumId)
                 .collection("participants")
-                .document(participant.participantId)
+                .document(participantId)
                 .delete()
                 .addOnSuccessListener { Log.d(TAG, "eliminateParticipantFromAlbum:success") }
                 .addOnFailureListener { e -> Log.w(TAG, "eliminateParticipantFromAlbum:failure", e) }
-//            db.collection("users")
-//                .document(participant.participantId)
-//                .collection("albums")
-//                .document(albumId)
-//                .delete()
-//                .addOnSuccessListener { Log.d(TAG, "eliminateDenormalizedUserAlbum:success") }
-//                .addOnFailureListener { e -> Log.w(TAG, "eliminateDenormalizedUserAlbum:failure", e) }
         } catch (e: Exception) {
             Log.e(TAG, "eliminateParticipantFromAlbum:failure", e)
             e.message
@@ -166,7 +160,27 @@ object FirestoreAlbumService {
     }
 
     /**
-     * Actualización del rol del participante [participant] pasado como parámetro de la subcolección de
+     * Eliminación del [UserAlbum] con el id [albumId] de la subcolección de álbumes del
+     * participante con el [participantId] pasado como parámetro en firestore.
+     */
+    fun eliminateUserAlbumFromParticipant(albumId: String, participantId: String) {
+        val db = Firebase.firestore
+        try {
+            db.collection("users")
+                .document(participantId)
+                .collection("albums")
+                .document(albumId)
+                .delete()
+                .addOnSuccessListener { Log.d(TAG, "eliminateUserAlbumFromParticipant:success") }
+                .addOnFailureListener { e -> Log.w(TAG, "eliminateUserAlbumFromParticipant:failure", e) }
+        } catch (e: Exception) {
+            Log.e(TAG, "eliminateUserAlbumFromParticipant:failure", e)
+            e.message
+        }
+    }
+
+    /**
+     * Actualización del rol del participante con id [participantId] pasado como parámetro de la subcolección de
      * participantes del álbum con el [albumId] dado al nuevo valor especificado en [newRole], en firestore.
      */
     fun updateParticipantRoleInAlbum(albumId: String, participantId: String, newRole: HashMap<String, Any?>) {
@@ -202,16 +216,19 @@ object FirestoreAlbumService {
     /**
      * Enlazamiento de un objeto de escucha en tiempo real para los participantes del
      * album [albumId] con el viewmodel correspondiente según lo especificado mediante
-     * la función [updateVMEvent]. Se hace uso de la clase [AlbumParticipantsListener].
+     * la función [updateParticipantsVMEvent]. También se actualiza el rol del usuario en función
+     * de los participantes obtenidos mediante la función [updateRoleVMEvent].
+     * Se hace uso de la clase [AlbumParticipantsListener].
      */
     fun getAlbumParticipantsRegistration(
-        albumId: String, updateVMEvent: (newAlbumParticipants: List<Participant>) -> Unit
+        albumId: String, updateParticipantsVMEvent: (newAlbumParticipants: List<Participant>) -> Unit,
+        updateRoleVMEvent: (newAlbumParticipants: List<Participant>) -> Unit
     ): ListenerRegistration {
         val db = Firebase.firestore
         return db.collection("albums")
             .document(albumId)
             .collection("participants")
-            .addSnapshotListener(AlbumParticipantsListener(updateVMEvent))
+            .addSnapshotListener(MetadataChanges.INCLUDE, AlbumParticipantsListener(updateParticipantsVMEvent, updateRoleVMEvent))
     }
 
     /**

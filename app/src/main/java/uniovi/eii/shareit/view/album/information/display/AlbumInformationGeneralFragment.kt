@@ -9,15 +9,20 @@ import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.util.Pair
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationGeneralBinding
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
+import uniovi.eii.shareit.view.album.information.AlbumInformationFragmentDirections
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -40,7 +45,12 @@ class AlbumInformationGeneralFragment : Fragment() {
         enableEdition(false)
         setUpListeners(viewModel.isCurrentUserOwner())
         viewModel.album.observe(viewLifecycleOwner) {
-            updateUI(it)
+            updateAlbumUI(it)
+        }
+        viewModel.currentUserRole.observe(viewLifecycleOwner) {
+            if (it != Participant.NONE) {
+                updateRoleUI(it == Participant.OWNER)
+            }
         }
         return binding.root
     }
@@ -48,7 +58,7 @@ class AlbumInformationGeneralFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (viewModel.isCurrentUserOwner()) binding.editFAB.show()
-        updateUI(viewModel.getAlbumInfo())
+        updateAlbumUI(viewModel.getAlbumInfo())
     }
 
     override fun onDestroyView() {
@@ -80,17 +90,44 @@ class AlbumInformationGeneralFragment : Fragment() {
                 }
             }
         }
-        if (!currentUserOwner) return
-        binding.editFAB.setOnClickListener {
-            enableEdition(true)
-            binding.editFAB.hide()
-            binding.saveFAB.show()
-        }
-        binding.saveFAB.setOnClickListener {
-            saveData()
-        }
-        binding.coverSettingsButton.setOnClickListener {
-            showMenu(it, R.menu.album_cover_options)
+        if (currentUserOwner) {
+            binding.dropAlbumButton.setOnClickListener(null)
+            binding.deleteAlbumButton.setOnClickListener {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(resources.getString(R.string.warn_delete_album_title))
+                    .setMessage(resources.getString(R.string.warn_delete_album_message))
+                    .setNeutralButton(resources.getString(R.string.btn_cancel), null)
+                    .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
+//                        viewModel.deleteAlbum() TODO
+                        findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
+                    }.show()
+            }
+            binding.editFAB.setOnClickListener {
+                enableEdition(true)
+                binding.editFAB.hide()
+                binding.saveFAB.show()
+            }
+            binding.saveFAB.setOnClickListener {
+                saveData()
+            }
+            binding.coverSettingsButton.setOnClickListener {
+                showMenu(it, R.menu.album_cover_options)
+            }
+        } else {
+            binding.dropAlbumButton.setOnClickListener {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(resources.getString(R.string.warn_drop_album_title))
+                    .setMessage(resources.getString(R.string.warn_drop_album_message))
+                    .setNeutralButton(resources.getString(R.string.btn_cancel), null)
+                    .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
+                        viewModel.dropAlbum()
+                        findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
+                    }.show()
+            }
+            binding.deleteAlbumButton.setOnClickListener(null)
+            binding.editFAB.setOnClickListener(null)
+            binding.saveFAB.setOnClickListener(null)
+            binding.coverSettingsButton.setOnClickListener(null)
         }
 
         // To remove error messages
@@ -104,7 +141,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         popup.menuInflater.inflate(menuRes, popup.menu)
 
         popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-            // Respond to menu item click.
+            // TODO: Respond to menu item click.
             when (menuItem.itemId) {
                 R.id.action_most_liked -> {
                     Toast.makeText(context, "Most liked", Toast.LENGTH_SHORT).show()
@@ -247,7 +284,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         }
     }
 
-    private fun updateUI(album: Album) {
+    private fun updateAlbumUI(album: Album) {
         binding.albumName.text = album.name
         binding.nameEditText.setText(album.name)
         binding.switchLocationSelection.isChecked = album.location != null
@@ -266,6 +303,18 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.dateStartEditText.setText("")
             binding.dateEndEditText.setText("")
             binding.dateToggleButton.check(R.id.toggleNone)
+        }
+    }
+
+    private fun updateRoleUI(isOwner: Boolean) {
+        setUpListeners(isOwner)
+        binding.dropAlbumButton.isVisible = !isOwner
+        binding.deleteAlbumButton.isVisible = isOwner
+        if(!isOwner) {
+            binding.editFAB.hide()
+            binding.saveFAB.hide()
+        } else if(!binding.editFAB.isVisible && !binding.saveFAB.isVisible) {
+            binding.editFAB.show()
         }
     }
 }

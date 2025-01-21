@@ -62,9 +62,9 @@ class AlbumInformationSharedFragment : Fragment() {
                     .setTitle(resources.getString(R.string.warn_disable_shared_title))
                     .setMessage(resources.getString(R.string.warn_disable_shared_message))
                     .setCancelable(false)
-                    .setNeutralButton(resources.getString(R.string.warn_disable_shared_cancel)) { _, _ ->
+                    .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
                         binding.switchSharedAlbum.isChecked = true
-                    }.setPositiveButton(resources.getString(R.string.warn_disable_shared_accept)) { _, _ ->
+                    }.setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
                         binding.sharedSettings.visibility = View.GONE
                         saveData()
                         binding.editFAB.hide()

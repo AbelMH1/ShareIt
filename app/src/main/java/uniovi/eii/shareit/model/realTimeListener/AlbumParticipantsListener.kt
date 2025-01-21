@@ -6,7 +6,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import uniovi.eii.shareit.model.Participant
 
-class AlbumParticipantsListener(private val updateEvent: (newAlbumParticipants: List<Participant>) -> Unit) :
+class AlbumParticipantsListener(private val updateParticipantsEvent: (newAlbumParticipants: List<Participant>) -> Unit,
+                                private val updateRoleEvent: (newAlbumParticipants: List<Participant>) -> Unit) :
     EventListener<QuerySnapshot> {
     companion object {
         private const val TAG = "AlbumParticipantsListener"
@@ -22,6 +23,9 @@ class AlbumParticipantsListener(private val updateEvent: (newAlbumParticipants: 
             participants.add(doc.toObject(Participant::class.java))
         }
         Log.d(TAG, "getNewAlbumParticipants:success")
-        updateEvent(participants)
+        updateParticipantsEvent(participants)
+        if (!snapshots.metadata.isFromCache) {
+            updateRoleEvent(participants)
+        }
     }
 }

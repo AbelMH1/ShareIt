@@ -26,6 +26,8 @@ class AlbumInformationViewModel : ViewModel() {
     val album: LiveData<Album> = _album
     private val _participants = MutableLiveData(emptyList<Participant>())
     val participants: LiveData<List<Participant>> = _participants
+    private val _currentUserRole = MutableLiveData(Participant.GUEST)
+    val currentUserRole: LiveData<String> = _currentUserRole
 
     private val _addParticipantAttempt = MutableLiveData(ParticipantValidationResult())
     val addParticipantAttempt: LiveData<ParticipantValidationResult> = _addParticipantAttempt
@@ -41,14 +43,8 @@ class AlbumInformationViewModel : ViewModel() {
         return album.value?.copy() ?: Album()
     }
 
-    fun getCurrentUserRoleInAlbum(): String {
-        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
-        val currentUser = participants.value!!.find { participant -> participant.participantId == currentUserId }
-        return currentUser?.role ?: "None"
-    }
-
     fun isCurrentUserOwner(): Boolean {
-        return getCurrentUserRoleInAlbum() == Participant.OWNER
+        return _currentUserRole.value == Participant.OWNER
     }
 
     private fun updateAlbumData(newAlbumData: Album) {
@@ -57,6 +53,17 @@ class AlbumInformationViewModel : ViewModel() {
 
     private fun updateAlbumParticipants(newAlbumParticipants: List<Participant>) {
         _participants.postValue(newAlbumParticipants)
+    }
+
+    private fun updateCurrentUserRole(participants: List<Participant>) {
+        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
+        val currentUser = participants.find { participant -> participant.participantId == currentUserId }
+        Log.d("updateCurrentUserRole", currentUser?.role ?: Participant.NONE)
+        _currentUserRole.postValue(currentUser?.role ?: Participant.NONE)
+    }
+
+    fun resetCurrentUserRole() {
+        _currentUserRole.postValue(Participant.GUEST)
     }
 
     fun registerAlbumDataListener(
@@ -78,10 +85,13 @@ class AlbumInformationViewModel : ViewModel() {
         albumId: String
     ) {
         Log.d(TAG, "albumParticipantsListener: START")
-        val updateEvent: (newAlbumParticipants: List<Participant>) -> Unit = {
+        val updateParticipantsEvent: (newAlbumParticipants: List<Participant>) -> Unit = {
             updateAlbumParticipants(it)
         }
-        albumParticipantsListenerRegistration = FirestoreAlbumService.getAlbumParticipantsRegistration(albumId, updateEvent)
+        val updateRoleEvent: (newAlbumParticipants: List<Participant>) -> Unit = {
+            updateCurrentUserRole(it)
+        }
+        albumParticipantsListenerRegistration = FirestoreAlbumService.getAlbumParticipantsRegistration(albumId, updateParticipantsEvent, updateRoleEvent)
     }
 
     fun unregisterAlbumParticipantsListener() {
@@ -139,7 +149,7 @@ class AlbumInformationViewModel : ViewModel() {
 
     fun eliminateParticipant(participant: Participant) {
         viewModelScope.launch(Dispatchers.IO) {
-            FirestoreAlbumService.eliminateParticipantFromAlbum(album.value!!.albumId, participant)
+            FirestoreAlbumService.eliminateParticipantFromAlbum(album.value!!.albumId, participant.participantId)
         }
     }
 
@@ -159,6 +169,21 @@ class AlbumInformationViewModel : ViewModel() {
         )
         viewModelScope.launch(Dispatchers.IO) {
             FirestoreAlbumService.updateParticipantRoleInAlbum(album.value!!.albumId, participant.participantId, newRole)
+        }
+    }
+
+    fun dropAlbum() {
+        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreAlbumService.eliminateUserAlbumFromParticipant(album.value!!.albumId, currentUserId)
+            FirestoreAlbumService.eliminateParticipantFromAlbum(album.value!!.albumId, currentUserId)
+        }
+    }
+
+    fun deleteUserAlbum(albumID: String) {
+        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreAlbumService.eliminateUserAlbumFromParticipant(albumID, currentUserId)
         }
     }
 

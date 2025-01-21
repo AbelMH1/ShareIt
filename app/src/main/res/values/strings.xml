@@ -119,6 +119,14 @@
     <string name="label_cover">Album\'s Cover</string>
     <string name="cover_settings_btn_desc">Set your Album\'s cover preferences</string>
     <string name="label_date">Date of the album</string>
+    <string name="btn_delete_album">Delete album</string>
+    <string name="warn_delete_album_title">Delete album?</string>
+    <string name="warn_delete_album_message">This will permanently delete all photos, participants and messages from the album.</string>
+    <string name="btn_drop_album">Drop album</string>
+    <string name="warn_drop_album_title">Drop album?</string>
+    <string name="warn_drop_album_message">You will lose access to all its photos and messages.</string>
+    <string name="warn_eliminated_from_album_title">Access denied</string>
+    <string name="warn_eliminated_from_album_message">Either you were eliminated from this album or the album itself got deleted. Do you want to remove it from your albums?</string>
     <string name="label_date_disabled">Date not enabled</string>
     <string name="label_location">Location of the Album</string>
     <string name="label_location_disabled">Location not enabled</string>
@@ -132,8 +140,8 @@
     <string name="chat_permission_see_comment">Ver y comentar</string>
     <string name="warn_disable_shared_title">Disable shared album?</string>
     <string name="warn_disable_shared_message">This will permanently delete all participants from the album and their shared photos.</string>
-    <string name="warn_disable_shared_accept">Accept</string>
-    <string name="warn_disable_shared_cancel">Cancel</string>
+    <string name="btn_accept">Accept</string>
+    <string name="btn_cancel">Cancel</string>
     <string name="participant_profile_image_desc">Participant profile image</string>
     <string name="progress_add_participant_btn_desc">Trying to add a participant to the album</string>
     <string name="err_participant_already_in_album">Participant already in album</string>

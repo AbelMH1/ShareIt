@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationBinding
+import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.view.adapter.AlbumInformationViewPagerAdapter
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 
@@ -41,6 +44,22 @@ class AlbumInformationFragment : Fragment() {
         viewModel.registerAlbumDataListener(args.albumID)
         viewModel.registerAlbumParticipantsListener(args.albumID)
 
+        viewModel.currentUserRole.observe(viewLifecycleOwner) {
+            if (it == Participant.NONE) { // TODO: && album.visibility != public
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
+                    .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
+                    .setCancelable(false)
+                    .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
+                        findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
+                    }
+                    .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
+                        viewModel.deleteUserAlbum(args.albumID)
+                        findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
+                    }.show()
+            }
+        }
+
         return binding.root
     }
 
@@ -54,6 +73,7 @@ class AlbumInformationFragment : Fragment() {
         super.onDestroyView()
         viewModel.unregisterAlbumDataListener()
         viewModel.unregisterAlbumParticipantsListener()
+        viewModel.resetCurrentUserRole()
         _binding = null
     }
 

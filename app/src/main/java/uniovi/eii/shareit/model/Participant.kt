@@ -11,5 +11,6 @@ data class Participant(
         const val OWNER = "Owner"
         const val GUEST = "Guest"
         const val MEMBER = "Member"
+        const val NONE = "None"
     }
 }
