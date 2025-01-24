@@ -187,6 +187,13 @@ class AlbumInformationViewModel : ViewModel() {
         }
     }
 
+    fun deleteAlbum() {
+        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreAlbumService.deleteAlbum(album.value!!.albumId, currentUserId)
+        }
+    }
+
     private fun checkValidData(
         name: String, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
     ): GeneralValidationResult {

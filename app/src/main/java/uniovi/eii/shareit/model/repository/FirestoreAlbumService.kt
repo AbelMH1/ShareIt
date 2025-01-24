@@ -2,6 +2,7 @@ package uniovi.eii.shareit.model.repository
 
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.firestore
@@ -50,6 +51,31 @@ object FirestoreAlbumService {
             Log.e(TAG, "createAlbum:failure", e)
             false
         }
+    }
+
+    fun deleteAlbum(albumId: String, currentUserId: String) {
+        val db = Firebase.firestore
+        val docRef = db.collection("albums").document(albumId)
+        deleteFullCollection(docRef, "participants")
+//        deleteFullCollection(docRef, "images")
+//        deleteFullCollection(docRef, "messages")
+        docRef.delete().addOnSuccessListener {
+            Log.d(TAG, "deleteAlbum $albumId: Success")
+            eliminateUserAlbumFromParticipant(albumId, currentUserId)
+        }.addOnFailureListener {
+            Log.w(TAG, "deleteAlbum $albumId: Failure")
+        }
+    }
+
+    private fun deleteFullCollection(docRef: DocumentReference, collectionPath: String) {
+        Log.d(TAG, "deleteFullCollection: $collectionPath")
+        docRef.collection(collectionPath).get()
+            .addOnSuccessListener {
+                for (doc in it) {
+                    doc.reference.delete()
+                        .addOnFailureListener { e -> Log.w(TAG, "Error deleting document ${doc.id}", e) }
+                }
+            }
     }
 
     /**

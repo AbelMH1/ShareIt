@@ -98,7 +98,7 @@ class AlbumInformationGeneralFragment : Fragment() {
                     .setMessage(resources.getString(R.string.warn_delete_album_message))
                     .setNeutralButton(resources.getString(R.string.btn_cancel), null)
                     .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
-//                        viewModel.deleteAlbum() TODO
+                        viewModel.deleteAlbum()
                         findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
                     }.show()
             }

@@ -121,7 +121,7 @@
     <string name="label_date">Date of the album</string>
     <string name="btn_delete_album">Delete album</string>
     <string name="warn_delete_album_title">Delete album?</string>
-    <string name="warn_delete_album_message">This will permanently delete all photos, participants and messages from the album.</string>
+    <string name="warn_delete_album_message">This will permanently delete the album, including all its photos, participants and messages.</string>
     <string name="btn_drop_album">Drop album</string>
     <string name="warn_drop_album_title">Drop album?</string>
     <string name="warn_drop_album_message">You will lose access to all its photos and messages.</string>
