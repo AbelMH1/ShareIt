@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import uniovi.eii.shareit.databinding.LineRecyclerViewMessageReceivedBinding
 import uniovi.eii.shareit.databinding.LineRecyclerViewMessageSentBinding
 import uniovi.eii.shareit.model.ChatMessage
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
+import uniovi.eii.shareit.utils.areSameDay
+import uniovi.eii.shareit.utils.toFormattedChatDateString
+import uniovi.eii.shareit.utils.toFormattedChatHourString
 
 class MessageListAdapter(
-    private var messageList: List<ChatMessage> = emptyList(),
+    private var currentUserId: String = "",
+    private var messageList: List<ChatMessage> = emptyList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -25,14 +27,14 @@ class MessageListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (messageList[position].senderId == "0") {
+        if (messageList[position].senderId == currentUserId) {
             return if (position == 0 ||
-                !messageList[position].timestamp.truncatedTo(ChronoUnit.DAYS).equals(messageList[position-1].timestamp.truncatedTo(ChronoUnit.DAYS)))
+                !messageList[position].timestamp.areSameDay(messageList[position-1].timestamp))
                 SENT_WITH_DATE
             else SENT
         }
         if (position == 0 ||
-            !messageList[position].timestamp.truncatedTo(ChronoUnit.DAYS).equals(messageList[position-1].timestamp.truncatedTo(ChronoUnit.DAYS))) return RECEIVED_WITH_DATE
+            !messageList[position].timestamp.areSameDay(messageList[position-1].timestamp)) return RECEIVED_WITH_DATE
         return if (messageList[position].senderName == messageList[position - 1].senderName) RECEIVED_SAME_SENDER else RECEIVED
     }
 
@@ -77,15 +79,19 @@ class MessageListAdapter(
         notifyDataSetChanged()
     }
 
+    fun setCurrentUserId(currentUserId: String) {
+        this.currentUserId = currentUserId
+    }
+
     inner class ReceivedMessageViewHolder(private val binding: LineRecyclerViewMessageReceivedBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun assignValuesToComponents(chatMessage: ChatMessage, showSender: Boolean = true, showDate: Boolean = false) {
             binding.message.text = chatMessage.message
             binding.sender.text = chatMessage.senderName
             if (!showSender) binding.sender.visibility = View.GONE
-            binding.date.text = chatMessage.timestamp.format(DateTimeFormatter.ofPattern("d MMM uuuu"))
+            binding.date.text = chatMessage.timestamp.toFormattedChatDateString()
             if (!showDate) binding.date.visibility = View.GONE
-            binding.time.text = chatMessage.timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
+            binding.time.text = chatMessage.timestamp.toFormattedChatHourString()
         }
     }
 
@@ -93,9 +99,9 @@ class MessageListAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun assignValuesToComponents(chatMessage: ChatMessage, showDate: Boolean = false) {
             binding.message.text = chatMessage.message
-            binding.date.text = chatMessage.timestamp.format(DateTimeFormatter.ofPattern("d MMM uuuu"))
+            binding.date.text = chatMessage.timestamp.toFormattedChatDateString()
             if (!showDate) binding.date.visibility = View.GONE
-            binding.time.text = chatMessage.timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
+            binding.time.text = chatMessage.timestamp.toFormattedChatHourString()
         }
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
@@ -24,6 +25,7 @@ class ChatFragment : Fragment() {
         fun newInstance() = ChatFragment()
     }
 
+    private val args: ChatFragmentArgs by navArgs()
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
     private val albumViewModel: AlbumViewModel by activityViewModels()
@@ -35,9 +37,12 @@ class ChatFragment : Fragment() {
     ): View {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
+        chatViewModel.registerChatMessagesListener(args.albumID)
+
         val layoutManager = LinearLayoutManager(context)
         layoutManager.stackFromEnd = true
         binding.messagesRecycler.layoutManager = layoutManager
+        adapter.setCurrentUserId(chatViewModel.getCurrentUserId())
         binding.messagesRecycler.adapter = adapter
 
         chatViewModel.messageList.observe(viewLifecycleOwner) {
@@ -53,7 +58,7 @@ class ChatFragment : Fragment() {
         binding.sendFAB.setOnClickListener {
             val message = binding.writeMessageEditText.text?.toString()?.trim() ?: ""
             if (message.isBlank()) return@setOnClickListener
-            chatViewModel.sendMessage(message)
+            chatViewModel.sendMessage(message, args.albumID)
             binding.writeMessageEditText.text = null
         }
 
@@ -67,6 +72,7 @@ class ChatFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        chatViewModel.unregisterChatMessagesListener()
         _binding = null
     }
 

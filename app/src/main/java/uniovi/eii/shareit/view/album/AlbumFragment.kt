@@ -120,7 +120,7 @@ class AlbumFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.action_chat -> {
                         findNavController().navigate(AlbumFragmentDirections
-                            .actionNavAlbumToNavAlbumChat())
+                            .actionNavAlbumToNavAlbumChat(args.albumID, args.albumName))
                         true
                     }
 

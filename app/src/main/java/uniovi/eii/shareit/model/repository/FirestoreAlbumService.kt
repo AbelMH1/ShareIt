@@ -58,7 +58,7 @@ object FirestoreAlbumService {
         val docRef = db.collection("albums").document(albumId)
         deleteFullCollection(docRef, "participants")
 //        deleteFullCollection(docRef, "images")
-//        deleteFullCollection(docRef, "messages")
+        deleteFullCollection(docRef, "chat")
         docRef.delete().addOnSuccessListener {
             Log.d(TAG, "deleteAlbum $albumId: Success")
             eliminateUserAlbumFromParticipant(albumId, currentUserId)
