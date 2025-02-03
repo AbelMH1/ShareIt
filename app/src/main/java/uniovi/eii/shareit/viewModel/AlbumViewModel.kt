@@ -11,7 +11,7 @@ class AlbumViewModel : ViewModel() {
     val currentAlbum: LiveData<Album> = _currentAlbum
 
     fun updateCurrentAlbum(albumID: String, albumName: String, albumCoverImage: String) {
-        _currentAlbum.value = Album(albumID, albumName, albumCoverImage)
+        _currentAlbum.value = Album(albumID, name = albumName, coverImage = albumCoverImage)
     }
 
 }
