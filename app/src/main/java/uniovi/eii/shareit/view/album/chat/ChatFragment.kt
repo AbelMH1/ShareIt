@@ -50,7 +50,7 @@ class ChatFragment : Fragment() {
             binding.messagesRecycler.layoutManager?.scrollToPosition(it.size - 1)
         }
 
-        albumViewModel.currentAlbum.observe(viewLifecycleOwner) {
+        albumViewModel.album.observe(viewLifecycleOwner) {
             val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
             toolbar.title = it.name
         }

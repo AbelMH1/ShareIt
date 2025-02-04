@@ -14,6 +14,7 @@ import uniovi.eii.shareit.databinding.FragmentAlbumInformationSharedBinding
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 class AlbumInformationSharedFragment : Fragment() {
 
@@ -24,15 +25,16 @@ class AlbumInformationSharedFragment : Fragment() {
     private var _binding: FragmentAlbumInformationSharedBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumInformationViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumInformationSharedBinding.inflate(inflater, container, false)
         enableEdition(false)
-        setUpListeners(viewModel.isCurrentUserOwner())
-        binding.switchSharedAlbum.isEnabled = viewModel.isCurrentUserOwner()
-        viewModel.album.observe(viewLifecycleOwner) {
+        setUpListeners(albumViewModel.isCurrentUserOwner())
+        binding.switchSharedAlbum.isEnabled = albumViewModel.isCurrentUserOwner()
+        albumViewModel.album.observe(viewLifecycleOwner) {
             updateUI(it)
         }
 
@@ -138,7 +140,7 @@ class AlbumInformationSharedFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         enableEdition(false)
-        updateUI(viewModel.getAlbumInfo())
+        updateUI(albumViewModel.getAlbumInfo())
     }
 
     override fun onDestroyView() {
@@ -165,7 +167,7 @@ class AlbumInformationSharedFragment : Fragment() {
     private fun updateUI(album: Album) {
         binding.switchSharedAlbum.isChecked = album.visibility == Album.SHARED
         if (album.visibility == Album.SHARED) {
-            if (viewModel.isCurrentUserOwner()) binding.editFAB.show()
+            if (albumViewModel.isCurrentUserOwner()) binding.editFAB.show()
             binding.membersImagesPermissionEditText.setText(album.membersImagesPermission, false)
             binding.membersChatPermissionEditText.setText(album.membersChatPermission, false)
             binding.guestsImagesPermissionEditText.setText(album.guestsImagesPermission, false)

@@ -22,63 +22,28 @@ class AlbumInformationViewModel : ViewModel() {
         private const val TAG = "AlbumInformationViewModel"
     }
 
-    private val _album = MutableLiveData(Album())
-    val album: LiveData<Album> = _album
+    private var album: Album = Album()
+
     private val _participants = MutableLiveData(emptyList<Participant>())
     val participants: LiveData<List<Participant>> = _participants
-    private val _currentUserRole = MutableLiveData(Participant.GUEST)
-    val currentUserRole: LiveData<String> = _currentUserRole
-
     private val _addParticipantAttempt = MutableLiveData(ParticipantValidationResult())
     val addParticipantAttempt: LiveData<ParticipantValidationResult> = _addParticipantAttempt
 
-    private var albumDataListenerRegistration: ListenerRegistration? = null
     private var albumParticipantsListenerRegistration: ListenerRegistration? = null
 
-    fun updateCurrentAlbum(albumID: String, albumName: String, albumCoverImage: String) {
-        _album.value = Album(albumID, albumName, albumCoverImage)
-    }
-
-    fun getAlbumInfo(): Album {
-        return album.value?.copy() ?: Album()
-    }
-
-    fun isCurrentUserOwner(): Boolean {
-        return _currentUserRole.value == Participant.OWNER
-    }
-
     private fun updateAlbumData(newAlbumData: Album) {
-        _album.postValue(newAlbumData)
+        album = newAlbumData
+    }
+
+    fun getUpdateAlbumFunc(): (Album) -> Unit {
+        val updateEvent: (newAlbumData: Album) -> Unit = {
+            updateAlbumData(it)
+        }
+        return updateEvent
     }
 
     private fun updateAlbumParticipants(newAlbumParticipants: List<Participant>) {
         _participants.postValue(newAlbumParticipants)
-    }
-
-    private fun updateCurrentUserRole(participants: List<Participant>) {
-        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
-        val currentUser = participants.find { participant -> participant.participantId == currentUserId }
-        Log.d("updateCurrentUserRole", currentUser?.role ?: Participant.NONE)
-        _currentUserRole.postValue(currentUser?.role ?: Participant.NONE)
-    }
-
-    fun resetCurrentUserRole() {
-        _currentUserRole.postValue(Participant.GUEST)
-    }
-
-    fun registerAlbumDataListener(
-        albumId: String
-    ) {
-        Log.d(TAG, "albumDataListener: START")
-        val updateEvent: (newData: Album) -> Unit = {
-            updateAlbumData(it)
-        }
-        albumDataListenerRegistration = FirestoreAlbumService.getAlbumDataRegistration(albumId, updateEvent)
-    }
-
-    fun unregisterAlbumDataListener() {
-        Log.d(TAG, "albumDataListener: STOP")
-        albumDataListenerRegistration?.remove()
     }
 
     fun registerAlbumParticipantsListener(
@@ -88,10 +53,7 @@ class AlbumInformationViewModel : ViewModel() {
         val updateParticipantsEvent: (newAlbumParticipants: List<Participant>) -> Unit = {
             updateAlbumParticipants(it)
         }
-        val updateRoleEvent: (newAlbumParticipants: List<Participant>) -> Unit = {
-            updateCurrentUserRole(it)
-        }
-        albumParticipantsListenerRegistration = FirestoreAlbumService.getAlbumParticipantsRegistration(albumId, updateParticipantsEvent, updateRoleEvent)
+        albumParticipantsListenerRegistration = FirestoreAlbumService.getAlbumParticipantsRegistration(albumId, updateParticipantsEvent)
     }
 
     fun unregisterAlbumParticipantsListener() {
@@ -105,7 +67,7 @@ class AlbumInformationViewModel : ViewModel() {
         val dataValidation = checkValidData(name, startDate, endDate, toggleDateSelected, location)
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
-                FirestoreAlbumService.updateCurrentAlbumData(album.value!!.albumId, dataValidation.dataToUpdate)
+                FirestoreAlbumService.updateCurrentAlbumData(album.albumId, dataValidation.dataToUpdate)
             }
         }
         return dataValidation
@@ -129,7 +91,7 @@ class AlbumInformationViewModel : ViewModel() {
 
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
-                FirestoreAlbumService.updateCurrentAlbumData(album.value!!.albumId, dataValidation.dataToUpdate)
+                FirestoreAlbumService.updateCurrentAlbumData(album.albumId, dataValidation.dataToUpdate)
             }
         }
         return dataValidation
@@ -141,7 +103,7 @@ class AlbumInformationViewModel : ViewModel() {
         if (checkValidData(participantEmail)) {
             viewModelScope.launch(Dispatchers.IO) {
                 _addParticipantAttempt.postValue(
-                    FirestoreAlbumService.addNewMemberToAlbum(album.value!!, participantEmail)
+                    FirestoreAlbumService.addNewMemberToAlbum(album, participantEmail)
                 )
             }
         }
@@ -149,7 +111,7 @@ class AlbumInformationViewModel : ViewModel() {
 
     fun eliminateParticipant(participant: Participant) {
         viewModelScope.launch(Dispatchers.IO) {
-            FirestoreAlbumService.eliminateParticipantFromAlbum(album.value!!.albumId, participant.participantId)
+            FirestoreAlbumService.eliminateParticipantFromAlbum(album.albumId, participant.participantId)
         }
     }
 
@@ -168,29 +130,22 @@ class AlbumInformationViewModel : ViewModel() {
             "role" to participant.role
         )
         viewModelScope.launch(Dispatchers.IO) {
-            FirestoreAlbumService.updateParticipantRoleInAlbum(album.value!!.albumId, participant.participantId, newRole)
+            FirestoreAlbumService.updateParticipantRoleInAlbum(album.albumId, participant.participantId, newRole)
         }
     }
 
     fun dropAlbum() {
         val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
         viewModelScope.launch(Dispatchers.IO) {
-            FirestoreAlbumService.eliminateUserAlbumFromParticipant(album.value!!.albumId, currentUserId)
-            FirestoreAlbumService.eliminateParticipantFromAlbum(album.value!!.albumId, currentUserId)
-        }
-    }
-
-    fun deleteUserAlbum(albumID: String) {
-        val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
-        viewModelScope.launch(Dispatchers.IO) {
-            FirestoreAlbumService.eliminateUserAlbumFromParticipant(albumID, currentUserId)
+            FirestoreAlbumService.eliminateUserAlbumFromParticipant(album.albumId, currentUserId)
+            FirestoreAlbumService.eliminateParticipantFromAlbum(album.albumId, currentUserId)
         }
     }
 
     fun deleteAlbum() {
         val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
         viewModelScope.launch(Dispatchers.IO) {
-            FirestoreAlbumService.deleteAlbum(album.value!!.albumId, currentUserId)
+            FirestoreAlbumService.deleteAlbum(album.albumId, currentUserId)
         }
     }
 
@@ -202,17 +157,17 @@ class AlbumInformationViewModel : ViewModel() {
         if (name.isBlank()) {
             return GeneralValidationResult(nameError = R.string.err_empty_field)
         }
-        if (name != album.value?.name) {
+        if (name != album.name) {
             dataToUpdate["name"] = name
         }
         if (toggleDateSelected == R.id.toggleNone) {
-            if (album.value?.startDate != null) dataToUpdate["startDate"] = null
-            if (album.value?.endDate != null) dataToUpdate["endDate"] = null
+            if (album.startDate != null) dataToUpdate["startDate"] = null
+            if (album.endDate != null) dataToUpdate["endDate"] = null
             return GeneralValidationResult(true, dataToUpdate=dataToUpdate)
         }
         val dateStart = startDate.toDate()
             ?: return GeneralValidationResult(dateStartError = R.string.err_invalid_date)
-        if (dateStart != album.value?.startDate) {
+        if (dateStart != album.startDate) {
             dataToUpdate["startDate"] = dateStart
         }
         if (toggleDateSelected == R.id.toggleRange) {
@@ -221,11 +176,11 @@ class AlbumInformationViewModel : ViewModel() {
             if (!dateEnd.after(dateStart)) {
                 return GeneralValidationResult(dateEndError = R.string.err_invalid_later_date)
             }
-            if (dateEnd != album.value?.endDate) {
+            if (dateEnd != album.endDate) {
                 dataToUpdate["endDate"] = dateEnd
             }
         } else {
-            if (album.value?.endDate != null) dataToUpdate["endDate"] = null
+            if (album.endDate != null) dataToUpdate["endDate"] = null
         }
         return GeneralValidationResult(true, dataToUpdate=dataToUpdate)
     }
@@ -242,30 +197,30 @@ class AlbumInformationViewModel : ViewModel() {
             if (membersImagesPermission.isBlank()) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
-            if (membersImagesPermission != album.value?.membersImagesPermission) {
+            if (membersImagesPermission != album.membersImagesPermission) {
                 dataToUpdate["membersImagesPermission"] = membersImagesPermission
             }
             if (membersChatPermission.isBlank()) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
-            if (membersChatPermission != album.value?.membersChatPermission) {
+            if (membersChatPermission != album.membersChatPermission) {
                 dataToUpdate["membersChatPermission"] = membersChatPermission
             }
             if (guestsImagesPermission.isBlank()) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
-            if (guestsImagesPermission != album.value?.guestsImagesPermission) {
+            if (guestsImagesPermission != album.guestsImagesPermission) {
                 dataToUpdate["guestsImagesPermission"] = guestsImagesPermission
             }
             if (guestsChatPermission.isBlank()) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
-            if (guestsChatPermission != album.value?.guestsChatPermission) {
+            if (guestsChatPermission != album.guestsChatPermission) {
                 dataToUpdate["guestsChatPermission"] = guestsChatPermission
             }
         }
         val visibility = if(shared) Album.SHARED else Album.PRIVATE
-        if (visibility != album.value?.visibility) {
+        if (visibility != album.visibility) {
             dataToUpdate["visibility"] = visibility
         }
         return SharedValidationResult(true, dataToUpdate=dataToUpdate)

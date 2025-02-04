@@ -24,6 +24,7 @@ import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.view.album.information.AlbumInformationFragmentDirections
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -37,17 +38,18 @@ class AlbumInformationGeneralFragment : Fragment() {
     private var _binding: FragmentAlbumInformationGeneralBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumInformationViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumInformationGeneralBinding.inflate(inflater, container, false)
         enableEdition(false)
-        setUpListeners(viewModel.isCurrentUserOwner())
-        viewModel.album.observe(viewLifecycleOwner) {
+        setUpListeners(albumViewModel.isCurrentUserOwner())
+        albumViewModel.album.observe(viewLifecycleOwner) {
             updateAlbumUI(it)
         }
-        viewModel.currentUserRole.observe(viewLifecycleOwner) {
+        albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
             if (it != Participant.NONE) {
                 updateRoleUI(it == Participant.OWNER)
             }
@@ -57,8 +59,8 @@ class AlbumInformationGeneralFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (viewModel.isCurrentUserOwner()) binding.editFAB.show()
-        updateAlbumUI(viewModel.getAlbumInfo())
+        if (albumViewModel.isCurrentUserOwner()) binding.editFAB.show()
+        updateAlbumUI(albumViewModel.getAlbumInfo())
     }
 
     override fun onDestroyView() {
@@ -241,7 +243,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         } else {
             binding.dateStartLayout.endIconDrawable = null
             binding.dateEndLayout.endIconDrawable = null
-            if (viewModel.isCurrentUserOwner()) binding.editFAB.show()
+            if (albumViewModel.isCurrentUserOwner()) binding.editFAB.show()
             binding.saveFAB.hide()
         }
     }

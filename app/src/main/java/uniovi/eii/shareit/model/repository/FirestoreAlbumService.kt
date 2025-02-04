@@ -13,6 +13,7 @@ import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.model.realTimeListener.AlbumDataListener
 import uniovi.eii.shareit.model.realTimeListener.AlbumParticipantsListener
+import uniovi.eii.shareit.model.realTimeListener.AlbumUserRoleListener
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel.ParticipantValidationResult
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel.GeneralValidationResult
 import java.util.Date
@@ -242,19 +243,34 @@ object FirestoreAlbumService {
     /**
      * Enlazamiento de un objeto de escucha en tiempo real para los participantes del
      * album [albumId] con el viewmodel correspondiente según lo especificado mediante
-     * la función [updateParticipantsVMEvent]. También se actualiza el rol del usuario en función
-     * de los participantes obtenidos mediante la función [updateRoleVMEvent].
+     * la función [updateEvent].
      * Se hace uso de la clase [AlbumParticipantsListener].
      */
     fun getAlbumParticipantsRegistration(
-        albumId: String, updateParticipantsVMEvent: (newAlbumParticipants: List<Participant>) -> Unit,
-        updateRoleVMEvent: (newAlbumParticipants: List<Participant>) -> Unit
+        albumId: String, updateEvent: (newAlbumParticipants: List<Participant>) -> Unit
     ): ListenerRegistration {
         val db = Firebase.firestore
         return db.collection("albums")
             .document(albumId)
             .collection("participants")
-            .addSnapshotListener(MetadataChanges.INCLUDE, AlbumParticipantsListener(updateParticipantsVMEvent, updateRoleVMEvent))
+            .addSnapshotListener(MetadataChanges.INCLUDE, AlbumParticipantsListener(updateEvent))
+    }
+
+    /**
+     * Enlazamiento de un objeto de escucha en tiempo real para el rol del participante con
+     * id [currentUserId] en el album [albumId] con el viewmodel correspondiente según lo
+     * especificado mediante la función [updateEvent].
+     * Se hace uso de la clase [AlbumUserRoleListener].
+     */
+    fun getCurrentUserRoleInAlbumRegistration(
+        albumId: String, currentUserId: String, updateEvent: (newRole: String) -> Unit
+    ): ListenerRegistration {
+        val db = Firebase.firestore
+        return db.collection("albums")
+            .document(albumId)
+            .collection("participants")
+            .document(currentUserId)
+            .addSnapshotListener(MetadataChanges.INCLUDE, AlbumUserRoleListener(updateEvent))
     }
 
     /**

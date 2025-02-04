@@ -16,6 +16,7 @@ import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.view.adapter.ParticipantsListAdapter
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 class AlbumInformationParticipantsFragment : Fragment() {
 
@@ -26,16 +27,17 @@ class AlbumInformationParticipantsFragment : Fragment() {
     private var _binding: FragmentAlbumInformationParticipantsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumInformationViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumInformationParticipantsBinding.inflate(inflater, container, false)
 
-        val isUserOwner = viewModel.isCurrentUserOwner()
+        val isUserOwner = albumViewModel.isCurrentUserOwner()
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
         binding.recyclerParticipants.adapter =
-            ParticipantsListAdapter(viewModel.getAlbumInfo().creatorId, isUserOwner)
+            ParticipantsListAdapter(albumViewModel.getAlbumInfo().creatorId, isUserOwner)
         binding.ownerAddingLayout.isVisible = isUserOwner
 
         binding.addParticipantBtn.setOnClickListener {

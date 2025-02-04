@@ -20,6 +20,7 @@ import uniovi.eii.shareit.databinding.FragmentAlbumInformationBinding
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.view.adapter.AlbumInformationViewPagerAdapter
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 class AlbumInformationFragment : Fragment() {
 
@@ -31,20 +32,22 @@ class AlbumInformationFragment : Fragment() {
     private var _binding: FragmentAlbumInformationBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumInformationViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.updateCurrentAlbum(args.albumID, args.albumName, args.albumCoverImage)
+        albumViewModel.updateCurrentAlbum(args.albumID, args.albumName, args.albumCoverImage)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumInformationBinding.inflate(inflater, container, false)
 
-        viewModel.registerAlbumDataListener(args.albumID)
+        albumViewModel.registerAlbumDataListener(args.albumID, viewModel.getUpdateAlbumFunc())
         viewModel.registerAlbumParticipantsListener(args.albumID)
+        albumViewModel.registerUserRoleListener(args.albumID)
 
-        viewModel.currentUserRole.observe(viewLifecycleOwner) {
+        albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
             if (it == Participant.NONE) { // TODO: && album.visibility != public
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
@@ -54,7 +57,7 @@ class AlbumInformationFragment : Fragment() {
                         findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
                     }
                     .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
-                        viewModel.deleteUserAlbum(args.albumID)
+                        albumViewModel.deleteUserAlbum(args.albumID)
                         findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
                     }.show()
             }
@@ -71,9 +74,9 @@ class AlbumInformationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.unregisterAlbumDataListener()
+        albumViewModel.unregisterAlbumDataListener()
         viewModel.unregisterAlbumParticipantsListener()
-        viewModel.resetCurrentUserRole()
+        albumViewModel.unregisterUserRoleListener()
         _binding = null
     }
 
