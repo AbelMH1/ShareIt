@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/addParticipantLayout"
@@ -72,6 +73,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/labelEnableSharedToAddParticipantInfo"
+            style="?attr/textAppearanceLabelLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_enable_shared_to_add_participant"
+            android:layout_marginVertical="@dimen/text_margin"
+            app:drawableStartCompat="@drawable/ic_menu_info_24" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerParticipants"

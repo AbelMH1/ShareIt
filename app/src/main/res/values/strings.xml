@@ -112,8 +112,6 @@
     <string name="label_permission_images">Images</string>
     <string name="label_permission_guests">Guests</string>
     <string name="label_permission_chat">Chat</string>
-    <string name="label_participants">Participants</string>
-    <string name="add_participant">Email del participante</string>
     <!--    Album Information    -->
     <string name="label_name">Name</string>
     <string name="label_cover">Album\'s Cover</string>
@@ -142,6 +140,9 @@
     <string name="warn_disable_shared_message">This will permanently delete all participants from the album and their shared photos.</string>
     <string name="btn_accept">Accept</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="label_participants">Participants</string>
+    <string name="add_participant">Participant\'s email</string>
+    <string name="label_enable_shared_to_add_participant">You must enable \"Shared Album\" to add participants</string>
     <string name="participant_profile_image_desc">Participant profile image</string>
     <string name="progress_add_participant_btn_desc">Trying to add a participant to the album</string>
     <string name="err_participant_already_in_album">Participant already in album</string>

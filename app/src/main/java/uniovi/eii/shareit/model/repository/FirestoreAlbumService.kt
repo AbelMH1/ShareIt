@@ -68,11 +68,20 @@ object FirestoreAlbumService {
         }
     }
 
-    private fun deleteFullCollection(docRef: DocumentReference, collectionPath: String) {
+    fun deleteSharedAlbumData(albumId: String, currentUserId: String) {
+        val db = Firebase.firestore
+        val docRef = db.collection("albums").document(albumId)
+        deleteFullCollection(docRef, "chat")
+        deleteFullCollection(docRef, "participants", currentUserId)
+
+    }
+
+    private fun deleteFullCollection(docRef: DocumentReference, collectionPath: String, except: String? = null) {
         Log.d(TAG, "deleteFullCollection: $collectionPath")
         docRef.collection(collectionPath).get()
             .addOnSuccessListener {
                 for (doc in it) {
+                    if (except.equals(doc.id)) continue
                     doc.reference.delete()
                         .addOnFailureListener { e -> Log.w(TAG, "Error deleting document ${doc.id}", e) }
                 }
@@ -253,7 +262,7 @@ object FirestoreAlbumService {
         return db.collection("albums")
             .document(albumId)
             .collection("participants")
-            .addSnapshotListener(MetadataChanges.INCLUDE, AlbumParticipantsListener(updateEvent))
+            .addSnapshotListener(AlbumParticipantsListener(updateEvent))
     }
 
     /**

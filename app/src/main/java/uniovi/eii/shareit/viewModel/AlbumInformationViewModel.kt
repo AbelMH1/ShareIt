@@ -92,6 +92,10 @@ class AlbumInformationViewModel : ViewModel() {
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
                 FirestoreAlbumService.updateCurrentAlbumData(album.albumId, dataValidation.dataToUpdate)
+                if (!isShared) {
+                    val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
+                    FirestoreAlbumService.deleteSharedAlbumData(album.albumId, currentUserId)
+                }
             }
         }
         return dataValidation

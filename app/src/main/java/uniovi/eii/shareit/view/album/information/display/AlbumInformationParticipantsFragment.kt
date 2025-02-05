@@ -34,11 +34,9 @@ class AlbumInformationParticipantsFragment : Fragment() {
     ): View {
         _binding = FragmentAlbumInformationParticipantsBinding.inflate(inflater, container, false)
 
-        val isUserOwner = albumViewModel.isCurrentUserOwner()
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
         binding.recyclerParticipants.adapter =
-            ParticipantsListAdapter(albumViewModel.getAlbumInfo().creatorId, isUserOwner)
-        binding.ownerAddingLayout.isVisible = isUserOwner
+            ParticipantsListAdapter(albumViewModel.getAlbumInfo().creatorId, albumViewModel.isCurrentUserOwner())
 
         binding.addParticipantBtn.setOnClickListener {
             addNewParticipant()
@@ -55,6 +53,13 @@ class AlbumInformationParticipantsFragment : Fragment() {
                 updateErrors(it.emailError, it.firestoreError)
             }
             enableForm(true)
+        }
+
+        albumViewModel.album.observe(viewLifecycleOwner) {
+            val isUserOwner = albumViewModel.isCurrentUserOwner()
+            val isAlbumPrivate = albumViewModel.isAlbumPrivate()
+            binding.ownerAddingLayout.isVisible = isUserOwner && !isAlbumPrivate
+            binding.labelEnableSharedToAddParticipantInfo.isVisible = isUserOwner && isAlbumPrivate
         }
 
         binding.addParticipantEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.addParticipantLayout))

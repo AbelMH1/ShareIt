@@ -95,4 +95,7 @@ class AlbumViewModel : ViewModel() {
         _currentUserRole.postValue(Participant.GUEST)
     }
 
+    fun isAlbumPrivate(): Boolean {
+        return _album.value!!.visibility == Album.PRIVATE
+    }
 }
