@@ -41,13 +41,9 @@ class ParticipantsListAdapter(
         holder.assignValuesToComponents(participant, position, creatorId, isUserOwner)
     }
 
-    fun getLastSelectedItemPosition(): Int = selectedItemPosition
-
     fun getLastSelectedItem(): Participant {
         return participantsList[selectedItemPosition]
     }
-
-    fun getParticipants(): List<Participant> = participantsList
 
     inner class ParticipantViewHolder(binding: LineRecyclerViewParticipantBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
@@ -76,6 +72,10 @@ class ParticipantsListAdapter(
                     selectedItemPosition = position
                     false
                 }
+            } else {
+                itemView.setOnClickListener(null)
+                itemView.setOnLongClickListener(null)
+                itemView.isLongClickable = false
             }
         }
 
