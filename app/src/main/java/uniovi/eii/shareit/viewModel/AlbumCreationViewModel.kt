@@ -46,10 +46,10 @@ class AlbumCreationViewModel : ViewModel() {
     }
 
     fun validateSharedData(
-        membersImagesPermission: String,
-        membersChatPermission: String,
-        guestsImagesPermission: String,
-        guestsChatPermission: String
+        membersImagesPermission: Int,
+        membersChatPermission: Int,
+        guestsImagesPermission: Int,
+        guestsChatPermission: Int
     ): SharedValidationResult {
         val dataValidation = checkValidData(
             membersImagesPermission,
@@ -88,15 +88,15 @@ class AlbumCreationViewModel : ViewModel() {
     }
 
     private fun checkValidData(
-        membersImagesPermission: String,
-        membersChatPermission: String,
-        guestsImagesPermission: String,
-        guestsChatPermission: String
+        membersImagesPermission: Int,
+        membersChatPermission: Int,
+        guestsImagesPermission: Int,
+        guestsChatPermission: Int
     ): SharedValidationResult {
-        if (membersImagesPermission.isBlank()) return SharedValidationResult(memberImagesError = R.string.err_empty_field)
-        if (membersChatPermission.isBlank()) return SharedValidationResult(memberChatError = R.string.err_empty_field)
-        if (guestsImagesPermission.isBlank()) return SharedValidationResult(guestImagesError = R.string.err_empty_field)
-        if (guestsChatPermission.isBlank()) return SharedValidationResult(guestChatError = R.string.err_empty_field)
+        if (membersImagesPermission < 0) return SharedValidationResult(memberImagesError = R.string.err_empty_field)
+        if (membersChatPermission < 0) return SharedValidationResult(memberChatError = R.string.err_empty_field)
+        if (guestsImagesPermission < 0) return SharedValidationResult(guestImagesError = R.string.err_empty_field)
+        if (guestsChatPermission < 0) return SharedValidationResult(guestChatError = R.string.err_empty_field)
         return SharedValidationResult(true)
     }
 

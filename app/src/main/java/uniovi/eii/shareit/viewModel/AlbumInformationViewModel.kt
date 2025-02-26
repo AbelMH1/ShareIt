@@ -75,10 +75,10 @@ class AlbumInformationViewModel : ViewModel() {
 
     fun saveSharedData(
         isShared: Boolean,
-        membersImagesPermission: String,
-        membersChatPermission: String,
-        guestsImagesPermission: String,
-        guestsChatPermission: String,
+        membersImagesPermission: Int,
+        membersChatPermission: Int,
+        guestsImagesPermission: Int,
+        guestsChatPermission: Int,
         invitationLinkEnabled: Boolean
     ): SharedValidationResult {
         val dataValidation = checkValidData(
@@ -190,33 +190,33 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     private fun checkValidData(shared: Boolean,
-                               membersImagesPermission: String,
-                               membersChatPermission: String,
-                               guestsImagesPermission: String,
-                               guestsChatPermission: String,
+                               membersImagesPermission: Int,
+                               membersChatPermission: Int,
+                               guestsImagesPermission: Int,
+                               guestsChatPermission: Int,
                                invitationLinkEnabled: Boolean
     ): SharedValidationResult {
         val dataToUpdate: HashMap<String, Any?> = HashMap()
         if (shared) {
-            if (membersImagesPermission.isBlank()) {
+            if (membersImagesPermission < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
             if (membersImagesPermission != album.membersImagesPermission) {
                 dataToUpdate["membersImagesPermission"] = membersImagesPermission
             }
-            if (membersChatPermission.isBlank()) {
+            if (membersChatPermission < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
             if (membersChatPermission != album.membersChatPermission) {
                 dataToUpdate["membersChatPermission"] = membersChatPermission
             }
-            if (guestsImagesPermission.isBlank()) {
+            if (guestsImagesPermission < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
             if (guestsImagesPermission != album.guestsImagesPermission) {
                 dataToUpdate["guestsImagesPermission"] = guestsImagesPermission
             }
-            if (guestsChatPermission.isBlank()) {
+            if (guestsChatPermission < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
             if (guestsChatPermission != album.guestsChatPermission) {

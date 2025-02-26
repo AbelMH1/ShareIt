@@ -90,12 +90,14 @@ class AlbumInformationSharedFragment : Fragment() {
 
     private fun saveData() {
         enableEdition(false)
+        val imagesPermissions = resources.getStringArray(R.array.ImagesPermission)
+        val chatPermissions = resources.getStringArray(R.array.ChatPermission)
         val dataValidationResult = viewModel.saveSharedData(
             binding.switchSharedAlbum.isChecked,
-            binding.membersImagesPermissionEditText.text?.toString() ?: "",
-            binding.membersChatPermissionEditText.text?.toString() ?: "",
-            binding.guestsImagesPermissionEditText.text?.toString() ?: "",
-            binding.guestsChatPermissionEditText.text?.toString() ?: "",
+            imagesPermissions.indexOf(binding.membersImagesPermissionEditText.text.toString()),
+            chatPermissions.indexOf(binding.membersChatPermissionEditText.text.toString()),
+            imagesPermissions.indexOf(binding.guestsImagesPermissionEditText.text.toString()),
+            chatPermissions.indexOf(binding.guestsChatPermissionEditText.text.toString()),
             binding.switchInvitationLink.isChecked
         )
         if (dataValidationResult.isDataValid) {
@@ -168,10 +170,12 @@ class AlbumInformationSharedFragment : Fragment() {
         binding.switchSharedAlbum.isChecked = album.visibility == Album.SHARED
         if (album.visibility == Album.SHARED) {
             if (albumViewModel.isCurrentUserOwner()) binding.editFAB.show()
-            binding.membersImagesPermissionEditText.setText(album.membersImagesPermission, false)
-            binding.membersChatPermissionEditText.setText(album.membersChatPermission, false)
-            binding.guestsImagesPermissionEditText.setText(album.guestsImagesPermission, false)
-            binding.guestsChatPermissionEditText.setText(album.guestsChatPermission, false)
+            val imagesPermissions = resources.getStringArray(R.array.ImagesPermission)
+            val chatPermissions = resources.getStringArray(R.array.ChatPermission)
+            binding.membersImagesPermissionEditText.setText(imagesPermissions[album.membersImagesPermission!!], false)
+            binding.membersChatPermissionEditText.setText(chatPermissions[album.membersChatPermission!!], false)
+            binding.guestsImagesPermissionEditText.setText(imagesPermissions[album.guestsImagesPermission!!], false)
+            binding.guestsChatPermissionEditText.setText(chatPermissions[album.guestsChatPermission!!], false)
         } else {
             binding.membersImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
             binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)

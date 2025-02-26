@@ -15,10 +15,10 @@ data class Album(
     var endDate: Date? = null,
     var location: LatLng? = null,
     var visibility: String = PRIVATE,
-    var membersImagesPermission: String? = null,
-    var membersChatPermission: String? = null,
-    var guestsImagesPermission: String? = null,
-    var guestsChatPermission: String? = null,
+    var membersImagesPermission: Int? = null,
+    var membersChatPermission: Int? = null,
+    var guestsImagesPermission: Int? = null,
+    var guestsChatPermission: Int? = null,
     var invitationLinkEnabled: Boolean = false,
     var invitationLink: String? = null
 ) {

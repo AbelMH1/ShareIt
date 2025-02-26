@@ -97,11 +97,13 @@ class AlbumCreationSharedFragment : Fragment() {
 
     private fun validateData(): Boolean {
         enableForm(false)
+        val imagesPermissions = resources.getStringArray(R.array.ImagesPermission)
+        val chatPermissions = resources.getStringArray(R.array.ChatPermission)
         val dataValidationResult = viewModel.validateSharedData(
-            binding.membersImagesPermissionEditText.text?.toString() ?: "",
-            binding.membersChatPermissionEditText.text?.toString() ?: "",
-            binding.guestsImagesPermissionEditText.text?.toString() ?: "",
-            binding.guestsChatPermissionEditText.text?.toString() ?: ""
+            imagesPermissions.indexOf(binding.membersImagesPermissionEditText.text.toString()),
+            chatPermissions.indexOf(binding.membersChatPermissionEditText.text?.toString()),
+            imagesPermissions.indexOf(binding.guestsImagesPermissionEditText.text?.toString()),
+            chatPermissions.indexOf(binding.guestsChatPermissionEditText.text?.toString())
         )
         if (!dataValidationResult.isDataValid) {
             updateErrors(
