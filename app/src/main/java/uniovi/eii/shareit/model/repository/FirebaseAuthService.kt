@@ -9,6 +9,7 @@ import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.viewModel.LoginViewModel.LoginResult
 import uniovi.eii.shareit.viewModel.SignUpViewModel.SignUpResult
+import java.util.Locale
 
 object FirebaseAuthService {
 
@@ -33,7 +34,7 @@ object FirebaseAuthService {
         val user = User(
             userId,
             email.substringBefore("@"),
-            email
+            email.lowercase(Locale.getDefault())
         )
         db.collection("users")
             .document(userId)

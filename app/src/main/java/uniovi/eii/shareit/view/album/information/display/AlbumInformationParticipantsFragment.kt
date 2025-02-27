@@ -17,6 +17,7 @@ import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.view.adapter.ParticipantsListAdapter
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import uniovi.eii.shareit.viewModel.AlbumViewModel
+import java.util.Locale
 
 class AlbumInformationParticipantsFragment : Fragment() {
 
@@ -118,7 +119,7 @@ class AlbumInformationParticipantsFragment : Fragment() {
     private fun addNewParticipant() {
         enableForm(false)
         viewModel.addNewParticipant(
-            binding.addParticipantEditText.text?.toString() ?: ""
+            binding.addParticipantEditText.text?.toString()?.lowercase(Locale.getDefault()) ?: ""
         )
     }
 
