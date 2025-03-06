@@ -9,6 +9,7 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
+import uniovi.eii.shareit.model.Role
 import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.model.realTimeListener.AlbumDataListener
@@ -39,7 +40,7 @@ object FirestoreAlbumService {
             }
             with(docRef.set(album).await()) {
                 val owner = currentUser.toParticipant()
-                owner.role = Participant.OWNER
+                owner.role = Role.OWNER
                 var error = addParticipantToAlbum(album.albumId, owner)
                 if (error != null) throw Exception(error)
                 val userAlbum = album.toUserAlbum()
@@ -98,7 +99,7 @@ object FirestoreAlbumService {
             return ParticipantValidationResult(firestoreError = participantResult.firestoreError)
         }
         val participant = participantResult.value!!.toParticipant()
-        participant.role = Participant.MEMBER
+        participant.role = Role.MEMBER
         var error = addParticipantToAlbum(album.albumId, participant)
         if (error != null) return ParticipantValidationResult(firestoreError = error)
         error = createUserAlbumDenormalizedData(album.toUserAlbum(), participant.participantId)
@@ -272,7 +273,7 @@ object FirestoreAlbumService {
      * Se hace uso de la clase [AlbumUserRoleListener].
      */
     fun getCurrentUserRoleInAlbumRegistration(
-        albumId: String, currentUserId: String, updateEvent: (newRole: String) -> Unit
+        albumId: String, currentUserId: String, updateEvent: (newRole: Role) -> Unit
     ): ListenerRegistration {
         val db = Firebase.firestore
         return db.collection("albums")

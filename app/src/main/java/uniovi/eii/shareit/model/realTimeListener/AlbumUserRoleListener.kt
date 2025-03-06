@@ -5,8 +5,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestoreException
 import uniovi.eii.shareit.model.Participant
+import uniovi.eii.shareit.model.Role
 
-class AlbumUserRoleListener(private val updateEvent: (newRole: String) -> Unit) :
+class AlbumUserRoleListener(private val updateEvent: (newRole: Role) -> Unit) :
     EventListener<DocumentSnapshot> {
     companion object {
         private const val TAG = "AlbumUserRoleListener"
@@ -24,7 +25,7 @@ class AlbumUserRoleListener(private val updateEvent: (newRole: String) -> Unit) 
                 val newUserRole = documentSnapshot.toObject(Participant::class.java)!!.role
                 updateEvent(newUserRole)
             } else {
-                updateEvent(Participant.NONE)
+                updateEvent(Role.NONE)
             }
         }
     }

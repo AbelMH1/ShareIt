@@ -37,7 +37,9 @@ class AlbumInformationParticipantsFragment : Fragment() {
 
         binding.recyclerParticipants.layoutManager = LinearLayoutManager(context)
         binding.recyclerParticipants.adapter =
-            ParticipantsListAdapter(albumViewModel.getAlbumInfo().creatorId, albumViewModel.isCurrentUserOwner())
+            ParticipantsListAdapter(albumViewModel.getAlbumInfo().creatorId,
+                albumViewModel.isCurrentUserOwner(),
+                resources.getStringArray(R.array.ParticipantRole).toList())
 
         binding.addParticipantBtn.setOnClickListener {
             addNewParticipant()

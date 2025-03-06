@@ -6,8 +6,14 @@
         <item>@string/images_permission_vote_add</item>
     </string-array>
     <string-array name="ChatPermission">
-        <item>@string/chat_permission_hiden</item>
+        <item>@string/chat_permission_hidden</item>
         <item>@string/chat_permission_see</item>
         <item>@string/chat_permission_see_comment</item>
+    </string-array>
+    <string-array name="ParticipantRole">
+        <item>@string/participant_role_owner</item>
+        <item>@string/participant_role_guest</item>
+        <item>@string/participant_role_member</item>
+        <item>@string/participant_role_none</item>
     </string-array>
 </resources>

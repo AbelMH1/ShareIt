@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
+import uniovi.eii.shareit.model.Role
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
 import uniovi.eii.shareit.model.repository.FirestoreUserService
 import uniovi.eii.shareit.utils.toDate
@@ -120,12 +121,12 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     fun promoteParticipant(participant: Participant) {
-        participant.role = Participant.MEMBER
+        participant.role = Role.MEMBER
         updateParticipantRole(participant)
     }
 
     fun demoteParticipant(participant: Participant) {
-        participant.role = Participant.GUEST
+        participant.role = Role.GUEST
         updateParticipantRole(participant)
     }
 

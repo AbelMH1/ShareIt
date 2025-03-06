@@ -178,9 +178,9 @@ class AlbumInformationSharedFragment : Fragment() {
             binding.guestsChatPermissionEditText.setText(chatPermissions[album.guestsChatPermission!!], false)
         } else {
             binding.membersImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
-            binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
+            binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
             binding.guestsImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
-            binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
+            binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
         }
         if (album.visibility == Album.SHARED && album.invitationLinkEnabled) {
             binding.invitationLinkEditText.setText(album.invitationLink)

@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewParticipantBinding
 import uniovi.eii.shareit.model.Participant
+import uniovi.eii.shareit.model.Role
 
 class ParticipantsListAdapter(
     private val creatorId: String = "",
     private val isUserOwner: Boolean = false,
+    private var roleList: List<String> = emptyList(),
     private var participantsList: List<Participant> = emptyList(),
     private var selectedItemPosition: Int = -1
 ) : RecyclerView.Adapter<ParticipantsListAdapter.ParticipantViewHolder>() {
@@ -38,7 +40,7 @@ class ParticipantsListAdapter(
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
         val participant = participantsList[position]
         Log.i("Lista", "Visualiza elemento: $participant")
-        holder.assignValuesToComponents(participant, position, creatorId, isUserOwner)
+        holder.assignValuesToComponents(participant, position, creatorId, isUserOwner, roleList)
     }
 
     fun getLastSelectedItem(): Participant {
@@ -51,16 +53,19 @@ class ParticipantsListAdapter(
         private val mail = binding.participantMail
         private val role = binding.participantRole
         private val image = binding.participantImage
+        private lateinit var participantRole: Role
 
         fun assignValuesToComponents(
             participant: Participant,
             position: Int,
             creatorId: String,
-            isUserOwner: Boolean
+            isUserOwner: Boolean,
+            roleList: List<String>
         ) {
             name.text = participant.name
             mail.text = participant.email
-            role.text = participant.role
+            participantRole = participant.role
+            role.text = roleList[participantRole.ordinal]
 //            image.setImageURI(participant.imagePath.toUri())
             if (isUserOwner && participant.participantId != creatorId) {
                 itemView.setOnCreateContextMenuListener(this)
@@ -87,9 +92,10 @@ class ParticipantsListAdapter(
             menu?.setHeaderTitle(name.text)
             val inflater = (v?.context as Activity).menuInflater
             inflater.inflate(R.menu.album_participant_options, menu)
-            when (role.text) {
-                Participant.GUEST -> menu?.removeItem(R.id.action_demote_to_guest)
-                Participant.MEMBER -> menu?.removeItem(R.id.action_promote_to_member)
+            when (participantRole) {
+                Role.GUEST -> menu?.removeItem(R.id.action_demote_to_guest)
+                Role.MEMBER -> menu?.removeItem(R.id.action_promote_to_member)
+                else -> {}
             }
         }
     }

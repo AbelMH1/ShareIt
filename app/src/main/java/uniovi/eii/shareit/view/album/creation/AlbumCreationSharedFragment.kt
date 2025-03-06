@@ -30,9 +30,9 @@ class AlbumCreationSharedFragment : Fragment() {
         _binding = FragmentAlbumCreationSharedBinding.inflate(inflater, container, false)
 
         binding.membersImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
-        binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
+        binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
         binding.guestsImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
-        binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hiden), false)
+        binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
 
         binding.createBtn.setOnClickListener {
             if (validateData()) {

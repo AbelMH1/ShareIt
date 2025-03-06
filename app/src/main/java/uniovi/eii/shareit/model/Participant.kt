@@ -5,12 +5,12 @@ data class Participant(
     var name: String = "",
     var email: String = "",
     var imagePath: String = "",
-    var role: String = GUEST
-) {
-    companion object Role {
-        const val OWNER = "Owner"
-        const val GUEST = "Guest"
-        const val MEMBER = "Member"
-        const val NONE = "None"
-    }
+    var role: Role = Role.GUEST
+)
+
+enum class Role {
+    OWNER,
+    GUEST,
+    MEMBER,
+    NONE
 }

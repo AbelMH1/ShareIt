@@ -133,7 +133,7 @@
     <string name="images_permission_see">Solo ver</string>
     <string name="images_permission_vote">Ver y valorar</string>
     <string name="images_permission_vote_add">Ver, valorar y añadir</string>
-    <string name="chat_permission_hiden">Oculto</string>
+    <string name="chat_permission_hidden">Oculto</string>
     <string name="chat_permission_see">Solo ver</string>
     <string name="chat_permission_see_comment">Ver y comentar</string>
     <string name="warn_disable_shared_title">Disable shared album?</string>
@@ -146,6 +146,10 @@
     <string name="participant_profile_image_desc">Participant profile image</string>
     <string name="progress_add_participant_btn_desc">Trying to add a participant to the album</string>
     <string name="err_participant_already_in_album">Participant already in album</string>
+    <string name="participant_role_owner">Owner</string>
+    <string name="participant_role_guest">Guest</string>
+    <string name="participant_role_member">Member</string>
+    <string name="participant_role_none">None</string>
     <!--    Image Display    -->
     <string name="author_profile_image_desc">Image\'s author profile picture</string>
     <string name="upload_image_desc">Image uploaded to the album</string>

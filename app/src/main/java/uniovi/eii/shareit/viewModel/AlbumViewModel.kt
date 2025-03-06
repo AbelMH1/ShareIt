@@ -9,7 +9,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.model.Participant
+import uniovi.eii.shareit.model.Role
 import uniovi.eii.shareit.model.repository.FirebaseAuthService
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
 import uniovi.eii.shareit.model.repository.FirestoreUserService
@@ -22,8 +22,8 @@ class AlbumViewModel : ViewModel() {
 
     private val _album = MutableLiveData(Album())
     val album: LiveData<Album> = _album
-    private val _currentUserRole = MutableLiveData(Participant.GUEST)
-    val currentUserRole: LiveData<String> = _currentUserRole
+    private val _currentUserRole = MutableLiveData(Role.GUEST)
+    val currentUserRole: LiveData<Role> = _currentUserRole
 
     private var albumDataListenerRegistration: ListenerRegistration? = null
     private var userRoleListenerRegistration: ListenerRegistration? = null
@@ -40,8 +40,8 @@ class AlbumViewModel : ViewModel() {
         _album.postValue(newAlbumData)
     }
 
-    private fun updateCurrentUserRole(newRole: String) {
-        Log.d("updateCurrentUserRole", newRole)
+    private fun updateCurrentUserRole(newRole: Role) {
+        Log.d("updateCurrentUserRole", newRole.name)
         _currentUserRole.postValue(newRole)
     }
 
@@ -66,7 +66,7 @@ class AlbumViewModel : ViewModel() {
         albumId: String
     ) {
         Log.d(TAG, "userRoleListener: START")
-        val updateEvent: (newData: String) -> Unit = {
+        val updateEvent: (newData: Role) -> Unit = {
             updateCurrentUserRole(it)
         }
         val userId = FirebaseAuthService.getCurrentUser()!!.uid
@@ -88,11 +88,11 @@ class AlbumViewModel : ViewModel() {
     }
 
     fun isCurrentUserOwner(): Boolean {
-        return _currentUserRole.value == Participant.OWNER
+        return _currentUserRole.value == Role.OWNER
     }
 
     private fun resetCurrentUserRole() {
-        _currentUserRole.postValue(Participant.GUEST)
+        _currentUserRole.postValue(Role.GUEST)
     }
 
     fun isAlbumPrivate(): Boolean {
