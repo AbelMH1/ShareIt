@@ -6,11 +6,11 @@ data class Participant(
     var email: String = "",
     var imagePath: String = "",
     var role: Role = Role.GUEST
-)
-
-enum class Role {
-    OWNER,
-    GUEST,
-    MEMBER,
-    NONE
+) {
+    enum class Role {
+        OWNER,
+        GUEST,
+        MEMBER,
+        NONE
+    }
 }

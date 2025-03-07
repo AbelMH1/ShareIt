@@ -18,7 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationGeneralBinding
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.model.Role
+import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher

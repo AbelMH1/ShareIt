@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
-import uniovi.eii.shareit.model.Role
+import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
 import uniovi.eii.shareit.model.repository.FirestoreUserService
 import uniovi.eii.shareit.utils.toDate

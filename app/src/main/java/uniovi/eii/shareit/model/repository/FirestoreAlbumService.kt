@@ -9,7 +9,7 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
-import uniovi.eii.shareit.model.Role
+import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.User
 import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.model.realTimeListener.AlbumDataListener

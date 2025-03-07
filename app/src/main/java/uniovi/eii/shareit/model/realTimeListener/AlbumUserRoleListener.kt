@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestoreException
 import uniovi.eii.shareit.model.Participant
-import uniovi.eii.shareit.model.Role
+import uniovi.eii.shareit.model.Participant.Role
 
 class AlbumUserRoleListener(private val updateEvent: (newRole: Role) -> Unit) :
     EventListener<DocumentSnapshot> {

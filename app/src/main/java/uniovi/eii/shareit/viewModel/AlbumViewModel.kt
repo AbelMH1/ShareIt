@@ -9,7 +9,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.model.Role
+import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.repository.FirebaseAuthService
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
 import uniovi.eii.shareit.model.repository.FirestoreUserService

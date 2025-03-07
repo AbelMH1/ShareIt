@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewParticipantBinding
 import uniovi.eii.shareit.model.Participant
-import uniovi.eii.shareit.model.Role
+import uniovi.eii.shareit.model.Participant.Role
 
 class ParticipantsListAdapter(
     private val creatorId: String = "",

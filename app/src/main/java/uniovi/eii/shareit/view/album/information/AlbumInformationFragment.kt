@@ -17,7 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationBinding
-import uniovi.eii.shareit.model.Role
+import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.view.adapter.AlbumInformationViewPagerAdapter
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import uniovi.eii.shareit.viewModel.AlbumViewModel
