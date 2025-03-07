@@ -11,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Album.ImagePermission
+import uniovi.eii.shareit.model.Album.ChatPermission
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
@@ -191,35 +193,39 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     private fun checkValidData(shared: Boolean,
-                               membersImagesPermission: Int,
-                               membersChatPermission: Int,
-                               guestsImagesPermission: Int,
-                               guestsChatPermission: Int,
+                               membersImagesPermissionPos: Int,
+                               membersChatPermissionPos: Int,
+                               guestsImagesPermissionPos: Int,
+                               guestsChatPermissionPos: Int,
                                invitationLinkEnabled: Boolean
     ): SharedValidationResult {
         val dataToUpdate: HashMap<String, Any?> = HashMap()
         if (shared) {
-            if (membersImagesPermission < 0) {
+            if (membersImagesPermissionPos < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
+            val membersImagesPermission = ImagePermission.entries[membersImagesPermissionPos]
             if (membersImagesPermission != album.membersImagesPermission) {
                 dataToUpdate["membersImagesPermission"] = membersImagesPermission
             }
-            if (membersChatPermission < 0) {
+            if (membersChatPermissionPos < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
+            val membersChatPermission = ChatPermission.entries[membersChatPermissionPos]
             if (membersChatPermission != album.membersChatPermission) {
                 dataToUpdate["membersChatPermission"] = membersChatPermission
             }
-            if (guestsImagesPermission < 0) {
+            if (guestsImagesPermissionPos < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
+            val guestsImagesPermission = ImagePermission.entries[guestsImagesPermissionPos]
             if (guestsImagesPermission != album.guestsImagesPermission) {
                 dataToUpdate["guestsImagesPermission"] = guestsImagesPermission
             }
-            if (guestsChatPermission < 0) {
+            if (guestsChatPermissionPos < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
+            val guestsChatPermission = ChatPermission.entries[guestsChatPermissionPos]
             if (guestsChatPermission != album.guestsChatPermission) {
                 dataToUpdate["guestsChatPermission"] = guestsChatPermission
             }

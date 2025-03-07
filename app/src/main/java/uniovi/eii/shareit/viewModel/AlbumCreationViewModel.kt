@@ -7,6 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Album.ImagePermission
+import uniovi.eii.shareit.model.Album.ChatPermission
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
 import uniovi.eii.shareit.model.repository.FirestoreUserService
 import uniovi.eii.shareit.utils.toDate
@@ -59,10 +61,10 @@ class AlbumCreationViewModel : ViewModel() {
         )
         if (dataValidation.isDataValid) {
             _albumToCreate.apply {
-                this.membersImagesPermission = membersImagesPermission
-                this.membersChatPermission = membersChatPermission
-                this.guestsImagesPermission = guestsImagesPermission
-                this.guestsChatPermission = guestsChatPermission
+                this.membersImagesPermission = ImagePermission.entries[membersImagesPermission]
+                this.membersChatPermission = ChatPermission.entries[membersChatPermission]
+                this.guestsImagesPermission = ImagePermission.entries[guestsImagesPermission]
+                this.guestsChatPermission = ChatPermission.entries[guestsChatPermission]
             }
         }
         return dataValidation

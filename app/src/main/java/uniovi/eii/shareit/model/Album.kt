@@ -15,13 +15,24 @@ data class Album(
     var endDate: Date? = null,
     var location: LatLng? = null,
     var visibility: String = PRIVATE,
-    var membersImagesPermission: Int? = null,
-    var membersChatPermission: Int? = null,
-    var guestsImagesPermission: Int? = null,
-    var guestsChatPermission: Int? = null,
+    var membersImagesPermission: ImagePermission? = null,
+    var membersChatPermission: ChatPermission? = null,
+    var guestsImagesPermission: ImagePermission? = null,
+    var guestsChatPermission: ChatPermission? = null,
     var invitationLinkEnabled: Boolean = false,
     var invitationLink: String? = null
 ) {
+    enum class ChatPermission {
+        HIDDEN,
+        SEE,
+        COMMENT
+    }
+
+    enum class ImagePermission {
+        SEE,
+        VOTE,
+        ADD
+    }
 
     fun toUserAlbum(): UserAlbum {
         return UserAlbum(
