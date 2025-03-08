@@ -9,6 +9,8 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Album.ChatPermission
+import uniovi.eii.shareit.model.Album.ImagePermission
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.repository.FirebaseAuthService
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
@@ -76,7 +78,6 @@ class AlbumViewModel : ViewModel() {
     fun unregisterUserRoleListener() {
         Log.d(TAG, "userRoleListener: STOP")
         userRoleListenerRegistration?.remove()
-        Log.d("userRoleListenerRegistration", userRoleListenerRegistration.toString())
         resetCurrentUserRole()
     }
 
@@ -97,5 +98,35 @@ class AlbumViewModel : ViewModel() {
 
     fun isAlbumPrivate(): Boolean {
         return _album.value!!.visibility == Album.PRIVATE
+    }
+
+    fun hasChatSeePermission(): Boolean {
+        when (_currentUserRole.value) {
+            Role.OWNER -> return true
+            Role.MEMBER -> {
+                val chatPermission = _album.value!!.membersChatPermission
+                return chatPermission == ChatPermission.SEE || chatPermission == ChatPermission.COMMENT
+            }
+            Role.GUEST -> {
+                val chatPermission = _album.value!!.guestsChatPermission
+                return chatPermission == ChatPermission.SEE || chatPermission == ChatPermission.COMMENT
+            }
+            else -> return false
+        }
+    }
+
+    fun hasImagesAddPermission(): Boolean {
+        when (_currentUserRole.value) {
+            Role.OWNER -> return true
+            Role.MEMBER -> {
+                val imagesPermission = _album.value!!.membersImagesPermission
+                return imagesPermission == ImagePermission.ADD
+            }
+            Role.GUEST -> {
+                val imagesPermission = _album.value!!.guestsImagesPermission
+                return imagesPermission == ImagePermission.ADD
+            }
+            else -> return false
+        }
     }
 }

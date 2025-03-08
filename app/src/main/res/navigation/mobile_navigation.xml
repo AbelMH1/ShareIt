@@ -93,6 +93,11 @@
         <argument
             android:name="albumCoverImage"
             app:argType="string" />
+        <action
+            android:id="@+id/action_nav_album_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

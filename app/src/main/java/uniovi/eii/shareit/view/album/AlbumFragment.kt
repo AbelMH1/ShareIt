@@ -18,9 +18,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumBinding
 import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.adapter.SectionListAdapter
@@ -58,40 +61,60 @@ class AlbumFragment : Fragment() {
             ImagesDisplayViewModelFactory()
         )[ALBUM_VIEW, ImagesDisplayViewModel::class.java]
 
-        sectionListAdapter =
-            SectionListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
-                override fun onItemClick(item: Image, position: Int) {
-                    clickOnItem(item, position)
-                }
-            }, columns = columnCount)
-        imageListAdapter =
-            ImageListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
-                override fun onItemClick(item: Image, position: Int) {
-                    clickOnItem(item, position)
-                }
-            })
+        albumViewModel.registerUserRoleListener(args.albumID)
+        albumViewModel.registerAlbumDataListener(args.albumID)
+
+        albumViewModel.album.observe(viewLifecycleOwner) {
+            val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
+            toolbar.title = it.name
+            checkPermissions()
+        }
+        albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
+            if (it == Role.NONE) { // TODO: && album.visibility != public
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
+                    .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
+                    .setCancelable(false)
+                    .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
+                        findNavController().navigate(AlbumFragmentDirections.actionNavAlbumToNavHome())
+                    }
+                    .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
+                        albumViewModel.deleteUserAlbum(args.albumID)
+                        findNavController().navigate(AlbumFragmentDirections.actionNavAlbumToNavHome())
+                    }.show()
+            } else {
+                checkPermissions()
+            }
+        }
+
+        val onClickListener = object : ImageListAdapter.OnItemClickListener {
+            override fun onItemClick(item: Image, position: Int) {
+                clickOnItem(item, position)
+            }
+        }
+        sectionListAdapter = SectionListAdapter(listener = onClickListener, columns = columnCount)
+        imageListAdapter = ImageListAdapter(listener = onClickListener)
 
         imagesViewModel.displayImageList.observe(viewLifecycleOwner) {
-            if(!imagesViewModel.shouldDisplaySections())
+            if (!imagesViewModel.shouldDisplaySections())
                 setUpImageRecyclerView(it)
         }
         imagesViewModel.displaySectionList.observe(viewLifecycleOwner) {
-            if(imagesViewModel.shouldDisplaySections())
+            if (imagesViewModel.shouldDisplaySections())
                 setUpSectionRecyclerView(it)
         }
 
-        albumViewModel.album.observe(viewLifecycleOwner) {
-            val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
-            toolbar.title = it.name
-        }
-
         // Set the adapter
-        binding.root.apply {
+        binding.imagesRecyclerView.apply {
             layoutManager = when {
                 columnCount <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount)
             }
             adapter = imageListAdapter
+        }
+
+        binding.fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own images action", Snackbar.LENGTH_LONG).show()
         }
 
         return binding.root
@@ -104,13 +127,15 @@ class AlbumFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        albumViewModel.unregisterAlbumDataListener()
+        albumViewModel.unregisterUserRoleListener()
         _binding = null
     }
 
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+                val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
                 toolbar.isTitleCentered = false
                 menuInflater.inflate(R.menu.album, menu)
                 menuInflater.inflate(R.menu.image_order_filter, menu)
@@ -162,6 +187,9 @@ class AlbumFragment : Fragment() {
                 menu.findItem(R.id.action_order)?.subMenu?.findItem(imagesViewModel.currentOrder.value!!)?.isChecked = true
                 menu.findItem(R.id.action_order)?.subMenu?.findItem(imagesViewModel.currentOrderDirection.value!!)?.isChecked = true
                 menu.findItem(R.id.action_filter)?.subMenu?.findItem(imagesViewModel.currentFilter.value!!)?.isChecked = true
+                if (!albumViewModel.hasChatSeePermission()) {
+                    menu.removeItem(R.id.action_chat)
+                }
             }
         }, viewLifecycleOwner)
     }
@@ -174,7 +202,7 @@ class AlbumFragment : Fragment() {
     }
 
     private fun setUpSectionRecyclerView(sections: List<Section>) {
-        binding.root.apply {
+        binding.imagesRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = sectionListAdapter
         }
@@ -182,7 +210,7 @@ class AlbumFragment : Fragment() {
     }
 
     private fun setUpImageRecyclerView(images: List<Image>) {
-        binding.root.apply {
+        binding.imagesRecyclerView.apply {
             layoutManager = when {
                 columnCount <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount)
@@ -190,5 +218,14 @@ class AlbumFragment : Fragment() {
             adapter = imageListAdapter
         }
         imageListAdapter.update(images)
+    }
+
+    private fun checkPermissions() {
+        activity?.invalidateMenu()
+        if (albumViewModel.hasImagesAddPermission()) {
+            binding.fab.show()
+        } else {
+            binding.fab.hide()
+        }
     }
 }
