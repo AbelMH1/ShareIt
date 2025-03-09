@@ -12,6 +12,12 @@
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true"/>
 
+    <action
+        android:id="@+id/action_exit_album_to_nav_home"
+        app:destination="@id/nav_home"
+        app:popUpTo="@id/nav_home"
+        app:popUpToInclusive="true"/>
+
     <fragment
         android:id="@+id/nav_login"
         android:name="uniovi.eii.shareit.view.identification.LoginFragment"
@@ -93,11 +99,6 @@
         <argument
             android:name="albumCoverImage"
             app:argType="string" />
-        <action
-            android:id="@+id/action_nav_album_to_nav_home"
-            app:destination="@id/nav_home"
-            app:popUpTo="@id/nav_home"
-            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -114,11 +115,6 @@
         <argument
             android:name="albumCoverImage"
             app:argType="string" />
-        <action
-            android:id="@+id/action_nav_album_information_to_nav_home"
-            app:destination="@id/nav_home"
-            app:popUpTo="@id/nav_home"
-            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

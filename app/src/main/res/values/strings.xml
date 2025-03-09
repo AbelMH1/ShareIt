@@ -159,4 +159,7 @@
     <!--    Chat    -->
     <string name="fab_send_desc">Send the current written message</string>
     <string name="hint_write_message">Write a message</string>
+    <string name="label_not_permission_to_comment">You don\'t have permission to comment</string>
+    <string name="warn_chat_see_permission_revoked_title">Permission denied</string>
+    <string name="warn_chat_see_permission_revoked_message">Permissions have changed and you can\'t access the chat anymore.</string>
 </resources>

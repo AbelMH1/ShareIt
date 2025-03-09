@@ -22,7 +22,6 @@ import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
-import uniovi.eii.shareit.view.album.information.AlbumInformationFragmentDirections
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import uniovi.eii.shareit.viewModel.AlbumViewModel
 import java.text.SimpleDateFormat
@@ -101,7 +100,7 @@ class AlbumInformationGeneralFragment : Fragment() {
                     .setNeutralButton(resources.getString(R.string.btn_cancel), null)
                     .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
                         viewModel.deleteAlbum()
-                        findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
+                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
                     }.show()
             }
             binding.editFAB.setOnClickListener {
@@ -123,7 +122,7 @@ class AlbumInformationGeneralFragment : Fragment() {
                     .setNeutralButton(resources.getString(R.string.btn_cancel), null)
                     .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
                         viewModel.dropAlbum()
-                        findNavController().navigate(AlbumInformationFragmentDirections.actionNavAlbumInformationToNavHome())
+                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
                     }.show()
             }
             binding.deleteAlbumButton.setOnClickListener(null)

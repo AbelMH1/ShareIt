@@ -19,6 +19,7 @@
             tools:listitem="@layout/line_recycler_view_message_received" />
 
         <LinearLayout
+            android:id="@+id/permissionToCommentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
@@ -54,6 +55,28 @@
                 android:layout_marginBottom="@dimen/fab_send_message_margin"
                 android:contentDescription="@string/fab_send_desc"
                 app:srcCompat="@drawable/ic_send_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/notPermissionToCommentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/message_margin">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="?attr/textAppearanceLabelLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/text_margin"
+                android:text="@string/label_not_permission_to_comment"
+                app:drawableStartCompat="@drawable/ic_menu_info_24" />
 
         </LinearLayout>
 

@@ -74,11 +74,11 @@ class AlbumFragment : Fragment() {
                     .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
                     .setCancelable(false)
                     .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
-                        findNavController().navigate(AlbumFragmentDirections.actionNavAlbumToNavHome())
+                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
                     }
                     .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
                         albumViewModel.deleteUserAlbum(args.albumID)
-                        findNavController().navigate(AlbumFragmentDirections.actionNavAlbumToNavHome())
+                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
                     }.show()
             } else {
                 checkPermissions()

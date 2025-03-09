@@ -115,6 +115,21 @@ class AlbumViewModel : ViewModel() {
         }
     }
 
+    fun hasChatCommentPermission(): Boolean {
+        when (_currentUserRole.value) {
+            Role.OWNER -> return true
+            Role.MEMBER -> {
+                val chatPermission = _album.value!!.membersChatPermission
+                return chatPermission == ChatPermission.COMMENT
+            }
+            Role.GUEST -> {
+                val chatPermission = _album.value!!.guestsChatPermission
+                return chatPermission == ChatPermission.COMMENT
+            }
+            else -> return false
+        }
+    }
+
     fun hasImagesAddPermission(): Boolean {
         when (_currentUserRole.value) {
             Role.OWNER -> return true
