@@ -43,9 +43,6 @@ class AlbumInformationFragment : Fragment() {
     ): View {
         _binding = FragmentAlbumInformationBinding.inflate(inflater, container, false)
 
-        albumViewModel.registerAlbumDataListener(args.albumID, viewModel.getUpdateAlbumFunc())
-        viewModel.registerAlbumParticipantsListener(args.albumID)
-        albumViewModel.registerUserRoleListener(args.albumID)
 
         albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
             if (it == Role.NONE) { // TODO: && album.visibility != public
@@ -72,11 +69,22 @@ class AlbumInformationFragment : Fragment() {
         configureTabs()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onStart() {
+        super.onStart()
+        albumViewModel.registerAlbumDataListener(args.albumID, viewModel.getUpdateAlbumFunc())
+        viewModel.registerAlbumParticipantsListener(args.albumID)
+        albumViewModel.registerUserRoleListener(args.albumID)
+    }
+
+    override fun onStop() {
+        super.onStop()
         albumViewModel.unregisterAlbumDataListener()
         viewModel.unregisterAlbumParticipantsListener()
         albumViewModel.unregisterUserRoleListener()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

@@ -61,8 +61,6 @@ class AlbumFragment : Fragment() {
             ImagesDisplayViewModelFactory()
         )[ALBUM_VIEW, ImagesDisplayViewModel::class.java]
 
-        albumViewModel.registerUserRoleListener(args.albumID)
-        albumViewModel.registerAlbumDataListener(args.albumID)
 
         albumViewModel.album.observe(viewLifecycleOwner) {
             val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
@@ -125,10 +123,20 @@ class AlbumFragment : Fragment() {
         configureToolBar()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onStart() {
+        super.onStart()
+        albumViewModel.registerUserRoleListener(args.albumID)
+        albumViewModel.registerAlbumDataListener(args.albumID)
+    }
+
+    override fun onStop() {
+        super.onStop()
         albumViewModel.unregisterAlbumDataListener()
         albumViewModel.unregisterUserRoleListener()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
