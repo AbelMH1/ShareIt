@@ -10,12 +10,17 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumImageBinding
+import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.view.adapter.ImageViewPagerAdapter
+import uniovi.eii.shareit.viewModel.AlbumViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
+import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
 
 class ImageFragment : Fragment() {
@@ -24,6 +29,7 @@ class ImageFragment : Fragment() {
     private var _binding: FragmentAlbumImageBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ImagesDisplayViewModel
+    private lateinit var albumViewModel: AlbumViewModel
     private lateinit var imagePagerAdapter: ImageViewPagerAdapter
     private var usingViewModel = ""
     private var selectedImage = 0
@@ -43,7 +49,30 @@ class ImageFragment : Fragment() {
             ImagesDisplayViewModelFactory()
         )[usingViewModel, ImagesDisplayViewModel::class.java]
 
-        imagePagerAdapter = ImageViewPagerAdapter(this)
+
+        if (usingViewModel == ALBUM_VIEW) {
+            albumViewModel = ViewModelProvider(
+                findNavController().getViewModelStoreOwner(R.id.navigation_album)
+            )[AlbumViewModel::class.java]
+
+            albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
+                if (it == Role.NONE) { // TODO: && album.visibility != public
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
+                        .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
+                        .setCancelable(false)
+                        .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
+                            findNavController().navigate(R.id.action_exit_album_to_nav_home)
+                        }
+                        .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
+                            albumViewModel.deleteUserAlbum(albumViewModel.getAlbumInfo().albumId)
+                            findNavController().navigate(R.id.action_exit_album_to_nav_home)
+                        }.show()
+                }
+            }
+        }
+
+        imagePagerAdapter = ImageViewPagerAdapter(this, usingViewModel)
 
         viewModel.displayImageList.observe(viewLifecycleOwner) {
             imagePagerAdapter.update(it.toMutableList())
@@ -67,7 +96,7 @@ class ImageFragment : Fragment() {
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+                val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
                 toolbar.isTitleCentered = true
             }
 

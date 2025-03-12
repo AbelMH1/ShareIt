@@ -8,6 +8,7 @@ import uniovi.eii.shareit.view.album.image.ImageDetailsFragment
 
 class ImageViewPagerAdapter(
     fragment: Fragment,
+    private var usingViewModel: String,
     private var imagesList: MutableList<Image> = mutableListOf()
 ) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
@@ -15,7 +16,7 @@ class ImageViewPagerAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return ImageDetailsFragment.newInstance(imagesList[position])
+        return ImageDetailsFragment.newInstance(imagesList[position], usingViewModel)
     }
 
     @SuppressLint("NotifyDataSetChanged")

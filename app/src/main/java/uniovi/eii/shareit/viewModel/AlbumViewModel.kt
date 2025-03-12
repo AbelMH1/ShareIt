@@ -148,4 +148,19 @@ class AlbumViewModel : ViewModel() {
             else -> return false
         }
     }
+
+    fun hasImagesVotePermission(): Boolean {
+        when (_currentUserRole.value) {
+            Role.OWNER -> return true
+            Role.MEMBER -> {
+                val imagesPermission = _album.value!!.membersImagesPermission
+                return imagesPermission == ImagePermission.VOTE || imagesPermission == ImagePermission.ADD
+            }
+            Role.GUEST -> {
+                val imagesPermission = _album.value!!.guestsImagesPermission
+                return imagesPermission == ImagePermission.VOTE || imagesPermission == ImagePermission.ADD
+            }
+            else -> return false
+        }
+    }
 }
