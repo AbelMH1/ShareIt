@@ -30,12 +30,19 @@ class AlbumViewModel : ViewModel() {
     private var albumDataListenerRegistration: ListenerRegistration? = null
     private var userRoleListenerRegistration: ListenerRegistration? = null
 
-    fun getAlbumInfo(): Album {
-        return album.value?.copy() ?: Album()
+    init {
+        Log.d(TAG, "START")
     }
 
-    fun updateCurrentAlbum(albumID: String, albumName: String, albumCoverImage: String) {
-        _album.value = Album(albumID, name = albumName, coverImage = albumCoverImage)
+    override fun onCleared() {
+        super.onCleared()
+        unregisterUserRoleListener()
+        unregisterAlbumDataListener()
+        Log.d(TAG, "END")
+    }
+
+    fun getAlbumInfo(): Album {
+        return album.value?.copy() ?: Album()
     }
 
     private fun updateAlbumData(newAlbumData: Album) {
@@ -51,6 +58,7 @@ class AlbumViewModel : ViewModel() {
         albumId: String,
         updateAlbumFunc: (Album) -> Unit = {}
     ) {
+        if (albumDataListenerRegistration != null) return
         Log.d(TAG, "albumDataListener: START")
         val updateEvent: (newData: Album) -> Unit = {
             updateAlbumData(it)
@@ -59,7 +67,7 @@ class AlbumViewModel : ViewModel() {
         albumDataListenerRegistration = FirestoreAlbumService.getAlbumDataRegistration(albumId, updateEvent)
     }
 
-    fun unregisterAlbumDataListener() {
+    private fun unregisterAlbumDataListener() {
         Log.d(TAG, "albumDataListener: STOP")
         albumDataListenerRegistration?.remove()
     }
@@ -67,6 +75,7 @@ class AlbumViewModel : ViewModel() {
     fun registerUserRoleListener(
         albumId: String
     ) {
+        if (userRoleListenerRegistration != null) return
         Log.d(TAG, "userRoleListener: START")
         val updateEvent: (newData: Role) -> Unit = {
             updateCurrentUserRole(it)
@@ -75,10 +84,9 @@ class AlbumViewModel : ViewModel() {
         userRoleListenerRegistration = FirestoreAlbumService.getCurrentUserRoleInAlbumRegistration(albumId, userId, updateEvent)
     }
 
-    fun unregisterUserRoleListener() {
+    private fun unregisterUserRoleListener() {
         Log.d(TAG, "userRoleListener: STOP")
         userRoleListenerRegistration?.remove()
-        resetCurrentUserRole()
     }
 
     fun deleteUserAlbum(albumID: String) {
@@ -90,10 +98,6 @@ class AlbumViewModel : ViewModel() {
 
     fun isCurrentUserOwner(): Boolean {
         return _currentUserRole.value == Role.OWNER
-    }
-
-    private fun resetCurrentUserRole() {
-        _currentUserRole.postValue(Role.GUEST)
     }
 
     fun isAlbumPrivate(): Boolean {

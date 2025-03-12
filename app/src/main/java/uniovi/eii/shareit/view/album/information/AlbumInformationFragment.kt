@@ -9,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
@@ -31,18 +31,17 @@ class AlbumInformationFragment : Fragment() {
     private val args: AlbumInformationFragmentArgs by navArgs()
     private var _binding: FragmentAlbumInformationBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlbumInformationViewModel by activityViewModels()
-    private val albumViewModel: AlbumViewModel by activityViewModels()
+    private val viewModel: AlbumInformationViewModel by navGraphViewModels(R.id.navigation_album)
+    private val albumViewModel: AlbumViewModel by navGraphViewModels(R.id.navigation_album)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        albumViewModel.updateCurrentAlbum(args.albumID, args.albumName, args.albumCoverImage)
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAlbumInformationBinding.inflate(inflater, container, false)
 
+        albumViewModel.registerUserRoleListener(args.albumID)
+        albumViewModel.registerAlbumDataListener(args.albumID, viewModel.getUpdateAlbumFunc())
+        viewModel.registerAlbumParticipantsListener(args.albumID)
 
         albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
             if (it == Role.NONE) { // TODO: && album.visibility != public
@@ -69,22 +68,9 @@ class AlbumInformationFragment : Fragment() {
         configureTabs()
     }
 
-    override fun onStart() {
-        super.onStart()
-        albumViewModel.registerAlbumDataListener(args.albumID, viewModel.getUpdateAlbumFunc())
-        viewModel.registerAlbumParticipantsListener(args.albumID)
-        albumViewModel.registerUserRoleListener(args.albumID)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        albumViewModel.unregisterAlbumDataListener()
-        viewModel.unregisterAlbumParticipantsListener()
-        albumViewModel.unregisterUserRoleListener()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.unregisterAlbumParticipantsListener()
         _binding = null
     }
 

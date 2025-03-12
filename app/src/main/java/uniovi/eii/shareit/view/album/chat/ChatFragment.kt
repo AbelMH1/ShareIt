@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -32,8 +33,8 @@ class ChatFragment : Fragment() {
     private val args: ChatFragmentArgs by navArgs()
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
-    private val albumViewModel: AlbumViewModel by activityViewModels()
-    private val chatViewModel: AlbumChatViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by navGraphViewModels(R.id.navigation_album)
+    private val chatViewModel: AlbumChatViewModel by viewModels()
     private val adapter = MessageListAdapter()
 
     override fun onCreateView(
@@ -90,18 +91,6 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureToolBar()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        albumViewModel.registerUserRoleListener(args.albumID)
-        albumViewModel.registerAlbumDataListener(args.albumID)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        albumViewModel.unregisterAlbumDataListener()
-        albumViewModel.unregisterUserRoleListener()
     }
 
     override fun onDestroyView() {

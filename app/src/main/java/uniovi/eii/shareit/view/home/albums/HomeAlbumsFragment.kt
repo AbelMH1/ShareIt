@@ -13,6 +13,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavGraph
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import uniovi.eii.shareit.R
@@ -115,17 +116,23 @@ class HomeAlbumsFragment : Fragment() {
     fun clickOnCardViewItem(album: UserAlbum, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
         Toast.makeText(context, "Item Clicked ${album.name}", Toast.LENGTH_SHORT).show()
-        // TODO: Pasar id del album a abrir
+        val graph = findNavController().graph.findNode(R.id.navigation_album)
+        if (graph is NavGraph) {
+            graph.setStartDestination(R.id.nav_album)
+        }
         findNavController().navigate(HomeFragmentDirections
-            .actionNavHomeToNavAlbum(album.albumId, album.name, album.coverImage))
+            .actionNavHomeToNavigationAlbum(album.albumId, album.name, album.coverImage))
     }
 
     fun clickOnInfoButtonItem(album: UserAlbum, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
         Toast.makeText(context, "Info Clicked ${album.name}", Toast.LENGTH_SHORT).show()
-        // TODO: Pasar id del album a abrir
+        val graph = findNavController().graph.findNode(R.id.navigation_album)
+        if (graph is NavGraph) {
+            graph.setStartDestination(R.id.nav_album_information)
+        }
         findNavController().navigate(HomeFragmentDirections
-            .actionNavHomeToNavAlbumInformation(album.albumId, album.name, album.coverImage))
+            .actionNavHomeToNavigationAlbum(album.albumId, album.name, album.coverImage))
     }
 
 }

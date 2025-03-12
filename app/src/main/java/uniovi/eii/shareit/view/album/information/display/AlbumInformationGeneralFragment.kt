@@ -11,8 +11,8 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
@@ -36,8 +36,8 @@ class AlbumInformationGeneralFragment : Fragment() {
 
     private var _binding: FragmentAlbumInformationGeneralBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlbumInformationViewModel by activityViewModels()
-    private val albumViewModel: AlbumViewModel by activityViewModels()
+    private val viewModel: AlbumInformationViewModel by navGraphViewModels(R.id.navigation_album)
+    private val albumViewModel: AlbumViewModel by navGraphViewModels(R.id.navigation_album)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

@@ -11,10 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
@@ -40,7 +40,7 @@ class AlbumFragment : Fragment() {
     private val args: AlbumFragmentArgs by navArgs()
     private var _binding: FragmentAlbumBinding? = null
     private val binding get() = _binding!!
-    private val albumViewModel: AlbumViewModel by activityViewModels()
+    private val albumViewModel: AlbumViewModel by navGraphViewModels(R.id.navigation_album)
     private lateinit var imagesViewModel: ImagesDisplayViewModel
     private lateinit var sectionListAdapter: SectionListAdapter
     private lateinit var imageListAdapter: ImageListAdapter
@@ -49,7 +49,6 @@ class AlbumFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         columnCount = args.COLUMNCOUNT
-        albumViewModel.updateCurrentAlbum(args.albumID, args.albumName, args.albumCoverImage)
     }
 
     override fun onCreateView(
@@ -61,6 +60,8 @@ class AlbumFragment : Fragment() {
             ImagesDisplayViewModelFactory()
         )[ALBUM_VIEW, ImagesDisplayViewModel::class.java]
 
+        albumViewModel.registerUserRoleListener(args.albumID)
+        albumViewModel.registerAlbumDataListener(args.albumID)
 
         albumViewModel.album.observe(viewLifecycleOwner) {
             val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
@@ -121,18 +122,6 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureToolBar()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        albumViewModel.registerUserRoleListener(args.albumID)
-        albumViewModel.registerAlbumDataListener(args.albumID)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        albumViewModel.unregisterAlbumDataListener()
-        albumViewModel.unregisterUserRoleListener()
     }
 
     override fun onDestroyView() {
@@ -206,7 +195,7 @@ class AlbumFragment : Fragment() {
         Log.i("Click adapter", "Item Clicked at index $position: $image")
         Toast.makeText(context, "Item Clicked ${image.author}", Toast.LENGTH_SHORT).show()
         findNavController().navigate(AlbumFragmentDirections
-            .actionNavAlbumToNavAlbumImage(ALBUM_VIEW, position))
+            .actionNavAlbumToNavAlbumImage(position))
     }
 
     private fun setUpSectionRecyclerView(sections: List<Section>) {
