@@ -128,6 +128,9 @@
             <argument
                 android:name="albumCoverImage"
                 app:argType="string" />
+            <action
+                android:id="@+id/action_nav_album_to_addImageFragment"
+                app:destination="@id/addImageFragment" />
         </fragment>
 
         <fragment
@@ -173,6 +176,11 @@
                 android:name="albumName"
                 app:argType="string" />
         </fragment>
+        <fragment
+            android:id="@+id/addImageFragment"
+            android:name="uniovi.eii.shareit.view.album.image.AddImageFragment"
+            android:label="@string/menu_album_add_image"
+            tools:layout="@layout/fragment_add_image" />
 
     </navigation>
 

@@ -10,8 +10,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Section
+import uniovi.eii.shareit.utils.toFormattedChatDateString
 import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
-import java.time.format.DateTimeFormatter
 
 
 class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
@@ -76,9 +76,9 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
         val newSectionList: List<Section> =
             when (currentOrder.value) {
                 R.id.action_order_date ->
-                    newImages.groupBy { image: Image -> image.creationDate.format(DateTimeFormatter.ofPattern("d MMM uuuu")) }
+                    newImages.groupBy { image: Image -> image.creationDate.toFormattedChatDateString() }
                 R.id.action_order_album ->
-                    newImages.groupBy { image: Image -> image.albumName }
+                    newImages.groupBy { image: Image -> image.albumId }
                 else -> return
             }.map { entry -> Section(entry.key, entry.value) }
         _displaySectionList.value = newSectionList
@@ -93,7 +93,7 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
     private fun filterImageList(filter: Int, newImages: List<Image>): List<Image> {
         return when (filter) {
             R.id.action_filter_all -> newImages
-            R.id.action_filter_mine -> newImages.filter { img -> img.author == "Author 0" }
+            R.id.action_filter_mine -> newImages.filter { img -> img.authorName == "Author 0" }
             else -> emptyList()
         }
     }
@@ -108,7 +108,7 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
     private fun orderImageList(order: Int, direction: Int, newImages: List<Image>): List<Image> {
         val orderedImages = when (order) {
             R.id.action_order_date -> newImages.sortedBy { img -> img.creationDate }
-            R.id.action_order_album -> newImages.sortedBy { img -> img.albumName }
+            R.id.action_order_album -> newImages.sortedBy { img -> img.albumId }
             R.id.action_order_likes -> newImages.sortedBy { img -> img.likes.size }
             else -> emptyList()
         }

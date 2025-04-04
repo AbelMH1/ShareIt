@@ -2,31 +2,35 @@ package uniovi.eii.shareit.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.temporal.ChronoField
+import java.util.Date
 
 data class Image(
-    var author : String = "",
-    var albumName: String = "",
+    var imageId: String = "",
+    var authorName : String = "",
+    var authorId: String = "",
+    var albumId: String = "",
     var imagePath : String = "",
-    var creationDate: LocalDateTime = LocalDateTime.now(),
+    var creationDate: Date = Date(),
     var likes : List<String> = emptyList()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        LocalDateTime.ofEpochSecond(parcel.readLong(), 0, ZoneOffset.UTC),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        Date(parcel.readLong()),
         parcel.createStringArrayList().orEmpty()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(author)
-        parcel.writeString(albumName)
+        parcel.writeString(imageId)
+        parcel.writeString(authorName)
+        parcel.writeString(authorId)
+        parcel.writeString(albumId)
         parcel.writeString(imagePath)
-        parcel.writeLong(creationDate.getLong(ChronoField.INSTANT_SECONDS))
+        parcel.writeLong(creationDate.time)
         parcel.writeStringList(likes)
     }
 

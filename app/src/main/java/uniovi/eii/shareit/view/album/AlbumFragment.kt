@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumBinding
 import uniovi.eii.shareit.model.Image
@@ -112,8 +111,8 @@ class AlbumFragment : Fragment() {
             adapter = imageListAdapter
         }
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own images action", Snackbar.LENGTH_LONG).show()
+        binding.fab.setOnClickListener {
+            findNavController().navigate(AlbumFragmentDirections.actionNavAlbumToAddImageFragment())
         }
 
         return binding.root
@@ -193,7 +192,6 @@ class AlbumFragment : Fragment() {
 
     fun clickOnItem(image: Image, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $image")
-        Toast.makeText(context, "Item Clicked ${image.author}", Toast.LENGTH_SHORT).show()
         findNavController().navigate(AlbumFragmentDirections
             .actionNavAlbumToNavAlbumImage(position))
     }

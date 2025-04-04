@@ -13,6 +13,7 @@
     <string name="menu_album_image">Images</string>
     <string name="menu_account">My account</string>
     <string name="menu_logOut">Log Out</string>
+    <string name="menu_album_add_image">Add new image</string>
     <!--    AppBar subtitles    -->
     <string name="menu_album_creation_general">General information</string>
     <string name="menu_album_creation_shared">Sharing information</string>
@@ -112,7 +113,7 @@
     <string name="label_permission_images">Images</string>
     <string name="label_permission_guests">Guests</string>
     <string name="label_permission_chat">Chat</string>
-    <!--    Album Information    -->
+    <!--    Album Information General   -->
     <string name="label_name">Name</string>
     <string name="label_cover">Album\'s Cover</string>
     <string name="cover_settings_btn_desc">Set your Album\'s cover preferences</string>
@@ -130,12 +131,14 @@
     <string name="label_location_disabled">Location not enabled</string>
     <string name="fab_edit_desc">Edit the information displayed</string>
     <string name="fab_save_desc">Save the modified information</string>
+    <!--    Album Information Shared   -->
     <string name="images_permission_see">Solo ver</string>
     <string name="images_permission_vote">Ver y valorar</string>
     <string name="images_permission_vote_add">Ver, valorar y añadir</string>
     <string name="chat_permission_hidden">Oculto</string>
     <string name="chat_permission_see">Solo ver</string>
     <string name="chat_permission_see_comment">Ver y comentar</string>
+    <!--    Album Information Participants   -->
     <string name="warn_disable_shared_title">Disable shared album?</string>
     <string name="warn_disable_shared_message">This will permanently delete all participants from the album and their shared photos.</string>
     <string name="btn_accept">Accept</string>
@@ -162,4 +165,18 @@
     <string name="label_not_permission_to_comment">You don\'t have permission to comment</string>
     <string name="warn_chat_see_permission_revoked_title">Permission denied</string>
     <string name="warn_chat_see_permission_revoked_message">Permissions have changed and you can\'t access the chat anymore.</string>
+    <!--    Add Image    -->
+    <string name="btn_select_image">Select image</string>
+    <string name="btn_upload_image">Upload image</string>
+    <string name="uploaded_image_desc">Selected image to upload to the album</string>
+    <string name="warn_image_add_permission_revoked_title">Permission denied</string>
+    <string name="warn_image_add_permission_revoked_message">Permissions have changed and you can\'t upload images anymore.</string>
+    <string name="error_gallery_permission_denied">Permission denied to access gallery</string>
+    <string name="error_camera_permission_denied">Permission denied to access camera</string>
+    <string name="error_loading_image">Error loading image</string>
+    <string name="error_uploading_image">Error uploading the image</string>
+    <string name="info_success_uploading_image">Image uploaded successfully</string>
+    <string name="select_source_title">Select Source</string>
+    <string name="select_source_camera">Camera</string>
+    <string name="select_source_gallery">Gallery</string>
 </resources>

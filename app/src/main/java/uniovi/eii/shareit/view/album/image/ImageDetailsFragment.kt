@@ -72,7 +72,7 @@ class ImageDetailsFragment : Fragment() {
             binding.likeBtn.isEnabled = false
         }
 
-        binding.userName.text = image.author
+        binding.userName.text = image.authorName
         binding.dateUpload.text = image.creationDate.toString()
         binding.numLikes.text = String.format(Locale.getDefault(), image.likes.size.toString())
 
