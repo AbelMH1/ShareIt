@@ -1,6 +1,5 @@
 package uniovi.eii.shareit.model.repository
 
-import android.net.Uri
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
@@ -9,7 +8,6 @@ import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.User
@@ -303,39 +301,6 @@ object FirestoreAlbumService {
         } catch (e: Exception) {
             Log.e(TAG, "updateCurrentAlbumData:failure", e)
             GeneralValidationResult(firestoreError = e.message)
-        }
-    }
-
-    /**
-     * Añade la [image] pasada como parámetro en la colección images del album
-     * correspondiente en firestore si se ha conseguido subir la [imageUri] pasada.
-     */
-    suspend fun uploadImage(image: Image, imageUri: Uri): Boolean {
-        val db = Firebase.firestore
-        return try {
-            val docRef = db.collection("albums")
-                .document(image.albumId)
-                .collection("images")
-                .document()
-            val imagePath = FirebaseStorageService.uploadAlbumImage(
-                image.albumId,
-                docRef.id,
-                imageUri
-            )
-            if (imagePath == null) {
-                Log.e(TAG, "uploadImage:failure")
-                return false
-            }
-            image.apply {
-                this.imageId = docRef.id
-                this.imagePath = imagePath
-            }
-            docRef.set(image).await()
-            Log.d(TAG, "uploadImage:success")
-            true
-        } catch (e: Exception) {
-            Log.e(TAG, "uploadImage:failure", e)
-            false
         }
     }
 }

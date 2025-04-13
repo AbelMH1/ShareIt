@@ -61,6 +61,7 @@ class AlbumFragment : Fragment() {
 
         albumViewModel.registerUserRoleListener(args.albumID)
         albumViewModel.registerAlbumDataListener(args.albumID)
+        imagesViewModel.registerAlbumImagesListener(args.albumID)
 
         albumViewModel.album.observe(viewLifecycleOwner) {
             val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)

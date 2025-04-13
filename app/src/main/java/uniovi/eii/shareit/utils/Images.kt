@@ -11,8 +11,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import uniovi.eii.shareit.R
 import java.io.ByteArrayOutputStream
 import java.io.File
+
+fun Context.loadImageIntoView(
+    uri: Uri,
+    imageView: android.widget.ImageView,
+    placeholder: Int = R.drawable.ic_image_24,
+    error: Int = R.drawable.ic_image_not_supported_24
+) {
+    Glide.with(this)
+        .load(uri)
+        .placeholder(placeholder)
+        .error(error)
+        .centerCrop()
+        .into(imageView)
+}
 
 fun Context.createTempImageFile(fileName: String = "temp_image", directory: File = filesDir): File {
     return File.createTempFile(fileName, ".jpg", directory)

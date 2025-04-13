@@ -9,11 +9,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.Image
-import uniovi.eii.shareit.model.repository.FirestoreAlbumService
+import uniovi.eii.shareit.model.repository.FirestoreImageService
 import uniovi.eii.shareit.model.repository.FirestoreUserService
+import uniovi.eii.shareit.utils.compressImage
 import uniovi.eii.shareit.utils.createTempImageFile
 import uniovi.eii.shareit.utils.getSecureUriForFile
-import uniovi.eii.shareit.utils.compressImage
 
 class AddImageViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -38,7 +38,7 @@ class AddImageViewModel(application: Application) : AndroidViewModel(application
         )
         viewModelScope.launch(Dispatchers.IO) {
             _isCompletedImageUpload.postValue(
-                FirestoreAlbumService.uploadImage(newImage, imageUri.value!!)
+                FirestoreImageService.uploadImage(newImage, imageUri.value!!)
             )
         }
     }

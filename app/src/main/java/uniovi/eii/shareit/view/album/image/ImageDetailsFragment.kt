@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentImageDetailsBinding
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant.Role
+import uniovi.eii.shareit.utils.loadImageIntoView
 import uniovi.eii.shareit.viewModel.AlbumViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
 import java.util.Locale
@@ -74,7 +76,8 @@ class ImageDetailsFragment : Fragment() {
 
         binding.userName.text = image.authorName
         binding.dateUpload.text = image.creationDate.toString()
-        binding.numLikes.text = String.format(Locale.getDefault(), image.likes.size.toString())
+        binding.numLikes.text = String.format(Locale.getDefault(), image.likes.toString())
+        requireContext().loadImageIntoView(image.imagePath.toUri(), binding.image)
 
         return binding.root
     }

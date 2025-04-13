@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewImageBinding
 import uniovi.eii.shareit.model.Image
+import uniovi.eii.shareit.utils.loadImageIntoView
 
 class ImageListAdapter(
     private var imagesList: List<Image> = emptyList(),
@@ -45,7 +46,10 @@ class ImageListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun assignValuesToComponents(image: Image, listener: OnItemClickListener, position: Int, accumulatedPosition: Int) {
-            binding.image.setImageResource(R.drawable.ic_menu_gallery) // TODO: Añadir imagen
+            binding.root.context.loadImageIntoView(
+                image.imagePath.toUri(),
+                binding.image
+            )
             itemView.setOnClickListener {
                 listener.onItemClick(image, accumulatedPosition+position)
             }

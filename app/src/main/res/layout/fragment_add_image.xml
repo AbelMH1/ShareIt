@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/upload_image_desc"
-        android:src="@drawable/ic_menu_gallery"
+        android:src="@drawable/ic_image_24"
         app:layout_constraintBottom_toTopOf="@+id/selectImageButton"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"

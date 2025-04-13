@@ -6,17 +6,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.VIEW_MODEL_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Section
+import uniovi.eii.shareit.model.repository.FirestoreImageService
 import uniovi.eii.shareit.utils.toFormattedChatDateString
-import uniovi.eii.shareit.view.album.placeholder.PlaceholderContent
 
 
 class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
 
     companion object {
+        private const val TAG = "ImagesDisplayViewModel"
+
         const val ALBUM_VIEW = "album"
         const val GENERAL_VIEW = "general"
 
@@ -47,28 +53,56 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
     private val _currentOrderDirection = MutableLiveData(R.id.action_order_ascending)
     val currentOrderDirection: LiveData<Int> = _currentOrderDirection
 
-
-    init {
-        Log.d("ImageViewModel", "View: $instanceKey")
-        if (instanceKey == ALBUM_VIEW) {
-            updateAllImageList(PlaceholderContent.getImagesList(15))
-        } else {
-            updateAllImageList(PlaceholderContent.getImagesList(25))
-        }
-    }
+    private var albumImagesListenerRegistration: ListenerRegistration? = null
 
     fun getKey(): String {
         return instanceKey
     }
 
+    fun loadImageList(albumID: String) {
+        viewModelScope.launch(Dispatchers.IO){
+            updateAllImageList(FirestoreImageService.getAlbumImages(albumID))
+        }
+    }
+
+    private fun updateImageList(newImages: List<Image>, isUpdateFromServer: Boolean = false) {
+        updateAllImageList(newImages)
+        if (isUpdateFromServer) {
+            unregisterAlbumImagesListener()
+            if (_currentOrder.value == R.id.action_order_likes) {
+                loadLikeCountForImages(newImages)
+            }
+        }
+
+    }
+
+    private fun loadLikeCountForImages(newImages: List<Image> = allImageList.value!!) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateAllImageList(FirestoreImageService.getLikesCountForImages(newImages))
+        }
+    }
+
     private fun updateAllImageList(newImages: List<Image>) {
-        _allImageList.value = newImages
+        _allImageList.postValue(newImages)
         updateDisplayImageList(orderImageList(currentOrder.value!!, currentOrderDirection.value!!, filterImageList(currentFilter.value!!, newImages)))
+    }
+
+    fun registerAlbumImagesListener(albumID: String) {
+        Log.d(TAG, "albumImagesListener: START")
+        val updateEvent: (newAlbumImages: List<Image>, isUpdateFromServer: Boolean) -> Unit = { images, b ->
+            updateImageList(images, b)
+        }
+        albumImagesListenerRegistration = FirestoreImageService.getAlbumImagesRegistration(albumID, updateEvent)
+    }
+
+    private fun unregisterAlbumImagesListener() {
+        Log.d(TAG, "albumImagesListener: STOP")
+        albumImagesListenerRegistration?.remove()
     }
 
     private fun updateDisplayImageList(newImages: List<Image>) {
         Log.d("ImagesDisplayViewModel", "New value for displayImageList (size: ${newImages.size}):  $newImages")
-        _displayImageList.value = newImages
+        _displayImageList.postValue(newImages)
         updateSectionList(newImages)
     }
 
@@ -81,7 +115,7 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
                     newImages.groupBy { image: Image -> image.albumId }
                 else -> return
             }.map { entry -> Section(entry.key, entry.value) }
-        _displaySectionList.value = newSectionList
+        _displaySectionList.postValue(newSectionList)
     }
 
     fun applyFilter(filter: Int) {
@@ -109,7 +143,7 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
         val orderedImages = when (order) {
             R.id.action_order_date -> newImages.sortedBy { img -> img.creationDate }
             R.id.action_order_album -> newImages.sortedBy { img -> img.albumId }
-            R.id.action_order_likes -> newImages.sortedBy { img -> img.likes.size }
+            R.id.action_order_likes -> newImages.sortedBy { img -> img.likes }
             else -> emptyList()
         }
         return if (direction == R.id.action_order_ascending) orderedImages else orderedImages.asReversed()
