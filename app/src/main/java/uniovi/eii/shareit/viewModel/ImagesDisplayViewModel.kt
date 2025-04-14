@@ -53,7 +53,7 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
     private val _currentOrderDirection = MutableLiveData(R.id.action_order_ascending)
     val currentOrderDirection: LiveData<Int> = _currentOrderDirection
 
-    private var albumImagesListenerRegistration: ListenerRegistration? = null
+    private var imagesListenerRegistration: ListenerRegistration? = null
 
     fun getKey(): String {
         return instanceKey
@@ -92,12 +92,20 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
         val updateEvent: (newAlbumImages: List<Image>, isUpdateFromServer: Boolean) -> Unit = { images, b ->
             updateImageList(images, b)
         }
-        albumImagesListenerRegistration = FirestoreImageService.getAlbumImagesRegistration(albumID, updateEvent)
+        imagesListenerRegistration = FirestoreImageService.getAlbumImagesRegistration(albumID, updateEvent)
+    }
+
+    fun registerUserImagesListener(userAlbums: List<String>) {
+        Log.d(TAG, "albumImagesListener: START")
+        val updateEvent: (newAlbumImages: List<Image>, isUpdateFromServer: Boolean) -> Unit = { images, b ->
+            updateImageList(images, b)
+        }
+        imagesListenerRegistration = FirestoreImageService.getUserImagesRegistration(userAlbums, updateEvent)
     }
 
     private fun unregisterAlbumImagesListener() {
         Log.d(TAG, "albumImagesListener: STOP")
-        albumImagesListenerRegistration?.remove()
+        imagesListenerRegistration?.remove()
     }
 
     private fun updateDisplayImageList(newImages: List<Image>) {

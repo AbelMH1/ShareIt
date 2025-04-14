@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ import uniovi.eii.shareit.model.Section
 import uniovi.eii.shareit.view.adapter.ImageListAdapter
 import uniovi.eii.shareit.view.adapter.SectionListAdapter
 import uniovi.eii.shareit.view.home.HomeFragmentDirections
+import uniovi.eii.shareit.viewModel.AlbumsDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.GENERAL_VIEW
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
@@ -63,6 +65,11 @@ class HomeImagesFragment : Fragment() {
             ImagesDisplayViewModelFactory()
         )[GENERAL_VIEW, ImagesDisplayViewModel::class.java]
 
+        val albumsDisplayViewModel: AlbumsDisplayViewModel by activityViewModels()
+        viewModel.registerUserImagesListener(
+            albumsDisplayViewModel.getAlbumListIds()
+        )
+
         sectionListAdapter =
             SectionListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {
@@ -75,7 +82,6 @@ class HomeImagesFragment : Fragment() {
                     clickOnImageItem(item, position)
                 }
             })
-
 
         // Set the adapter
         binding.allImagesRecyclerView.apply {

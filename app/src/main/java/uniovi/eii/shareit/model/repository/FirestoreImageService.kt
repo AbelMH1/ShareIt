@@ -16,6 +16,7 @@ import uniovi.eii.shareit.model.realTimeListener.AlbumImagesListener
 
 object FirestoreImageService {
     private const val TAG = "FirestoreImageService"
+    private const val MAX_WHERE_IN_LIST_SIZE = 30
 
     /**
      * Obtiene la lista de imágenes del album [albumId] pasado como parámetro.
@@ -54,6 +55,25 @@ object FirestoreImageService {
     }
 
     /**
+     * Enlazamiento de un objeto de escucha en tiempo real para las imágenes de los albumes del
+     * usuario especificados en [userAlbums] con el viewmodel correspondiente según lo especificado
+     * mediante la función [updateVMEvent]. Se hace uso de la clase [AlbumImagesListener].
+     */
+    fun getUserImagesRegistration(
+        userAlbums: List<String>,
+        updateVMEvent: (newData: List<Image>, isUpdateFromServer: Boolean) -> Unit
+    ): ListenerRegistration {
+        val db = Firebase.firestore
+        val albumsIds =
+            if (userAlbums.size > MAX_WHERE_IN_LIST_SIZE)
+                userAlbums.subList(0, 30)
+            else userAlbums
+        return db.collectionGroup("images")
+            .whereIn("albumId", albumsIds)
+            .addSnapshotListener(MetadataChanges.INCLUDE, AlbumImagesListener(updateVMEvent))
+    }
+
+    /**
      * Obtiene el número de likes de cada imagen en la lista [images] pasada como parámetro.
      * Se hace uso de la clase [Image].
      */
@@ -83,7 +103,6 @@ object FirestoreImageService {
             images
         }
     }
-
 
 
     /**

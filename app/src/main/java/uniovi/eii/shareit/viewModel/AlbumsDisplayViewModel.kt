@@ -27,6 +27,10 @@ class AlbumsDisplayViewModel : ViewModel() {
 
     private var userAlbumsListenerRegistration: ListenerRegistration? = null
 
+    fun getAlbumListIds(): List<String> {
+        return _albumList.map { it.albumId }
+    }
+
     private fun updateAlbumList(newAlbums: List<UserAlbum>) {
         _albumList = newAlbums
         updateDisplayAlbumList(orderAlbumList(currentOrder.value!!, currentOrderDirection.value!!, newAlbums))
