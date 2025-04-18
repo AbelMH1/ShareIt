@@ -21,6 +21,11 @@ fun Date.toFormattedString(): String {
     return sdf.format(this)
 }
 
+fun Date.toFormattedImageDetailsString(): String {
+    val sdf = SimpleDateFormat("MMM d, yyyy; HH:mm", Locale.getDefault())
+    return sdf.format(this)
+}
+
 fun Date.toFormattedChatDateString(): String {
     val sdf = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
     return sdf.format(this)

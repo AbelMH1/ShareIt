@@ -18,7 +18,7 @@ import uniovi.eii.shareit.model.repository.FirestoreImageService
 import uniovi.eii.shareit.utils.toFormattedChatDateString
 
 
-class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
+class ImagesDisplayViewModel : ViewModel() {
 
     companion object {
         private const val TAG = "ImagesDisplayViewModel"
@@ -29,14 +29,18 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
         @Suppress("UNCHECKED_CAST") // Añadir el resto de parámetros necesarios en el constructor de la clase: ImagesDisplayViewModelFactory(private val extraParams: String)
         class ImagesDisplayViewModelFactory : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-                val instanceKey = checkNotNull(extras[VIEW_MODEL_KEY])
+                checkNotNull(extras[VIEW_MODEL_KEY])
                 if (modelClass.isAssignableFrom(ImagesDisplayViewModel::class.java)) {
-                    return ImagesDisplayViewModel(instanceKey) as T
+                    return ImagesDisplayViewModel() as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
             }
         }
     }
+    var currentImage = 0
+
+    private val _updatedImageLikes = MutableLiveData<MutableMap<String, Int>>(mutableMapOf())
+    val updatedImageLikes: LiveData<MutableMap<String, Int>> = _updatedImageLikes
 
     private val _allImageList = MutableLiveData<List<Image>>(emptyList())
     val allImageList: LiveData<List<Image>> = _allImageList
@@ -50,23 +54,43 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
     val currentFilter: LiveData<Int> = _currentFilter
     private val _currentOrder = MutableLiveData(R.id.action_order_date)
     val currentOrder: LiveData<Int> = _currentOrder
-    private val _currentOrderDirection = MutableLiveData(R.id.action_order_ascending)
+    private val _currentOrderDirection = MutableLiveData(R.id.action_order_descending)
     val currentOrderDirection: LiveData<Int> = _currentOrderDirection
 
     private var imagesListenerRegistration: ListenerRegistration? = null
 
-    fun getKey(): String {
-        return instanceKey
+
+    fun checkUpdatedImageLikes(imagePosition: Int) {
+        val image = _displayImageList.value?.get(imagePosition) ?: return
+        if (_updatedImageLikes.value!!.containsKey(image.imageId)) {
+            Log.d(TAG, "Image ${image.imageId} already has likes: ${_updatedImageLikes.value!![image.imageId]}")
+        } else {
+            Log.d(TAG, "Image ${image.imageId} does not have likes, fetching from Firestore")
+            viewModelScope.launch(Dispatchers.IO) {
+                val likesCount = FirestoreImageService.getLikesCountForImage(image)
+                Log.d(TAG, "Image ${image.imageId} likes count: $likesCount")
+                _updatedImageLikes.value!![image.imageId] = likesCount
+                _updatedImageLikes.postValue(_updatedImageLikes.value)
+            }
+        }
     }
 
-    fun loadImageList(albumID: String) {
-        viewModelScope.launch(Dispatchers.IO){
-            updateAllImageList(FirestoreImageService.getAlbumImages(albumID))
+    fun incrementImageLikes(imageId: String, likesIncrement: Int) {
+        if (_updatedImageLikes.value!!.containsKey(imageId)) {
+            _updatedImageLikes.value!![imageId] = _updatedImageLikes.value!![imageId]!! + likesIncrement
+            _updatedImageLikes.postValue(_updatedImageLikes.value)
+        }
+    }
+
+    private fun fillImageListWithLikes(newImages: List<Image>): List<Image> {
+        return newImages.map { image ->
+            val likesCount = _updatedImageLikes.value?.get(image.imageId) ?: 0
+            image.copy(likes = likesCount)
         }
     }
 
     private fun updateImageList(newImages: List<Image>, isUpdateFromServer: Boolean = false) {
-        updateAllImageList(newImages)
+        updateAllImageList(fillImageListWithLikes(newImages))
         if (isUpdateFromServer) {
             unregisterAlbumImagesListener()
             if (_currentOrder.value == R.id.action_order_likes) {
@@ -78,7 +102,9 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
 
     private fun loadLikeCountForImages(newImages: List<Image> = allImageList.value!!) {
         viewModelScope.launch(Dispatchers.IO) {
-            updateAllImageList(FirestoreImageService.getLikesCountForImages(newImages))
+            val imagesWithLikes = FirestoreImageService.getLikesCountForImages(newImages)
+            updateAllImageList(imagesWithLikes)
+            _updatedImageLikes.postValue(imagesWithLikes.associateBy({ it.imageId }, { it.likes }).toMutableMap())
         }
     }
 
@@ -142,9 +168,14 @@ class ImagesDisplayViewModel(private val instanceKey: String) : ViewModel() {
 
     fun applyOrder(order: Int = currentOrder.value!!, direction: Int = currentOrderDirection.value!!) {
         if (order == currentOrder.value && direction == currentOrderDirection.value) return
+        val orderChanged = order != currentOrder.value
         _currentOrder.value = order
         _currentOrderDirection.value = direction
-        updateDisplayImageList(orderImageList(order, direction, displayImageList.value!!))
+        if (orderChanged && order == R.id.action_order_likes) {
+            loadLikeCountForImages()
+        } else {
+            updateDisplayImageList(orderImageList(order, direction, displayImageList.value!!))
+        }
     }
 
     private fun orderImageList(order: Int, direction: Int, newImages: List<Image>): List<Image> {

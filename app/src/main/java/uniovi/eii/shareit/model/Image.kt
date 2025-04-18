@@ -11,7 +11,7 @@ data class Image(
     var albumId: String = "",
     var imagePath : String = "",
     var creationDate: Date = Date(),
-    var likes : Long = 0,
+    var likes : Int = 0,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -20,7 +20,7 @@ data class Image(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         Date(parcel.readLong()),
-        parcel.readLong()
+        parcel.readInt()
     ) {
     }
 
@@ -31,7 +31,7 @@ data class Image(
         parcel.writeString(albumId)
         parcel.writeString(imagePath)
         parcel.writeLong(creationDate.time)
-        parcel.writeLong(likes)
+        parcel.writeInt(likes)
     }
 
     override fun describeContents(): Int {

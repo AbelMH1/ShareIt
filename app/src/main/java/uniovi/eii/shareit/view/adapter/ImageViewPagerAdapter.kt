@@ -16,7 +16,7 @@ class ImageViewPagerAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return ImageDetailsFragment.newInstance(imagesList[position], usingViewModel)
+        return ImageDetailsFragment.newInstance(imagesList[position], position, usingViewModel)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -27,11 +27,6 @@ class ImageViewPagerAdapter(
 
     fun add(index: Int, image: Image) {
         imagesList.add(index, image)
-        notifyItemChanged(index)
-    }
-
-    fun refreshFragment(index: Int, image: Image) {
-        imagesList[index] = image
         notifyItemChanged(index)
     }
 

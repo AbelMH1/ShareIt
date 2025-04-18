@@ -13,31 +13,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.realTimeListener.AlbumImagesListener
+import uniovi.eii.shareit.model.realTimeListener.ImageLikedListener
 
 object FirestoreImageService {
     private const val TAG = "FirestoreImageService"
     private const val MAX_WHERE_IN_LIST_SIZE = 30
-
-    /**
-     * Obtiene la lista de imágenes del album [albumId] pasado como parámetro.
-     * Se hace uso de la clase [Image].
-     */
-    suspend fun getAlbumImages(albumId: String): List<Image> {
-        val db = Firebase.firestore
-        return try {
-            val images = db.collection("albums")
-                .document(albumId)
-                .collection("images")
-                .get()
-                .await()
-                .toObjects(Image::class.java)
-            Log.d(TAG, "getAlbumImages:success")
-            images
-        } catch (e: Exception) {
-            Log.e(TAG, "getAlbumImages:failure", e)
-            emptyList()
-        }
-    }
 
     /**
      * Enlazamiento de un objeto de escucha en tiempo real para las imágenes del album [albumId]
@@ -75,24 +55,12 @@ object FirestoreImageService {
 
     /**
      * Obtiene el número de likes de cada imagen en la lista [images] pasada como parámetro.
-     * Se hace uso de la clase [Image].
      */
     suspend fun getLikesCountForImages(images: List<Image>): List<Image> = coroutineScope {
-        val db = Firebase.firestore
         try {
             val updatedImages = images.map { image ->
                 async {
-                    val likesCount = db.collection("albums")
-                        .document(image.albumId)
-                        .collection("images")
-                        .document(image.imageId)
-                        .collection("likes")
-                        .count()
-                        .get(AggregateSource.SERVER)
-                        .await()
-                        .count
-
-                    image.copy(likes = likesCount)
+                    image.copy(likes = getLikesCountForImage(image))
                 }
             }.awaitAll()
 
@@ -104,6 +72,29 @@ object FirestoreImageService {
         }
     }
 
+    /**
+     * Obtiene el número de likes de la imagen [image] pasada como parámetro.
+     */
+    suspend fun getLikesCountForImage(image: Image): Int {
+        val db = Firebase.firestore
+        return try {
+            val likesCount = db.collection("albums")
+                .document(image.albumId)
+                .collection("images")
+                .document(image.imageId)
+                .collection("likes")
+                .count()
+                .get(AggregateSource.SERVER)
+                .await()
+                .count.toInt()
+
+            Log.d(TAG, "getLikesCountForImage: success")
+            likesCount
+        } catch (e: Exception) {
+            Log.e(TAG, "getLikesCountForImage: failure", e)
+            0
+        }
+    }
 
     /**
      * Añade la [image] pasada como parámetro en la colección images del album
@@ -134,6 +125,59 @@ object FirestoreImageService {
             true
         } catch (e: Exception) {
             Log.e(TAG, "uploadImage:failure", e)
+            false
+        }
+    }
+
+    fun getImageLikeRegistration(
+        image: Image,
+        userId: String,
+        updateEvent: (newData: Boolean) -> Unit
+    ): ListenerRegistration {
+        val db = Firebase.firestore
+        return db.collection("albums")
+                .document(image.albumId)
+                .collection("images")
+                .document(image.imageId)
+                .collection("likes")
+                .document(userId)
+                .addSnapshotListener(ImageLikedListener(updateEvent))
+    }
+
+    suspend fun createImageLike(image: Image, userId: String): Boolean {
+        val db = Firebase.firestore
+        return try {
+            db.collection("albums")
+                .document(image.albumId)
+                .collection("images")
+                .document(image.imageId)
+                .collection("likes")
+                .document(userId)
+                .set({})
+                .await()
+            Log.d(TAG, "likeImage:success")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "likeImage:failure", e)
+            false
+        }
+    }
+
+    suspend fun deleteImageLike(image: Image, userId: String): Boolean {
+        val db = Firebase.firestore
+        return try {
+            db.collection("albums")
+                .document(image.albumId)
+                .collection("images")
+                .document(image.imageId)
+                .collection("likes")
+                .document(userId)
+                .delete()
+                .await()
+            Log.d(TAG, "unlikeImage:success")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "unlikeImage:failure", e)
             false
         }
     }

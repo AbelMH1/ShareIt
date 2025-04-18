@@ -193,8 +193,9 @@ class AlbumFragment : Fragment() {
 
     fun clickOnItem(image: Image, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $image")
+        imagesViewModel.currentImage = position
         findNavController().navigate(AlbumFragmentDirections
-            .actionNavAlbumToNavAlbumImage(position))
+            .actionNavAlbumToNavAlbumImage())
     }
 
     private fun setUpSectionRecyclerView(sections: List<Section>) {

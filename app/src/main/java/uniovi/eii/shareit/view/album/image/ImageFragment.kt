@@ -32,12 +32,10 @@ class ImageFragment : Fragment() {
     private lateinit var albumViewModel: AlbumViewModel
     private lateinit var imagePagerAdapter: ImageViewPagerAdapter
     private var usingViewModel = ""
-    private var selectedImage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         usingViewModel = args.USEVIEWMODEL
-        selectedImage = args.SELECTEDIMAGE
     }
 
     override fun onCreateView(
@@ -48,7 +46,6 @@ class ImageFragment : Fragment() {
             requireActivity(),
             ImagesDisplayViewModelFactory()
         )[usingViewModel, ImagesDisplayViewModel::class.java]
-
 
         if (usingViewModel == ALBUM_VIEW) {
             albumViewModel = ViewModelProvider(
@@ -76,7 +73,7 @@ class ImageFragment : Fragment() {
 
         viewModel.displayImageList.observe(viewLifecycleOwner) {
             imagePagerAdapter.update(it.toMutableList())
-            binding.pager.setCurrentItem(selectedImage, false)
+            binding.pager.setCurrentItem(viewModel.currentImage, false)
         }
 
         return binding.root
@@ -113,7 +110,17 @@ class ImageFragment : Fragment() {
 
     private fun configureViewPager() {
         binding.pager.adapter = imagePagerAdapter
-        binding.pager.setCurrentItem(selectedImage, false)
+        binding.pager.setCurrentItem(viewModel.currentImage, false)
+
+        binding.pager.registerOnPageChangeCallback(
+            object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewModel.currentImage = position
+                    viewModel.checkUpdatedImageLikes(position)
+                }
+            }
+        )
     }
 
 }

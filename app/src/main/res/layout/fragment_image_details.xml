@@ -38,7 +38,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="User123" />
+            android:text="User123"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <ImageView
@@ -75,7 +76,8 @@
             style="?attr/textAppearanceBodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1234" />
+            android:text="0"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/likesLabel"
@@ -105,7 +107,8 @@
                 style="?attr/textAppearanceBodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="May 12, 2024" />
+                android:text="May 12, 2024"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </LinearLayout>

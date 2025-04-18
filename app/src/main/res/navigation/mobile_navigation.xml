@@ -83,10 +83,6 @@
             android:name="USE_VIEWMODEL"
             android:defaultValue="general"
             app:argType="string" />
-        <argument
-            android:name="SELECTED_IMAGE"
-            android:defaultValue="0"
-            app:argType="integer" />
     </fragment>
 
     <navigation
@@ -154,10 +150,6 @@
             android:name="uniovi.eii.shareit.view.album.image.ImageFragment"
             android:label="@string/menu_album_image"
             tools:layout="@layout/fragment_album_image">
-            <argument
-                android:name="SELECTED_IMAGE"
-                android:defaultValue="0"
-                app:argType="integer" />
             <argument
                 android:name="USE_VIEWMODEL"
                 android:defaultValue="album"

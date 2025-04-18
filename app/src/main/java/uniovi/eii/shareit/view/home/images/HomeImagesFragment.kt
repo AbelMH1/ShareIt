@@ -1,6 +1,7 @@
 package uniovi.eii.shareit.view.home.images
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -158,9 +159,10 @@ class HomeImagesFragment : Fragment() {
     }
 
     private fun clickOnImageItem(image: Image, position: Int) {
-        Toast.makeText(context, "Item Clicked $position", Toast.LENGTH_SHORT).show()
+        Log.i("Click adapter", "Item Clicked at index $position: $image")
+        viewModel.currentImage = position
         findNavController().navigate(
-            HomeFragmentDirections.actionNavHomeToNavAlbumImage(GENERAL_VIEW, position))
+            HomeFragmentDirections.actionNavHomeToNavAlbumImage())
     }
 
     private fun setUpSectionRecyclerView(sections: List<Section>) {
