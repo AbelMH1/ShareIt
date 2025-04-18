@@ -148,7 +148,10 @@ class ImagesDisplayViewModel : ViewModel() {
                 R.id.action_order_album ->
                     newImages.groupBy { image: Image -> image.albumId }
                 else -> return
-            }.map { entry -> Section(entry.key, entry.value) }
+            }.map { entry ->
+                if (currentOrder.value == R.id.action_order_date)
+                    Section(entry.key, entry.value)
+                else Section(entry.value[0].albumName, entry.value) }
         _displaySectionList.postValue(newSectionList)
     }
 

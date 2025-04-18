@@ -6,14 +6,16 @@ import java.util.Date
 
 data class Image(
     var imageId: String = "",
-    var authorName : String = "",
     var authorId: String = "",
+    var authorName : String = "",
     var albumId: String = "",
+    var albumName: String = "",
     var imagePath : String = "",
     var creationDate: Date = Date(),
     var likes : Int = 0,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -26,9 +28,10 @@ data class Image(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(imageId)
-        parcel.writeString(authorName)
         parcel.writeString(authorId)
+        parcel.writeString(authorName)
         parcel.writeString(albumId)
+        parcel.writeString(albumName)
         parcel.writeString(imagePath)
         parcel.writeLong(creationDate.time)
         parcel.writeInt(likes)

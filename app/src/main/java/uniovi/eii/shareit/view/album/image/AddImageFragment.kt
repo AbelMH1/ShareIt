@@ -141,8 +141,9 @@ class AddImageFragment : Fragment() {
 
         binding.uploadImageButton.setOnClickListener {
             enableUploadButton(false)
-            val albumId = albumViewModel.getAlbumInfo().albumId
-            viewModel.uploadImage(albumId)
+            with(albumViewModel.getAlbumInfo()) {
+                viewModel.uploadImage(albumId, name)
+            }
         }
 
         return binding.root

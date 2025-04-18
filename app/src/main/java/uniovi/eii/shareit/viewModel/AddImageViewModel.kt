@@ -25,16 +25,17 @@ class AddImageViewModel(application: Application) : AndroidViewModel(application
     private val _imageUri = MutableLiveData<Uri?>(null)
     val imageUri: LiveData<Uri?> get() = _imageUri
 
-    fun uploadImage(albumId: String) {
+    fun uploadImage(albumId: String, albumName: String) {
         val currentUser = FirestoreUserService.getCurrentUserData()
         if (currentUser == null || imageUri.value == null) {
             _isCompletedImageUpload.value = false
             return
         }
         val newImage = Image(
-            authorName = currentUser.name,
             authorId = currentUser.userId,
-            albumId = albumId
+            authorName = currentUser.name,
+            albumId = albumId,
+            albumName = albumName
         )
         viewModelScope.launch(Dispatchers.IO) {
             _isCompletedImageUpload.postValue(
