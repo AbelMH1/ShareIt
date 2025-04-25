@@ -6,6 +6,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.MetadataChanges
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -179,6 +180,29 @@ object FirestoreImageService {
         } catch (e: Exception) {
             Log.e(TAG, "unlikeImage:failure", e)
             false
+        }
+    }
+
+    suspend fun getLastAlbumImage(albumId: String): String {
+        val db = Firebase.firestore
+        return try {
+            val snapshot = db.collection("albums")
+                .document(albumId)
+                .collection("images")
+                .orderBy("creationDate", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .await()
+
+            if (snapshot.isEmpty) {
+                ""
+            } else {
+                Log.d(TAG, "getLastAlbumImage:success")
+                snapshot.documents.first().getString("imagePath") ?: ""
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "getLastAlbumImage:failure", e)
+            ""
         }
     }
 }

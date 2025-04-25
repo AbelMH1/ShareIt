@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/sl_like_24"
-            android:contentDescription="@string/cover_settings_btn_desc" />
+            android:contentDescription="@string/like_switch_btn_desc" />
 
         <TextView
             android:id="@+id/numLikes"

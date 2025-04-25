@@ -8,6 +8,6 @@ data class UserAlbum(
     var creatorName: String = "",
     var name: String = "",
     var coverImage: String = "",
-    var creationDate: Date? = Date(),
-    var lastUpdate: Date? = Date()
+    var creationDate: Date = Date(),
+    var lastUpdate: Date = Date()
 )

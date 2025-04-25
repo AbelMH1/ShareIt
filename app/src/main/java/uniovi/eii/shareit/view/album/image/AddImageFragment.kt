@@ -1,14 +1,8 @@
 package uniovi.eii.shareit.view.album.image
 
 import android.Manifest.permission.CAMERA
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.READ_MEDIA_IMAGES
-import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,7 +22,14 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAddImageBinding
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.utils.createTempImageFile
+import uniovi.eii.shareit.utils.getRequiredGalleryPermissions
 import uniovi.eii.shareit.utils.getSecureUriForFile
+import uniovi.eii.shareit.utils.hasCameraPermission
+import uniovi.eii.shareit.utils.hasGalleryPermission
+import uniovi.eii.shareit.utils.registerCameraPicker
+import uniovi.eii.shareit.utils.registerGalleryPicker
+import uniovi.eii.shareit.utils.registerPermissionRequest
+import uniovi.eii.shareit.utils.registerPermissionsRequest
 import uniovi.eii.shareit.viewModel.AddImageViewModel
 import uniovi.eii.shareit.viewModel.AlbumViewModel
 
@@ -42,46 +42,13 @@ class AddImageFragment : Fragment() {
     private var imageUri: Uri? = null
 
     // Lanzador para seleccionar la imagen de la galería
-    private val pickImageLauncher =
-        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: $uri")
-                viewModel.processImage(uri)
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
-
+    private val pickImageLauncher = registerGalleryPicker(::processImage)
     // Lanzador para tomar una foto con la cámara
-    private val captureImageLauncher =
-        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                Log.d("Camera", "Selected URI: $imageUri")
-                viewModel.processImage(imageUri!!)
-            } else {
-                Log.d("Camera", "No media selected")
-            }
-        }
-
+    private val captureImageLauncher = registerCameraPicker(::processImage)
     // Lanzador para solicitar el permiso de lectura del almacenamiento
-    private val requestPermissions =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
-            if (results.isNotEmpty() && results.values.all { it }) {
-                openGallery()
-            } else {
-                Toast.makeText(requireContext(), resources.getString(R.string.error_gallery_permission_denied), Toast.LENGTH_SHORT).show()
-            }
-        }
-
+    private val requestPermissions = registerPermissionsRequest(::openGallery, R.string.error_gallery_permission_denied)
     // Lanzador para solicitar el permiso de la cámara
-    private val requestCameraPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                takePicture()
-            } else {
-                Toast.makeText(requireContext(), resources.getString(R.string.error_camera_permission_denied), Toast.LENGTH_SHORT).show()
-            }
-        }
+    private val requestCameraPermission = registerPermissionRequest(::takePicture, R.string.error_camera_permission_denied)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -179,30 +146,10 @@ class AddImageFragment : Fragment() {
     }
 
     private fun checkGalleryPermissions() {
-        val hasPermission = when {
-            // Full access on Android 13 (API level 33) or higher
-            VERSION.SDK_INT >= VERSION_CODES.TIRAMISU &&
-                    ContextCompat.checkSelfPermission(requireContext(), READ_MEDIA_IMAGES) == PERMISSION_GRANTED -> true
-            // Partial access on Android 14 (API level 34) or higher
-            VERSION.SDK_INT >= VERSION_CODES.UPSIDE_DOWN_CAKE &&
-                    ContextCompat.checkSelfPermission(requireContext(), READ_MEDIA_VISUAL_USER_SELECTED) == PERMISSION_GRANTED -> true
-            // Full access up to Android 12 (API level 32)
-            ContextCompat.checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED -> true
-            else -> false
-        }
-
-        if (hasPermission) {
+        if (requireContext().hasGalleryPermission()) {
             openGallery()
         } else {
-            val permissions = when {
-                VERSION.SDK_INT >= VERSION_CODES.UPSIDE_DOWN_CAKE ->
-                    arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VISUAL_USER_SELECTED)
-                VERSION.SDK_INT >= VERSION_CODES.TIRAMISU ->
-                    arrayOf(READ_MEDIA_IMAGES)
-                else ->
-                    arrayOf(READ_EXTERNAL_STORAGE)
-            }
-            requestPermissions.launch(permissions)
+            requestPermissions.launch(getRequiredGalleryPermissions())
         }
     }
 
@@ -211,7 +158,7 @@ class AddImageFragment : Fragment() {
     }
 
     private fun checkCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(requireContext(), CAMERA) == PERMISSION_GRANTED) {
+        if (requireContext().hasCameraPermission()) {
             takePicture()
         } else {
             requestCameraPermission.launch(CAMERA)
@@ -222,6 +169,11 @@ class AddImageFragment : Fragment() {
         val image = requireContext().createTempImageFile("IMG_${System.currentTimeMillis()}")
         imageUri = requireContext().getSecureUriForFile(image)
         captureImageLauncher.launch(imageUri)
+    }
+
+    private fun processImage(uri: Uri? = imageUri) {
+        Log.d("Camera", "Selected URI: $imageUri")
+        viewModel.processImage(uri!!)
     }
 
     private fun showPickResourceDialog() {

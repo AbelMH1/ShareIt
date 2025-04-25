@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.viewModel
 
+import android.net.Uri
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -26,6 +27,7 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     private var album: Album = Album()
+    private var unsavedData: Album? = null
 
     private val _participants = MutableLiveData(emptyList<Participant>())
     val participants: LiveData<List<Participant>> = _participants
@@ -65,9 +67,9 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     fun saveGeneralData(
-        name: String, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
+        name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
     ): GeneralValidationResult {
-        val dataValidation = checkValidData(name, startDate, endDate, toggleDateSelected, location)
+        val dataValidation = checkValidData(name, useLastImageAsCover, imageUri, startDate, endDate, toggleDateSelected, location)
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
                 FirestoreAlbumService.updateCurrentAlbumData(album.albumId, dataValidation.dataToUpdate)
@@ -157,7 +159,7 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     private fun checkValidData(
-        name: String, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
+        name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
     ): GeneralValidationResult {
         // Todo: location (LatLng(0.0, 0.0))
         val dataToUpdate: HashMap<String, Any?> = HashMap()
@@ -166,6 +168,12 @@ class AlbumInformationViewModel : ViewModel() {
         }
         if (name != album.name) {
             dataToUpdate["name"] = name
+        }
+        if (useLastImageAsCover != album.useLastImageAsCover) {
+            dataToUpdate["useLastImageAsCover"] = useLastImageAsCover
+        }
+        if (imageUri != null && !useLastImageAsCover) {
+            dataToUpdate["coverImage"] = imageUri
         }
         if (toggleDateSelected == R.id.toggleNone) {
             if (album.startDate != null) dataToUpdate["startDate"] = null
@@ -252,6 +260,31 @@ class AlbumInformationViewModel : ViewModel() {
             return false
         }
         return true
+    }
+
+    fun saveUnsavedData(
+        name: String, useLastImageAsCover: Boolean, startDate: String?, endDate: String?, toggleDateSelected: Int, location: Boolean
+    ) {
+        Log.d("saveUnsavedData", "saveUnsavedData")
+        unsavedData = Album(
+            name = name,
+            coverImage = album.coverImage,
+            useLastImageAsCover = useLastImageAsCover,
+            startDate = if (toggleDateSelected != R.id.toggleNone) startDate?.toDate() else null,
+            endDate = if (toggleDateSelected == R.id.toggleRange) endDate?.toDate() else null,
+            location = if (location) album.location else null
+        )
+    }
+
+    fun hasUnsavedChanges(): Boolean {
+        return unsavedData != null
+    }
+
+    fun restoreUnsavedData(): Album {
+        Log.d("restoreUnsavedData", "restoreUnsavedData")
+        val restoredData = unsavedData
+        unsavedData = null
+        return restoredData ?: Album()
     }
 
     data class GeneralValidationResult(

@@ -23,4 +23,5 @@
     <dimen name="my_profile_image_size">155dp</dimen>
     <dimen name="my_edit_profile_image_size">40dp</dimen>
     <dimen name="default_text_field_width">245dp</dimen>
+    <dimen name="cover_image_size_on_album_info">130dp</dimen>
 </resources>

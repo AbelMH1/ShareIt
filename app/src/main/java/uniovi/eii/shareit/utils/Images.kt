@@ -66,9 +66,9 @@ private fun getCompressFormat(mimeType: String?): Bitmap.CompressFormat {
 
 /**
  * Procesa la imagen referenciada por [imageUri]:
- * - Si su tamaño es ≤ 2 MB se copia directamente al archivo [outputFile].
+ * - Si su tamaño es ≤ [compressionThresholdMB] MB se copia directamente al archivo [outputFile].
  * - Si es mayor, se redimensiona y comprime.
- * - Si tras la redimensión la imagen sigue siendo mayor a 2 MB, se retorna false para notificar al usuario.
+ * - Si tras la redimensión la imagen sigue siendo mayor a [compressionThresholdMB] MB, se retorna false para notificar al usuario.
  */
 suspend fun Context.compressImage(
     imageUri: Uri,

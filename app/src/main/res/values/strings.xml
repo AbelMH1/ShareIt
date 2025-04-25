@@ -116,7 +116,8 @@
     <!--    Album Information General   -->
     <string name="label_name">Name</string>
     <string name="label_cover">Album\'s Cover</string>
-    <string name="cover_settings_btn_desc">Set your Album\'s cover preferences</string>
+    <string name="label_use_last_image">Use last image</string>
+    <string name="cover_custom_btn_desc">Set a custom Album cover</string>
     <string name="label_date">Date of the album</string>
     <string name="btn_delete_album">Delete album</string>
     <string name="warn_delete_album_title">Delete album?</string>
@@ -157,6 +158,7 @@
     <string name="author_profile_image_desc">Image\'s author profile picture</string>
     <string name="upload_image_desc">Image uploaded to the album</string>
     <string name="label_by">By</string>
+    <string name="like_switch_btn_desc">Switch your like/unlike state on this image</string>
     <string name="label_likes">Likes</string>
     <string name="label_upload_date">Uploaded on</string>
     <!--    Chat    -->

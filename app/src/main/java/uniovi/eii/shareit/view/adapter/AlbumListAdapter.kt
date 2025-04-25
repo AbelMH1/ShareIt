@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import uniovi.eii.shareit.databinding.LineRecyclerViewAlbumBinding
 import uniovi.eii.shareit.model.UserAlbum
+import uniovi.eii.shareit.utils.loadImageIntoView
 
 class AlbumListAdapter(
     private var albumList: List<UserAlbum> = emptyList(),
@@ -46,6 +48,10 @@ class AlbumListAdapter(
         fun assignValuesToComponents(album: UserAlbum, position: Int, cardListener: OnItemClickListener, infoBtnListener: OnItemClickListener) {
             binding.albumName.text = album.name
             binding.creatorName.text = album.creatorName
+            binding.root.context.loadImageIntoView(
+                album.coverImage.toUri(),
+                binding.albumCover
+            )
             binding.infoBtn.setOnClickListener {
                 Log.d("AlbumListAdapter", "Click en información del álbum")
                 infoBtnListener.onItemClick(album, position)

@@ -1,24 +1,40 @@
 package uniovi.eii.shareit.view.album.information.display
 
+import android.Manifest.permission.CAMERA
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.MenuRes
-import androidx.appcompat.widget.PopupMenu
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationGeneralBinding
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant.Role
+import uniovi.eii.shareit.utils.compressImage
+import uniovi.eii.shareit.utils.createTempImageFile
+import uniovi.eii.shareit.utils.getRequiredGalleryPermissions
+import uniovi.eii.shareit.utils.getSecureUriForFile
+import uniovi.eii.shareit.utils.hasCameraPermission
+import uniovi.eii.shareit.utils.hasGalleryPermission
+import uniovi.eii.shareit.utils.loadImageIntoView
+import uniovi.eii.shareit.utils.registerCameraPicker
+import uniovi.eii.shareit.utils.registerGalleryPicker
+import uniovi.eii.shareit.utils.registerPermissionRequest
+import uniovi.eii.shareit.utils.registerPermissionsRequest
 import uniovi.eii.shareit.utils.toDate
 import uniovi.eii.shareit.utils.toFormattedString
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
@@ -38,6 +54,17 @@ class AlbumInformationGeneralFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: AlbumInformationViewModel by navGraphViewModels(R.id.navigation_album)
     private val albumViewModel: AlbumViewModel by navGraphViewModels(R.id.navigation_album)
+
+    private var imageUri: Uri? = null
+
+    // Lanzador para seleccionar la imagen de la galería
+    private val pickImageLauncher = registerGalleryPicker(::processImage)
+    // Lanzador para tomar una foto con la cámara
+    private val captureImageLauncher = registerCameraPicker(::processImage)
+    // Lanzador para solicitar el permiso de lectura del almacenamiento
+    private val requestPermissions = registerPermissionsRequest(::openGallery, R.string.error_gallery_permission_denied)
+    // Lanzador para solicitar el permiso de la cámara
+    private val requestCameraPermission = registerPermissionRequest(::takePicture, R.string.error_camera_permission_denied)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -59,7 +86,13 @@ class AlbumInformationGeneralFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (albumViewModel.isCurrentUserOwner()) binding.editFAB.show()
-        updateAlbumUI(albumViewModel.getAlbumInfo())
+        val albumInfo = if (viewModel.hasUnsavedChanges()) {
+            enableEdition(true)
+            viewModel.restoreUnsavedData()
+        } else {
+            albumViewModel.getAlbumInfo()
+        }
+        updateAlbumUI(albumInfo)
     }
 
     override fun onDestroyView() {
@@ -112,7 +145,7 @@ class AlbumInformationGeneralFragment : Fragment() {
                 saveData()
             }
             binding.coverSettingsButton.setOnClickListener {
-                showMenu(it, R.menu.album_cover_options)
+                showPickResourceDialog()
             }
         } else {
             binding.dropAlbumButton.setOnClickListener {
@@ -135,30 +168,6 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.nameEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.nameLayout))
         binding.dateStartEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.dateStartLayout))
         binding.dateEndEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.dateEndLayout))
-    }
-
-    private fun showMenu(v: View, @MenuRes menuRes: Int) {
-        val popup = PopupMenu(requireContext(), v)
-        popup.menuInflater.inflate(menuRes, popup.menu)
-
-        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
-            // TODO: Respond to menu item click.
-            when (menuItem.itemId) {
-                R.id.action_most_liked -> {
-                    Toast.makeText(context, "Most liked", Toast.LENGTH_SHORT).show()
-                }
-                R.id.action_choose_one -> {
-                    Toast.makeText(context, "Choose cover", Toast.LENGTH_SHORT).show()
-                }
-                else -> return@setOnMenuItemClickListener false
-            }
-            true
-        }
-        popup.setOnDismissListener {
-            // Respond to popup being dismissed.
-        }
-        // Show the popup menu.
-        popup.show()
     }
 
     private fun toggleDatesEditTexts(checkedId: Int) {
@@ -234,6 +243,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.switchLocationSelection.visibility = editView
         binding.dateStartLayout.isEnabled = enable
         binding.dateEndLayout.isEnabled = enable
+        binding.coverSettingsButton.visibility = editView
         if (enable) {
             binding.dateStartLayout.setEndIconDrawable(R.drawable.ic_calendar_24)
             binding.dateEndLayout.setEndIconDrawable(R.drawable.ic_calendar_24)
@@ -251,6 +261,8 @@ class AlbumInformationGeneralFragment : Fragment() {
         enableEdition(false)
         val dataValidationResult = viewModel.saveGeneralData(
             binding.nameEditText.text?.toString() ?: "",
+            binding.switchCoverLastImage.isChecked,
+            imageUri,
             binding.dateStartEditText.text?.toString() ?: "",
             binding.dateEndEditText.text?.toString() ?: "",
             binding.dateToggleButton.checkedButtonId,
@@ -288,6 +300,8 @@ class AlbumInformationGeneralFragment : Fragment() {
     private fun updateAlbumUI(album: Album) {
         binding.albumName.text = album.name
         binding.nameEditText.setText(album.name)
+        binding.switchCoverLastImage.isChecked = album.useLastImageAsCover
+        requireContext().loadImageIntoView(album.coverImage.toUri(), binding.albumCover)
         binding.switchLocationSelection.isChecked = album.location != null
         if (album.location != null) {
             // TODO: Establecer ubicación en el mapa
@@ -316,6 +330,82 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.saveFAB.hide()
         } else if(!binding.editFAB.isVisible && !binding.saveFAB.isVisible) {
             binding.editFAB.show()
+        }
+    }
+
+    private fun showPickResourceDialog() {
+        val view = layoutInflater.inflate(R.layout.dialog_select_source_menu, null)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.select_source_title))
+            .setView(view)
+            .create()
+
+        view.findViewById<View>(R.id.option_camera).setOnClickListener {
+            dialog.dismiss()
+            checkCameraPermissions()
+        }
+        view.findViewById<View>(R.id.option_gallery).setOnClickListener {
+            dialog.dismiss()
+            checkGalleryPermissions()
+        }
+
+        dialog.show()
+    }
+
+    private fun checkGalleryPermissions() {
+        if (requireContext().hasGalleryPermission()) {
+            openGallery()
+        } else {
+            saveUnsavedData()
+            requestPermissions.launch(getRequiredGalleryPermissions())
+        }
+    }
+
+    private fun openGallery() {
+        saveUnsavedData()
+        pickImageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private fun checkCameraPermissions() {
+        if (requireContext().hasCameraPermission()) {
+            takePicture()
+        } else {
+            saveUnsavedData()
+            requestCameraPermission.launch(CAMERA)
+        }
+    }
+
+    private fun takePicture() {
+        val image = requireContext().createTempImageFile("IMG_${System.currentTimeMillis()}")
+        imageUri = requireContext().getSecureUriForFile(image)
+        saveUnsavedData()
+        captureImageLauncher.launch(imageUri)
+    }
+
+    private fun saveUnsavedData() {
+        viewModel.saveUnsavedData(
+            binding.nameEditText.text?.toString() ?: "",
+            binding.switchCoverLastImage.isChecked,
+            binding.dateStartEditText.text?.toString(),
+            binding.dateEndEditText.text?.toString(),
+            binding.dateToggleButton.checkedButtonId,
+            binding.switchLocationSelection.isChecked
+        )
+    }
+
+    private fun processImage(uri: Uri? = imageUri) {
+        Log.d("Camera", "Selected URI: $uri")
+        lifecycleScope.launch {
+            val context = requireContext()
+            val outputFile = context.createTempImageFile()
+            val processed = context.compressImage(uri!!, outputFile)
+            if (processed) {
+                imageUri = context.getSecureUriForFile(outputFile)
+                binding.switchCoverLastImage.isChecked = false
+                context.loadImageIntoView(imageUri!!, binding.albumCover)
+            } else {
+                Toast.makeText(context, "Error picking image", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

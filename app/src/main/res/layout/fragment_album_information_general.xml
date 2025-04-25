@@ -20,6 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -78,37 +79,68 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/divider_margin"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/labelCover"
-                                style="?attr/textAppearanceTitleMedium"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/label_cover" />
-
-                            <Button
-                                android:id="@+id/coverSettingsButton"
-                                style="?attr/materialIconButtonFilledStyle"
+                                style="?attr/textAppearanceTitleLarge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:contentDescription="@string/cover_settings_btn_desc"
-                                app:icon="@drawable/ic_settings_24" />
+                                android:text="@string/label_cover" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/labelCoverSwitch"
+                                    style="?attr/textAppearanceTitleMedium"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/label_use_last_image" />
+
+                                <com.google.android.material.materialswitch.MaterialSwitch
+                                    android:id="@+id/switchCoverLastImage"
+                                    style="?attr/materialSwitchStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                            </LinearLayout>
+
 
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imageView2"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_height="@dimen/cover_image_size_on_album_info"
                     android:layout_weight="1"
-                    android:contentDescription="@string/label_cover"
-                    app:srcCompat="@android:mipmap/sym_def_app_icon"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    android:padding="@dimen/images_padding">
+
+                    <ImageView
+                        android:id="@+id/albumCover"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:contentDescription="@string/label_cover"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_image_24" />
+
+                    <Button
+                        android:id="@+id/coverSettingsButton"
+                        style="?attr/materialIconButtonFilledTonalStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/cover_custom_btn_desc"
+                        app:icon="@drawable/ic_edit_24"
+                        app:layout_constraintBottom_toBottomOf="@+id/albumCover"
+                        app:layout_constraintEnd_toEndOf="@+id/albumCover" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 
@@ -122,7 +154,7 @@
                 style="?attr/textAppearanceTitleMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_margin"
+                android:layout_marginVertical="@dimen/text_margin"
                 android:text="@string/label_date" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
@@ -130,6 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/text_margin"
                 app:selectionRequired="true"
                 app:singleSelection="true">
 
@@ -262,9 +295,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/divider_margin"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginVertical="@dimen/divider_margin">
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/dropAlbumButton"

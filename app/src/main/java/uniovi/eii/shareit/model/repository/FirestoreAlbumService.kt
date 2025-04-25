@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.model.repository
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
@@ -77,7 +78,11 @@ object FirestoreAlbumService {
 
     }
 
-    private fun deleteFullCollection(docRef: DocumentReference, collectionPath: String, except: String? = null) {
+    private fun deleteFullCollection(
+        docRef: DocumentReference,
+        collectionPath: String,
+        except: String? = null
+    ) {
         Log.d(TAG, "deleteFullCollection: $collectionPath")
         docRef.collection(collectionPath).get()
             .addOnSuccessListener {
@@ -93,7 +98,10 @@ object FirestoreAlbumService {
      * Adición del usuario con email [participantEmail] y con rol de miembro a los participantes
      * del [album] dado en firestore.
      */
-    suspend fun addNewMemberToAlbum(album: Album, participantEmail: String) : ParticipantValidationResult {
+    suspend fun addNewMemberToAlbum(
+        album: Album,
+        participantEmail: String
+    ): ParticipantValidationResult {
         val participantResult = searchUserByEmail(participantEmail)
         if (participantResult.value == null) {
             return ParticipantValidationResult(firestoreError = participantResult.firestoreError)
@@ -111,7 +119,7 @@ object FirestoreAlbumService {
      * Adición del participante [participant] bajo la subcolección de participantes del álbum
      * con el [albumId] dado en firestore.
      */
-    private suspend fun addParticipantToAlbum(albumId: String, participant: Participant) : String? {
+    private suspend fun addParticipantToAlbum(albumId: String, participant: Participant): String? {
         val db = Firebase.firestore
         return try {
             db.collection("albums")
@@ -131,14 +139,14 @@ object FirestoreAlbumService {
      * Busca y devuelve en un [SearchUserResult] el resultado de buscar un usuario por su [userEmail].
      * En caso de no encontrarlo devuelve el error encontrado también dentro del objeto mencionado.
      */
-    private suspend fun searchUserByEmail(userEmail : String) : SearchUserResult {
+    private suspend fun searchUserByEmail(userEmail: String): SearchUserResult {
         val db = Firebase.firestore
         Log.d(TAG, "searchingUserByEmail: $userEmail")
         return try {
             with(
                 db.collection("users").whereEqualTo("email", userEmail).get().await()
             ) {
-                if(this.isEmpty) {
+                if (this.isEmpty) {
                     Log.d(TAG, "searchUserByEmail: notFound")
                     SearchUserResult(firestoreError = "User not found")
                 } else {
@@ -160,7 +168,10 @@ object FirestoreAlbumService {
     /**
      * Adición del álbum ([userAlbum]) bajo la colección de álbumes del usuario en firestore.
      */
-    private suspend fun createUserAlbumDenormalizedData(userAlbum: UserAlbum, userId: String) : String? {
+    private suspend fun createUserAlbumDenormalizedData(
+        userAlbum: UserAlbum,
+        userId: String
+    ): String? {
         val db = Firebase.firestore
         return try {
             db.collection("users")
@@ -220,7 +231,11 @@ object FirestoreAlbumService {
      * Actualización del rol del participante con id [participantId] pasado como parámetro de la subcolección de
      * participantes del álbum con el [albumId] dado al nuevo valor especificado en [newRole], en firestore.
      */
-    fun updateParticipantRoleInAlbum(albumId: String, participantId: String, newRole: HashMap<String, Any?>) {
+    fun updateParticipantRoleInAlbum(
+        albumId: String,
+        participantId: String,
+        newRole: HashMap<String, Any?>
+    ) {
         val db = Firebase.firestore
         try {
             db.collection("albums")
@@ -290,17 +305,44 @@ object FirestoreAlbumService {
         albumId: String, newAlbumData: HashMap<String, Any?>
     ): GeneralValidationResult {
         val db = Firebase.firestore
-        Log.d(TAG, "updatingCurrentAlbumData:\n Album: $albumId \n Data: $newAlbumData")
-        return try {
-            with(
-                db.collection("albums").document(albumId).update(newAlbumData).await()
-            ) {
-                Log.d(TAG, "updateCurrentAlbumData:success")
-                GeneralValidationResult(true)
+        try {
+            val albumCoverUpdate = checkCoverUpdate(albumId, newAlbumData)
+            if (!albumCoverUpdate.isDataValid) {
+                return GeneralValidationResult(firestoreError = albumCoverUpdate.firestoreError)
             }
+            Log.d(TAG, "updatingCurrentAlbumData:\n Album: $albumId \n Data: $newAlbumData")
+            db.collection("albums").document(albumId).update(newAlbumData).await()
+            Log.d(TAG, "updateCurrentAlbumData:success")
+            return GeneralValidationResult(true)
         } catch (e: Exception) {
             Log.e(TAG, "updateCurrentAlbumData:failure", e)
-            GeneralValidationResult(firestoreError = e.message)
+            return GeneralValidationResult(firestoreError = e.message)
         }
+    }
+
+    private suspend fun checkCoverUpdate(
+        albumId: String, newAlbumData: HashMap<String, Any?>
+    ): GeneralValidationResult {
+        if (newAlbumData.getOrDefault("useLastImageAsCover", false) == true) {
+            // Obtener URL de la última imagen
+            val lastImageUrl = FirestoreImageService.getLastAlbumImage(albumId)
+            if (lastImageUrl.isNotEmpty()) {
+                // Descargar la imagen a un archivo temporal
+                val imageFile = FirebaseStorageService.downloadImageToTempFile(lastImageUrl)
+                    ?: return GeneralValidationResult(firestoreError = "Error downloading last image cover")
+                // Subir el archivo temporal como portada
+                val coverUrl = FirebaseStorageService.uploadAlbumCover(albumId, Uri.fromFile(imageFile))
+                    ?: return GeneralValidationResult(firestoreError = "Error uploading cover image")
+                newAlbumData["coverImage"] = coverUrl
+                // Eliminar archivo temporal
+                imageFile.delete()
+            }
+        } else if (newAlbumData["coverImage"] != null) {
+            val imageUri = newAlbumData["coverImage"] as Uri
+            val coverUrl = FirebaseStorageService.uploadAlbumCover(albumId, imageUri)
+                ?: return GeneralValidationResult(firestoreError = "Error uploading cover image")
+            newAlbumData["coverImage"] = coverUrl
+        }
+        return GeneralValidationResult(true, dataToUpdate = newAlbumData)
     }
 }
