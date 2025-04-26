@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.viewModel
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -46,7 +47,7 @@ class ProfileViewModel : ViewModel() {
         userDataListenerRegistration?.remove()
     }
 
-    fun attemptDataUpdate(name: String, email: String, image: String) {
+    fun attemptDataUpdate(name: String, email: String, image: Uri?) {
         if (!validateData(name)) return
         val newUserData = getChangedData(name, email, image)
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,9 +73,12 @@ class ProfileViewModel : ViewModel() {
         return true
     }
 
-    private fun getChangedData(name: String, email: String, image: String): HashMap<String, Any> {
+    private fun getChangedData(name: String, email: String, image: Uri?): HashMap<String, Any> {
         with(_currentUser.value!!) {
-            val newUserData = this.getChanges(User(userId, name, email, image))
+            val newUserData = this.getChanges(User(userId, name, email))
+            if (image != null) {
+                newUserData["imagePath"] = image
+            }
             Log.d(TAG, "DATACHANGED: $newUserData")
             return newUserData
         }

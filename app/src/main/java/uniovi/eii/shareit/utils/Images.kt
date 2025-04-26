@@ -29,6 +29,20 @@ fun Context.loadImageIntoView(
         .into(imageView)
 }
 
+fun Context.loadCircularImageIntoView(
+    uri: Uri,
+    imageView: android.widget.ImageView,
+    placeholder: Int = R.drawable.ic_image_24,
+    error: Int = R.drawable.ic_image_not_supported_24
+) {
+    Glide.with(this)
+        .load(uri)
+        .placeholder(placeholder)
+        .error(error)
+        .circleCrop()
+        .into(imageView)
+}
+
 fun Context.createTempImageFile(fileName: String = "temp_image", directory: File = filesDir): File {
     return File.createTempFile(fileName, ".jpg", directory)
 }

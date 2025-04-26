@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.model.repository
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -63,6 +64,12 @@ object FirestoreUserService {
     ): ValidationResult {
         val db = Firebase.firestore
         return try {
+            if (newUserData["imagePath"] != null) {
+                val imageUri = newUserData["imagePath"] as Uri
+                val coverUrl = FirebaseStorageService.uploadUserImage(userId, imageUri)
+                    ?: return ValidationResult(firestoreError = "Error uploading user image")
+                newUserData["imagePath"] = coverUrl
+            }
             with(
                 db.collection("users").document(userId).update(newUserData).await()
             ) {

@@ -42,6 +42,19 @@ object FirebaseStorageService {
         }
     }
 
+    suspend fun uploadUserImage(userId: String, imageUri: Uri): String? {
+        return withContext(Dispatchers.IO) {
+            val imageRef = storage.child("users/$userId")
+            try {
+                imageRef.putFile(imageUri).await()
+                getImageDownloadUriString(imageRef)
+            } catch (e: Exception) {
+                Log.e(TAG, "uploadUserImage: Error al subir la imagen", e)
+                null
+            }
+        }
+    }
+
     private suspend fun getImageDownloadUriString(imageRef: StorageReference): String? {
         return try {
             imageRef.downloadUrl.await().toString()

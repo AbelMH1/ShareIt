@@ -13,7 +13,6 @@ data class User(
         val changedData = HashMap<String, Any>()
         if (this.name != newUserData.name) changedData["name"] = newUserData.name
         if (this.email != newUserData.email) changedData["email"] = newUserData.email
-        if (this.imagePath != newUserData.imagePath) changedData["imagePath"] = newUserData.imagePath
         return changedData
     }
 }
