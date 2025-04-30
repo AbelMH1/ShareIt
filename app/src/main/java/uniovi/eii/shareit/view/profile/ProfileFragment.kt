@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.finishAffinity
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -28,6 +27,7 @@ import uniovi.eii.shareit.utils.getSecureUriForFile
 import uniovi.eii.shareit.utils.hasCameraPermission
 import uniovi.eii.shareit.utils.hasGalleryPermission
 import uniovi.eii.shareit.utils.loadCircularImageIntoView
+import uniovi.eii.shareit.utils.loadProfileImageIntoView
 import uniovi.eii.shareit.utils.registerCameraPicker
 import uniovi.eii.shareit.utils.registerGalleryPicker
 import uniovi.eii.shareit.utils.registerPermissionRequest
@@ -116,12 +116,13 @@ class ProfileFragment : Fragment() {
     private fun updateUI(user: User) {
         binding.etUser.setText(user.name)
         binding.etEmail.setText(user.email)
-        requireContext().loadCircularImageIntoView(
-            user.imagePath.toUri(),
-            binding.imgProfile,
-            R.drawable.ic_person_24,
-            R.drawable.ic_person_24
-        )
+        lifecycleScope.launch {
+            requireContext().loadProfileImageIntoView(
+                user.imagePath,
+                user.lastUpdatedImage.time,
+                binding.imgProfile,
+            )
+        }
     }
 
     private fun enableEdition(enable: Boolean) {

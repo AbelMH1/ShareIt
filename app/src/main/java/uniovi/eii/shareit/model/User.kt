@@ -1,10 +1,13 @@
 package uniovi.eii.shareit.model
 
+import java.util.Date
+
 data class User(
     var userId: String = "",
     var name: String = "",
     var email: String = "",
-    var imagePath: String = ""
+    var imagePath: String = "",
+    var lastUpdatedImage: Date = Date(),
 ) {
     fun toParticipant(): Participant {
         return Participant(userId, name, email, imagePath)

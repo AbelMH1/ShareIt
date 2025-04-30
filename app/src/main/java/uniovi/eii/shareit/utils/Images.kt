@@ -5,19 +5,22 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.widget.ImageView
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import uniovi.eii.shareit.R
+import uniovi.eii.shareit.model.repository.FirebaseStorageService
 import java.io.ByteArrayOutputStream
 import java.io.File
 
 fun Context.loadImageIntoView(
     uri: Uri,
-    imageView: android.widget.ImageView,
+    imageView: ImageView,
     placeholder: Int = R.drawable.ic_image_24,
     error: Int = R.drawable.ic_image_not_supported_24
 ) {
@@ -31,7 +34,7 @@ fun Context.loadImageIntoView(
 
 fun Context.loadCircularImageIntoView(
     uri: Uri,
-    imageView: android.widget.ImageView,
+    imageView: ImageView,
     placeholder: Int = R.drawable.ic_image_24,
     error: Int = R.drawable.ic_image_not_supported_24
 ) {
@@ -39,6 +42,20 @@ fun Context.loadCircularImageIntoView(
         .load(uri)
         .placeholder(placeholder)
         .error(error)
+        .circleCrop()
+        .into(imageView)
+}
+
+fun Context.loadProfileImageIntoView(
+    docRef: String,
+    key: Long,
+    imageView: ImageView
+) {
+    val storageRef = FirebaseStorageService.getStorageReference(docRef)
+    Glide.with(this)
+        .load(storageRef)
+        .signature(ObjectKey(key))
+        .error(R.drawable.ic_image_not_supported_24)
         .circleCrop()
         .into(imageView)
 }

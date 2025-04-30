@@ -12,6 +12,7 @@ import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.model.realTimeListener.UserAlbumsListener
 import uniovi.eii.shareit.model.realTimeListener.UserDataListener
 import uniovi.eii.shareit.viewModel.ProfileViewModel.ValidationResult
+import java.util.Date
 
 object FirestoreUserService {
 
@@ -66,9 +67,10 @@ object FirestoreUserService {
         return try {
             if (newUserData["imagePath"] != null) {
                 val imageUri = newUserData["imagePath"] as Uri
-                val coverUrl = FirebaseStorageService.uploadUserImage(userId, imageUri)
+                FirebaseStorageService.uploadUserImage(userId, imageUri)
                     ?: return ValidationResult(firestoreError = "Error uploading user image")
-                newUserData["imagePath"] = coverUrl
+                newUserData.remove("imagePath")
+                newUserData["lastUpdatedImage"] = Date()
             }
             with(
                 db.collection("users").document(userId).update(newUserData).await()

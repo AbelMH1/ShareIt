@@ -34,7 +34,8 @@ object FirebaseAuthService {
         val user = User(
             userId,
             email.substringBefore("@"),
-            email.lowercase(Locale.getDefault())
+            email.lowercase(Locale.getDefault()),
+            FirebaseStorageService.getStorageReferenceStringForUser(userId),
         )
         db.collection("users")
             .document(userId)
