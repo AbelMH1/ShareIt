@@ -7,7 +7,14 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Participant.Role
@@ -278,8 +285,33 @@ object FirestoreAlbumService {
         return db.collection("albums")
             .document(albumId)
             .collection("participants")
-            .addSnapshotListener(AlbumParticipantsListener(updateEvent))
+            .addSnapshotListener(AlbumParticipantsListener(getDownloadImageUrlForParticipants(updateEvent)))
     }
+
+    private fun getDownloadImageUrlForParticipants(
+        updateEvent: (newAlbumParticipants: List<Participant>) -> Unit,
+    ): (List<Participant>) -> Unit = { participants ->
+        CoroutineScope(Dispatchers.IO).launch {
+            val updatedParticipants = coroutineScope {
+                participants.map { participant ->
+                    async {
+                        val downloadUrl = FirebaseStorageService
+                            .getStorageReference(participant.imagePath)
+                            ?.downloadUrl
+                            ?.await()
+                            ?.toString()
+
+                        participant.copy(imagePath = downloadUrl ?: "")
+                    }
+                }.awaitAll()
+            }
+
+            withContext(Dispatchers.Default) {
+                updateEvent(updatedParticipants)
+            }
+        }
+    }
+
 
     /**
      * Enlazamiento de un objeto de escucha en tiempo real para el rol del participante con

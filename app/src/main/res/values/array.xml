@@ -12,8 +12,8 @@
     </string-array>
     <string-array name="ParticipantRole">
         <item>@string/participant_role_owner</item>
-        <item>@string/participant_role_guest</item>
         <item>@string/participant_role_member</item>
+        <item>@string/participant_role_guest</item>
         <item>@string/participant_role_none</item>
     </string-array>
 </resources>

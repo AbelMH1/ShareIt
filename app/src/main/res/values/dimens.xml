@@ -9,7 +9,7 @@
     <dimen name="images_margin">1dp</dimen>
     <dimen name="images_padding">10dp</dimen>
     <dimen name="divider_margin">10dp</dimen>
-    <dimen name="profile_image_size">48dp</dimen>
+    <dimen name="profile_image_size">40dp</dimen>
     <dimen name="fab_send_message_margin">16dp</dimen>
     <item name="message_maxLines" type="integer">4</item>
     <dimen name="remove_hint_space">16dp</dimen>
@@ -24,4 +24,6 @@
     <dimen name="my_edit_profile_image_size">40dp</dimen>
     <dimen name="default_text_field_width">245dp</dimen>
     <dimen name="cover_image_size_on_album_info">130dp</dimen>
+    <dimen name="participants_vertical_padding">8dp</dimen>
+    <dimen name="participants_image_end_margin">12dp</dimen>
 </resources>

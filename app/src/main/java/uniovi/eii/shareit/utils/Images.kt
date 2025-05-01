@@ -35,8 +35,8 @@ fun Context.loadImageIntoView(
 fun Context.loadCircularImageIntoView(
     uri: Uri,
     imageView: ImageView,
-    placeholder: Int = R.drawable.ic_image_24,
-    error: Int = R.drawable.ic_image_not_supported_24
+    placeholder: Int = R.drawable.ic_person_24,
+    error: Int = R.drawable.ic_person_24
 ) {
     Glide.with(this)
         .load(uri)

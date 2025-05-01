@@ -7,11 +7,13 @@ import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewParticipantBinding
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Participant.Role
+import uniovi.eii.shareit.utils.loadCircularImageIntoView
 
 class ParticipantsListAdapter(
     private val creatorId: String = "",
@@ -47,12 +49,8 @@ class ParticipantsListAdapter(
         return participantsList[selectedItemPosition]
     }
 
-    inner class ParticipantViewHolder(binding: LineRecyclerViewParticipantBinding) :
+    inner class ParticipantViewHolder(private val binding: LineRecyclerViewParticipantBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
-        private val name = binding.participantName
-        private val mail = binding.participantMail
-        private val role = binding.participantRole
-        private val image = binding.participantImage
         private lateinit var participantRole: Role
 
         fun assignValuesToComponents(
@@ -62,11 +60,14 @@ class ParticipantsListAdapter(
             isUserOwner: Boolean,
             roleList: List<String>
         ) {
-            name.text = participant.name
-            mail.text = participant.email
+            binding.participantName.text = participant.name
+            binding.participantMail.text = participant.email
             participantRole = participant.role
-            role.text = roleList[participantRole.ordinal]
-//            image.setImageURI(participant.imagePath.toUri())
+            binding.participantRole.text = roleList[participantRole.ordinal]
+            binding.root.context.loadCircularImageIntoView(
+                participant.imagePath.toUri(),
+                binding.participantImage
+            )
             if (isUserOwner && participant.participantId != creatorId) {
                 itemView.setOnCreateContextMenuListener(this)
                 itemView.setOnClickListener {
@@ -89,7 +90,7 @@ class ParticipantsListAdapter(
             v: View?,
             menuInfo: ContextMenu.ContextMenuInfo?
         ) {
-            menu?.setHeaderTitle(name.text)
+            menu?.setHeaderTitle(binding.participantName.text)
             val inflater = (v?.context as Activity).menuInflater
             inflater.inflate(R.menu.album_participant_options, menu)
             when (participantRole) {

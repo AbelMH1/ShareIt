@@ -9,8 +9,8 @@ data class Participant(
 ) {
     enum class Role {
         OWNER,
-        GUEST,
         MEMBER,
+        GUEST,
         NONE
     }
 }

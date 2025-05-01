@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/participants_vertical_padding">
 
     <ImageView
         android:id="@+id/participantImage"
         android:layout_width="@dimen/profile_image_size"
         android:layout_height="@dimen/profile_image_size"
         android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/participants_image_end_margin"
         android:contentDescription="@string/participant_profile_image_desc"
         app:srcCompat="@drawable/ic_person_24" />
 
@@ -26,7 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="Participante" />
+            android:text="Participante"
+            tools:ignore="HardcodedText" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +43,8 @@
                 style="?attr/textAppearanceTitleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email@gmail.com" />
+                android:text="Email@gmail.com"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/participantRole"
@@ -48,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="Role" />
+                android:text="Role"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

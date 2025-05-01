@@ -21,6 +21,7 @@ class AlbumParticipantsListener(private val updateParticipantsEvent: (newAlbumPa
         for (doc in snapshots!!) {
             participants.add(doc.toObject(Participant::class.java))
         }
+        participants.sortBy { it.role }
         Log.d(TAG, "getNewAlbumParticipants:success")
         updateParticipantsEvent(participants)
     }
