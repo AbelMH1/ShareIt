@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeImagesBinding
 import uniovi.eii.shareit.model.Image
@@ -88,11 +87,6 @@ class HomeImagesFragment : Fragment() {
         binding.allImagesRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = sectionListAdapter
-        }
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own images action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
         }
 
         viewModel.displayImageList.observe(viewLifecycleOwner) {
