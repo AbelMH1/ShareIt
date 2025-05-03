@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import uniovi.eii.shareit.databinding.LineRecyclerViewAlbumBinding
 import uniovi.eii.shareit.model.UserAlbum
@@ -49,7 +48,8 @@ class AlbumListAdapter(
             binding.albumName.text = album.name
             binding.creatorName.text = album.creatorName
             binding.root.context.loadImageIntoView(
-                album.coverImage.toUri(),
+                album.coverImage,
+                album.lastUpdate.time,
                 binding.albumCover
             )
             binding.infoBtn.setOnClickListener {

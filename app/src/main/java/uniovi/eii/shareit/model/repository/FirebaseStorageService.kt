@@ -20,13 +20,17 @@ object FirebaseStorageService {
         return try {
             FirebaseStorage.getInstance().getReferenceFromUrl(fullUrl)
         } catch (e: Exception) {
-            Log.e(TAG, "getStorageReference: Error al obtener la referencia de almacenamiento", e)
+            Log.e(TAG, "getStorageReference: Error al obtener la referencia de almacenamiento")
             null
         }
     }
 
     fun getStorageReferenceStringForUser(userId: String): String {
         return storage.child("users/$userId").toString()
+    }
+
+    fun getStorageReferenceStringForAlbum(albumId: String): String {
+        return storage.child("albums/$albumId/cover").toString()
     }
 
     suspend fun uploadAlbumImage(albumId: String, imageId: String, imageUri: Uri): String? {
@@ -47,7 +51,7 @@ object FirebaseStorageService {
             val imageRef = storage.child("albums/$albumId/cover")
             try {
                 imageRef.putFile(imageUri).await()
-                getImageDownloadUriString(imageRef)
+                imageRef.toString()
             } catch (e: Exception) {
                 Log.e(TAG, "uploadAlbumCover: Error al subir la imagen", e)
                 null

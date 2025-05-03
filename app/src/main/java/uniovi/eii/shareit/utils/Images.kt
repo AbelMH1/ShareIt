@@ -32,6 +32,23 @@ fun Context.loadImageIntoView(
         .into(imageView)
 }
 
+fun Context.loadImageIntoView(
+    docRef: String,
+    key: Long,
+    imageView: ImageView,
+    placeholder: Int = R.drawable.ic_image_24,
+    error: Int = R.drawable.ic_image_not_supported_24
+) {
+    val storageRef = FirebaseStorageService.getStorageReference(docRef)
+    Glide.with(this)
+        .load(storageRef)
+        .signature(ObjectKey(key))
+        .placeholder(placeholder)
+        .error(error)
+        .centerCrop()
+        .into(imageView)
+}
+
 fun Context.loadCircularImageIntoView(
     uri: Uri,
     imageView: ImageView,

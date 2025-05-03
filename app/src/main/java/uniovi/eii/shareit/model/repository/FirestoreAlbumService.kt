@@ -45,6 +45,7 @@ object FirestoreAlbumService {
                 creatorName = currentUser.name
                 creationDate = Date()
                 lastUpdate = Date()
+                coverImage = FirebaseStorageService.getStorageReferenceStringForAlbum(albumId)
             }
             with(docRef.set(album).await()) {
                 val owner = currentUser.toParticipant()
@@ -363,17 +364,18 @@ object FirestoreAlbumService {
                 val imageFile = FirebaseStorageService.downloadImageToTempFile(lastImageUrl)
                     ?: return GeneralValidationResult(firestoreError = "Error downloading last image cover")
                 // Subir el archivo temporal como portada
-                val coverUrl = FirebaseStorageService.uploadAlbumCover(albumId, Uri.fromFile(imageFile))
+                FirebaseStorageService.uploadAlbumCover(albumId, Uri.fromFile(imageFile))
                     ?: return GeneralValidationResult(firestoreError = "Error uploading cover image")
-                newAlbumData["coverImage"] = coverUrl
+                newAlbumData["lastUpdate"] = Date()
                 // Eliminar archivo temporal
                 imageFile.delete()
             }
         } else if (newAlbumData["coverImage"] != null) {
             val imageUri = newAlbumData["coverImage"] as Uri
-            val coverUrl = FirebaseStorageService.uploadAlbumCover(albumId, imageUri)
+            FirebaseStorageService.uploadAlbumCover(albumId, imageUri)
                 ?: return GeneralValidationResult(firestoreError = "Error uploading cover image")
-            newAlbumData["coverImage"] = coverUrl
+            newAlbumData.remove("coverImage")
+            newAlbumData["lastUpdate"] = Date()
         }
         return GeneralValidationResult(true, dataToUpdate = newAlbumData)
     }
