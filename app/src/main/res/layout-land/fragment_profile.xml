@@ -28,15 +28,16 @@
             app:layout_constraintVertical_bias="0.2"
             app:srcCompat="@drawable/ic_person_24" />
 
-        <ImageView
-            android:id="@+id/imgEditImgProfile"
-            android:layout_width="@dimen/my_edit_profile_image_size"
-            android:layout_height="@dimen/my_edit_profile_image_size"
+        <Button
+            android:id="@+id/btEditImgProfile"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/edit_profile_image_desc"
             android:visibility="gone"
+            app:icon="@drawable/ic_edit_24"
             app:layout_constraintBottom_toBottomOf="@+id/imgProfile"
-            app:layout_constraintEnd_toEndOf="@+id/imgProfile"
-            app:srcCompat="@drawable/ic_edit_24" />
+            app:layout_constraintEnd_toEndOf="@+id/imgProfile" />
 
         <Button
             android:id="@+id/btExit"

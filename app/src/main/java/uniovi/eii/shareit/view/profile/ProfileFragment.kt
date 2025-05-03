@@ -75,6 +75,9 @@ class ProfileFragment : Fragment() {
         binding.imgProfile.setOnClickListener {
             showPickResourceDialog()
         }
+        binding.btEditImgProfile.setOnClickListener {
+            showPickResourceDialog()
+        }
 
         binding.btCloseSession.setOnClickListener {
             val mainViewModel: MainViewModel by activityViewModels()
@@ -129,7 +132,7 @@ class ProfileFragment : Fragment() {
         binding.btEditData.isVisible = !enable
         binding.btSaveData.isVisible = enable
         binding.outlinedTextFieldUser.isEnabled = enable
-        binding.imgEditImgProfile.isVisible = enable
+        binding.btEditImgProfile.isVisible = enable
         binding.imgProfile.isClickable = enable
     }
 
