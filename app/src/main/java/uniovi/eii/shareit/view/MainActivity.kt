@@ -31,6 +31,7 @@ import com.google.firebase.auth.auth
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.ActivityMainBinding
 import uniovi.eii.shareit.model.User
+import uniovi.eii.shareit.utils.loadProfileImageIntoView
 import uniovi.eii.shareit.viewModel.MainViewModel
 import uniovi.eii.shareit.viewModel.ProfileViewModel
 
@@ -137,13 +138,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }, this)
     }
 
-    fun updateDrawMenuUser(user: User) {
+    private fun updateDrawMenuUser(user: User) {
         val header = binding.navView.getHeaderView(0)
-        val imgView = header.findViewById(R.id.imgProfile) as ImageView
-        val nameTv = header.findViewById(R.id.displayName) as TextView
-        val emailTv : TextView = header.findViewById(R.id.email) as TextView
+        val imgView: ImageView = header.findViewById(R.id.imgProfile)
+        val nameTv: TextView = header.findViewById(R.id.displayName)
+        val emailTv : TextView = header.findViewById(R.id.email)
         nameTv.text = user.name
         emailTv.text = user.email
+        baseContext.loadProfileImageIntoView(
+            user.imagePath,
+            user.lastUpdatedImage.time,
+            imgView,
+        )
     }
 
     class ErrorCleaningTextWatcher (private val etLayout: TextInputLayout) : TextWatcher {
