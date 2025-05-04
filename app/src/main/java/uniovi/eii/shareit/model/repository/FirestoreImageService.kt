@@ -205,4 +205,22 @@ object FirestoreImageService {
             ""
         }
     }
+
+    suspend fun deleteImage(image: Image): Boolean {
+        val db = Firebase.firestore
+        return try {
+            db.collection("albums")
+                .document(image.albumId)
+                .collection("images")
+                .document(image.imageId)
+                .delete()
+                .await()
+            FirebaseStorageService.deleteAlbumImage(image)
+            Log.d(TAG, "deleteImage:success")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "deleteImage:failure", e)
+            false
+        }
+    }
 }

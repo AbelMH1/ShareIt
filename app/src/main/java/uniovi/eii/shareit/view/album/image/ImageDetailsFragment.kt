@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentImageDetailsBinding
 import uniovi.eii.shareit.model.Image
@@ -29,7 +32,8 @@ class ImageDetailsFragment : Fragment() {
         const val IMAGE = "image"
         const val POSITION = "position"
         const val USINGVIEWMODEL = "usingViewModel"
-        @JvmStatic fun newInstance(image: Image, position: Int, usingViewModel: String) =
+        @JvmStatic
+        fun newInstance(image: Image, position: Int, usingViewModel: String) =
             ImageDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(IMAGE, image)
@@ -45,7 +49,7 @@ class ImageDetailsFragment : Fragment() {
 
     private var _binding: FragmentImageDetailsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : ImageDetailsViewModel by viewModels()
+    private val viewModel: ImageDetailsViewModel by viewModels()
     private lateinit var imagesViewModel: ImagesDisplayViewModel
     private lateinit var albumViewModel: AlbumViewModel
 
@@ -57,6 +61,7 @@ class ImageDetailsFragment : Fragment() {
             usingViewModel = it.getString(USINGVIEWMODEL)!!
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,11 +82,32 @@ class ImageDetailsFragment : Fragment() {
             }
         }
 
+        viewModel.isCompletedImageDeletion.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                // Volver al fragmento anterior
+                Toast.makeText(
+                    context,
+                    resources.getString(R.string.info_image_deleted),
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().popBackStack()
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    resources.getString(R.string.error_deleting_image),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         viewModel.registerLikedListener(image)
         viewModel.isLikedByCurrentUser.observe(viewLifecycleOwner) {
             binding.likeBtn.isChecked = it
         }
 
+        binding.btMoreOptions.setOnClickListener {
+            showMoreOptionsMenu()
+        }
         if (usingViewModel == ALBUM_VIEW) {
             albumViewModel = ViewModelProvider(
                 findNavController().getViewModelStoreOwner(R.id.navigation_album)
@@ -108,7 +134,14 @@ class ImageDetailsFragment : Fragment() {
                 }
             }
         } else {
-            binding.likeBtn.isEnabled = false
+            binding.likeBtn.setOnClickListener {
+                binding.likeBtn.isChecked = !binding.likeBtn.isChecked
+                Snackbar.make(
+                    binding.root,
+                    resources.getString(R.string.warn_like_only_enabled_in_albums),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
 
         return binding.root
@@ -130,4 +163,38 @@ class ImageDetailsFragment : Fragment() {
         _binding = null
     }
 
+    private fun showMoreOptionsMenu() {
+        val popupMenu = PopupMenu(requireContext(), binding.btMoreOptions)
+        popupMenu.menuInflater.inflate(R.menu.image_details_more_options, popupMenu.menu)
+
+        popupMenu.setForceShowIcon(true)
+
+        // Verificar permisos y establecer visibilidad del ítem de eliminación
+        val deleteItem = popupMenu.menu.findItem(R.id.action_delete_image)
+        deleteItem.icon?.setTint(resources.getColor(R.color.md_theme_error_mediumContrast, null))
+        deleteItem.isVisible = usingViewModel == ALBUM_VIEW && albumViewModel.canDeleteImage(image)
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_delete_image -> {
+                    showDeleteConfirmationDialog()
+                }
+                else -> return@setOnMenuItemClickListener false
+            }
+            true
+        }
+
+        popupMenu.show()
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(resources.getString(R.string.warn_delete_image_title))
+            .setMessage(resources.getString(R.string.warn_delete_image_message))
+            .setPositiveButton(R.string.btn_accept) { _, _ ->
+                viewModel.deleteImage(image)
+            }
+            .setNeutralButton(R.string.btn_cancel, null)
+            .show()
+    }
 }

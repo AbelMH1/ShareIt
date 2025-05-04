@@ -6,6 +6,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import uniovi.eii.shareit.model.Image
 import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
@@ -105,6 +106,20 @@ object FirebaseStorageService {
             } catch (e: Exception) {
                 Log.e(TAG, "Error downloading image", e)
                 null
+            }
+        }
+    }
+
+    suspend fun deleteAlbumImage(image: Image): Boolean {
+        return withContext(Dispatchers.IO) {
+            val imageRef = storage.child("albums/${image.albumId}/images/${image.imageId}")
+            try {
+                imageRef.delete().await()
+                Log.d(TAG, "Image deleted successfully")
+                true
+            } catch (e: Exception) {
+                Log.e(TAG, "Error deleting image", e)
+                false
             }
         }
     }

@@ -54,6 +54,7 @@
     <string name="action_promote_to_member">Promote to Member</string>
     <string name="action_demote_to_guest">Demote to Guest</string>
     <string name="action_eliminate_participant">Eliminate participant</string>
+    <string name="action_delete_image">Delete image</string>
     <!--    Login and Register    -->
     <string name="label_welcome">Welcome to</string> <!--  TODO: Decide Op1: <string name="label_welcome">Welcome</string> -->
     <string name="label_signUp">Register</string>
@@ -158,9 +159,15 @@
     <string name="author_profile_image_desc">Image\'s author profile picture</string>
     <string name="upload_image_desc">Image uploaded to the album</string>
     <string name="label_by">By</string>
+    <string name="more_options_btn_desc">Display more options about the image</string>
     <string name="like_switch_btn_desc">Switch your like/unlike state on this image</string>
     <string name="label_likes">Likes</string>
     <string name="label_upload_date">Uploaded on</string>
+    <string name="warn_like_only_enabled_in_albums">Like is only available inside albums</string>
+    <string name="warn_delete_image_title">¿Delete image?</string>
+    <string name="warn_delete_image_message">This action will delete permanently this image from the album.</string>
+    <string name="info_image_deleted">Image deleted</string>
+    <string name="error_deleting_image">Error deleting the image</string>
     <!--    Chat    -->
     <string name="fab_send_desc">Send the current written message</string>
     <string name="hint_write_message">Write a message</string>

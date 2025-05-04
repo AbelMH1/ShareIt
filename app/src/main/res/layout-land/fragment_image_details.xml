@@ -40,6 +40,15 @@
             android:layout_weight="1"
             android:text="User123"
             tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btMoreOptions"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/more_options_btn_desc"
+            app:icon="@drawable/ic_more_vert_24"
+            app:iconTint="@color/md_theme_inverseSurface_mediumContrast" />
     </LinearLayout>
 
     <ImageView

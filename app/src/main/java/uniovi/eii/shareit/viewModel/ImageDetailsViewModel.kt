@@ -19,6 +19,8 @@ class ImageDetailsViewModel : ViewModel() {
 
     private val _isLikedByCurrentUser = MutableLiveData(false)
     val isLikedByCurrentUser: LiveData<Boolean> = _isLikedByCurrentUser
+    private val _isCompletedImageDeletion = MutableLiveData<Boolean>()
+    val isCompletedImageDeletion: LiveData<Boolean> get() = _isCompletedImageDeletion
 
     private var likedListenerRegistration: ListenerRegistration? = null
 
@@ -34,7 +36,8 @@ class ImageDetailsViewModel : ViewModel() {
         val updateEvent: (newData: Boolean) -> Unit = {
             updateIsLikedByCurrentUser(it)
         }
-        likedListenerRegistration = FirestoreImageService.getImageLikeRegistration(image, userId, updateEvent)
+        likedListenerRegistration =
+            FirestoreImageService.getImageLikeRegistration(image, userId, updateEvent)
     }
 
     fun unregisterLikedListener() {
@@ -53,6 +56,14 @@ class ImageDetailsViewModel : ViewModel() {
         val userId = FirebaseAuthService.getCurrentUser()!!.uid
         viewModelScope.launch(Dispatchers.IO) {
             FirestoreImageService.deleteImageLike(image, userId)
+        }
+    }
+
+    fun deleteImage(image: Image) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isCompletedImageDeletion.postValue(
+                FirestoreImageService.deleteImage(image)
+            )
         }
     }
 }

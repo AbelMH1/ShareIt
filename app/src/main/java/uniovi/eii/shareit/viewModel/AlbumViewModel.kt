@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Album.ChatPermission
 import uniovi.eii.shareit.model.Album.ImagePermission
+import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.repository.FirebaseAuthService
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
@@ -162,5 +163,10 @@ class AlbumViewModel : ViewModel() {
             }
             else -> return false
         }
+    }
+
+    fun canDeleteImage(image: Image): Boolean {
+        val userId = FirebaseAuthService.getCurrentUser()!!.uid
+        return _currentUserRole.value == Role.OWNER || userId == image.authorId
     }
 }
