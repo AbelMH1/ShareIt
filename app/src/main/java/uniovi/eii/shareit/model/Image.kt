@@ -12,6 +12,7 @@ data class Image(
     var albumName: String = "",
     var imagePath : String = "",
     var creationDate: Date = Date(),
+    var authorImage: String = "",
     var likes : Int = 0,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -22,6 +23,7 @@ data class Image(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         Date(parcel.readLong()),
+        parcel.readString() ?: "",
         parcel.readInt()
     ) {
     }
@@ -34,6 +36,7 @@ data class Image(
         parcel.writeString(albumName)
         parcel.writeString(imagePath)
         parcel.writeLong(creationDate.time)
+        parcel.writeString(authorImage)
         parcel.writeInt(likes)
     }
 

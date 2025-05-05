@@ -17,6 +17,8 @@ import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentImageDetailsBinding
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant.Role
+import uniovi.eii.shareit.utils.getMinutesStableValue
+import uniovi.eii.shareit.utils.loadCircularImageIntoView
 import uniovi.eii.shareit.utils.loadImageIntoView
 import uniovi.eii.shareit.utils.toFormattedImageDetailsString
 import uniovi.eii.shareit.viewModel.AlbumViewModel
@@ -24,6 +26,7 @@ import uniovi.eii.shareit.viewModel.ImageDetailsViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ALBUM_VIEW
 import uniovi.eii.shareit.viewModel.ImagesDisplayViewModel.Companion.ImagesDisplayViewModelFactory
+import java.util.Date
 import java.util.Locale
 
 class ImageDetailsFragment : Fragment() {
@@ -151,6 +154,7 @@ class ImageDetailsFragment : Fragment() {
         binding.userName.text = image.authorName
         binding.dateUpload.text = image.creationDate.toFormattedImageDetailsString()
         requireContext().loadImageIntoView(image.imagePath.toUri(), binding.image)
+        requireContext().loadCircularImageIntoView(image.authorImage, Date().getMinutesStableValue(), binding.userImage)
     }
 
     private fun updateImageDetails(numLikes: Int) {

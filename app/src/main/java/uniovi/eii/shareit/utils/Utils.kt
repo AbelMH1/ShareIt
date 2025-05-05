@@ -42,3 +42,8 @@ fun Date.areSameDay(other: Date): Boolean {
     return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
             cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
 }
+
+fun Date.getMinutesStableValue(minuteRange: Int = 10): Long {
+    val intervalMillis = minuteRange * 60 * 1000 // minuteRange minutes in milliseconds
+    return this.time / intervalMillis
+}
