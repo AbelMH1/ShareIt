@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/more_options_btn_desc"
             app:icon="@drawable/ic_more_vert_24"
-            app:iconTint="@color/md_theme_inverseSurface_mediumContrast" />
+            app:iconTint="?attr/colorControlNormal" />
     </LinearLayout>
 
     <ImageView

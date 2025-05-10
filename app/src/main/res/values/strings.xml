@@ -84,6 +84,10 @@
     <string name="err_password_too_short">Passwords must have at least %1$d characters</string>
     <string name="err_invalid_password">1 digit, 1 lower case and 1 upper case letter are required</string>
     <string name="err_passwords_dont_match">Passwords do not match</string>
+    <!--    Home    -->
+    <string name="label_no_images">There are no images yet. Add one to an album!</string>
+    <string name="label_no_albums_images">There are no images yet. Create an album and start!</string>
+    <string name="label_no_albums">There are no albums yet. Create one!</string>
     <!--    User Profile    -->
     <string name="label_user_name">Display name</string>
     <string name="label_user_email">User email</string>

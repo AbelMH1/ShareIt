@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -66,9 +67,15 @@ class HomeImagesFragment : Fragment() {
         )[GENERAL_VIEW, ImagesDisplayViewModel::class.java]
 
         val albumsDisplayViewModel: AlbumsDisplayViewModel by activityViewModels()
-        viewModel.registerUserImagesListener(
-            albumsDisplayViewModel.getAlbumListIds()
-        )
+        val albumIds = albumsDisplayViewModel.getAlbumListIds()
+        if (albumIds.isEmpty()) {
+            binding.noAlbumImagesTextView.isVisible = true
+        } else {
+            binding.noAlbumImagesTextView.isVisible = false
+            viewModel.registerUserImagesListener(
+                albumsDisplayViewModel.getAlbumListIds()
+            )
+        }
 
         sectionListAdapter =
             SectionListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
@@ -165,6 +172,7 @@ class HomeImagesFragment : Fragment() {
             adapter = sectionListAdapter
         }
         sectionListAdapter.update(sections)
+        binding.noImagesTextView.isVisible = sections.isEmpty()
     }
 
     private fun setUpImageRecyclerView(images: List<Image>) {
@@ -176,6 +184,7 @@ class HomeImagesFragment : Fragment() {
             adapter = imageListAdapter
         }
         imageListAdapter.update(images)
+        binding.noImagesTextView.isVisible = images.isEmpty()
     }
 
 }
