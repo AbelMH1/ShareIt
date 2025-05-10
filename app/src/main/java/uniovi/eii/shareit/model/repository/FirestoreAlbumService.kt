@@ -296,12 +296,16 @@ object FirestoreAlbumService {
             val updatedParticipants = coroutineScope {
                 participants.map { participant ->
                     async {
-                        val downloadUrl = FirebaseStorageService
-                            .getStorageReference(participant.imagePath)
-                            ?.downloadUrl
-                            ?.await()
-                            ?.toString()
-
+                        val downloadUrl = try {
+                            FirebaseStorageService
+                                .getStorageReference(participant.imagePath)
+                                ?.downloadUrl
+                                ?.await()
+                                ?.toString()
+                        } catch (e: Exception) {
+                            Log.e(TAG, "getDownloadImageUrlForParticipant: failure - ${participant.participantId}")
+                            ""
+                        }
                         participant.copy(imagePath = downloadUrl ?: "")
                     }
                 }.awaitAll()
