@@ -56,16 +56,11 @@ class AlbumViewModel : ViewModel() {
     }
 
     fun registerAlbumDataListener(
-        albumId: String,
-        updateAlbumFunc: (Album) -> Unit = {}
+        albumId: String
     ) {
         if (albumDataListenerRegistration != null) return
         Log.d(TAG, "albumDataListener: START")
-        val updateEvent: (newData: Album) -> Unit = {
-            updateAlbumData(it)
-            updateAlbumFunc(it)
-        }
-        albumDataListenerRegistration = FirestoreAlbumService.getAlbumDataRegistration(albumId, updateEvent)
+        albumDataListenerRegistration = FirestoreAlbumService.getAlbumDataRegistration(albumId, ::updateAlbumData)
     }
 
     private fun unregisterAlbumDataListener() {

@@ -40,9 +40,12 @@ class AlbumInformationFragment : Fragment() {
         _binding = FragmentAlbumInformationBinding.inflate(inflater, container, false)
 
         albumViewModel.registerUserRoleListener(args.albumID)
-        albumViewModel.registerAlbumDataListener(args.albumID, viewModel.getUpdateAlbumFunc())
+        albumViewModel.registerAlbumDataListener(args.albumID)
         viewModel.registerAlbumParticipantsListener(args.albumID)
 
+        albumViewModel.album.observe(viewLifecycleOwner) { album ->
+            viewModel.updateAlbumData(album)
+        }
         albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
             if (it == Role.NONE) { // TODO: && album.visibility != public
                 MaterialAlertDialogBuilder(requireContext())

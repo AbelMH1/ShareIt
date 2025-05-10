@@ -36,15 +36,8 @@ class AlbumInformationViewModel : ViewModel() {
 
     private var albumParticipantsListenerRegistration: ListenerRegistration? = null
 
-    private fun updateAlbumData(newAlbumData: Album) {
+    fun updateAlbumData(newAlbumData: Album) {
         album = newAlbumData
-    }
-
-    fun getUpdateAlbumFunc(): (Album) -> Unit {
-        val updateEvent: (newAlbumData: Album) -> Unit = {
-            updateAlbumData(it)
-        }
-        return updateEvent
     }
 
     private fun updateAlbumParticipants(newAlbumParticipants: List<Participant>) {
