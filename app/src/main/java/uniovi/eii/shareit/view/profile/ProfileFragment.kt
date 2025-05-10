@@ -186,11 +186,12 @@ class ProfileFragment : Fragment() {
     private fun takePicture() {
         val image = requireContext().createTempImageFile("IMG_${System.currentTimeMillis()}")
         imageUri = requireContext().getSecureUriForFile(image)
+        Log.d("takePicture", "Image URI: $imageUri")
         captureImageLauncher.launch(imageUri)
     }
 
     private fun processImage(uri: Uri? = imageUri) {
-        Log.d("Camera", "Selected URI: $uri")
+        Log.d("processImage", "Selected URI: $uri")
         lifecycleScope.launch {
             val context = requireContext()
             val outputFile = context.createTempImageFile()
@@ -203,7 +204,7 @@ class ProfileFragment : Fragment() {
                     R.drawable.ic_person_24,
                     R.drawable.ic_person_24)
             } else {
-                Toast.makeText(context, "Error picking image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), resources.getString(R.string.error_loading_image), Toast.LENGTH_SHORT).show()
             }
         }
     }

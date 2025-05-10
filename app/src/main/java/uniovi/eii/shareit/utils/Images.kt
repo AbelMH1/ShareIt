@@ -89,7 +89,7 @@ fun Context.loadProfileImageIntoView(
     Glide.with(this)
         .load(storageRef)
         .signature(ObjectKey(key))
-        .error(R.drawable.ic_image_not_supported_24)
+        .error(R.drawable.ic_person_24)
         .circleCrop()
         .into(imageView)
 }

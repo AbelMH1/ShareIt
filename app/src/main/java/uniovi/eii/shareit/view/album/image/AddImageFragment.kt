@@ -14,13 +14,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAddImageBinding
 import uniovi.eii.shareit.model.Participant.Role
+import uniovi.eii.shareit.utils.compressImage
 import uniovi.eii.shareit.utils.createTempImageFile
 import uniovi.eii.shareit.utils.getRequiredGalleryPermissions
 import uniovi.eii.shareit.utils.getSecureUriForFile
@@ -83,12 +86,6 @@ class AddImageFragment : Fragment() {
                 binding.uploadImageButton.isEnabled = true
             } else {
                 binding.uploadImageButton.isEnabled = false
-            }
-        }
-
-        viewModel.isCompletedImageLoad.observe(viewLifecycleOwner) { isCompleted ->
-            if (!isCompleted) {
-                Toast.makeText(requireContext(), resources.getString(R.string.error_loading_image), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -168,12 +165,22 @@ class AddImageFragment : Fragment() {
     private fun takePicture() {
         val image = requireContext().createTempImageFile("IMG_${System.currentTimeMillis()}")
         imageUri = requireContext().getSecureUriForFile(image)
+        Log.d("takePicture", "Image URI: $imageUri")
         captureImageLauncher.launch(imageUri)
     }
 
     private fun processImage(uri: Uri? = imageUri) {
-        Log.d("Camera", "Selected URI: $imageUri")
-        viewModel.processImage(uri!!)
+        Log.d("processImage", "Selected URI: $uri")
+        lifecycleScope.launch {
+            val context = requireContext()
+            val outputFile = context.createTempImageFile()
+            val processed = context.compressImage(uri!!, outputFile)
+            if (processed) {
+                viewModel.loadImage(context.getSecureUriForFile(outputFile))
+            } else {
+                Toast.makeText(requireContext(), resources.getString(R.string.error_loading_image), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun showPickResourceDialog() {
