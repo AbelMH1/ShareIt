@@ -4,8 +4,10 @@ import android.net.Uri
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.MetadataChanges
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Album.Visibility.SHARED
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.User
@@ -382,5 +385,47 @@ object FirestoreAlbumService {
             newAlbumData["lastUpdate"] = Date()
         }
         return GeneralValidationResult(true, dataToUpdate = newAlbumData)
+    }
+
+    /**
+     * Obtención de los álbumes públicos de la colección de álbumes en firestore.
+     * Se devuelve una lista de [UserAlbum] y el último álbum recibido para la paginación por
+     * medio de los callbacks [onNewAlbumBatch], [onExistMoreAlbums] y [onLastAlbumReceived].
+     */
+    suspend fun getPublicAlbums(
+        lastAlbumLoaded: DocumentSnapshot?,
+        onNewAlbumBatch: (List<UserAlbum>) -> Unit,
+        onExistMoreAlbums: (Boolean) -> Unit,
+        onLastAlbumReceived: (DocumentSnapshot) -> Unit,
+    ) {
+        val db = Firebase.firestore
+        try {
+            var query = db.collection("albums")
+                .whereEqualTo("visibility", SHARED) // TODO: Cambiar a PUBLIC
+                .orderBy("lastUpdate", Query.Direction.DESCENDING)
+                .limit(2) // TODO: Cambiar a 18
+            if (lastAlbumLoaded != null) {
+                query = query.startAfter(lastAlbumLoaded)
+            }
+
+            val albumsDocs = query.get().await().documents
+            val lastAlbum = albumsDocs.lastOrNull()
+
+            if (lastAlbum == null) {
+                Log.d(TAG, "getPublicAlbums: no more albums")
+                onExistMoreAlbums(false)
+            } else {
+                Log.d(TAG, "getPublicAlbums: more albums available")
+                onNewAlbumBatch(
+                    albumsDocs
+                    .mapNotNull { it.toObject(Album::class.java) }
+                    .map { it.toUserAlbum() }
+                )
+                onLastAlbumReceived(lastAlbum)
+            }
+            Log.d(TAG, "getPublicAlbums:success")
+        } catch (e: Exception) {
+            Log.e(TAG, "getPublicAlbums:failure", e)
+        }
     }
 }

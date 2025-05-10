@@ -11,6 +11,7 @@
     <string name="menu_album_creation">Create Album</string>
     <string name="menu_album_information">Information</string>
     <string name="menu_album_image">Images</string>
+    <string name="menu_explore">Explore</string>
     <string name="menu_account">My account</string>
     <string name="menu_logOut">Log Out</string>
     <string name="menu_album_add_image">Add new image</string>
@@ -34,6 +35,7 @@
     <string name="toast_successful_logout">You have logged out from your account</string>
     <!--    Menus    -->
     <string name="action_account">Account</string>
+    <string name="action_search">Search</string>
     <string name="action_chat">Chat</string>
     <string name="action_info">Information</string>
     <string name="action_order">Order By…</string>
@@ -88,6 +90,8 @@
     <string name="label_no_images">There are no images yet. Add one to an album!</string>
     <string name="label_no_albums_images">There are no images yet. Create an album and start!</string>
     <string name="label_no_albums">There are no albums yet. Create one!</string>
+    <!--    Explore    -->
+    <string name="searchbar_hint">Search for albums</string>
     <!--    User Profile    -->
     <string name="label_user_name">Display name</string>
     <string name="label_user_email">User email</string>

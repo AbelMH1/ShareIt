@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/nav_explore"
+            android:icon="@drawable/ic_explore_24"
+            android:title="@string/menu_explore" />
+        <item
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_menu_account_circle_24"
             android:title="@string/menu_account" />
