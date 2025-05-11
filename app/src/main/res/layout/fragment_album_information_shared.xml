@@ -16,28 +16,66 @@
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/labelAlbumVisibility"
+                style="?attr/textAppearanceTitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/switchSharedAlbum"
+                android:text="@string/label_album_visibility" />
+
+            <TextView
+                android:id="@+id/albumVisibilityValue"
+                style="?attr/textAppearanceTitleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/switchSharedAlbum"
+                android:text="@string/album_visibility_private" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/visibilityToggleButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/text_margin"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-                <TextView
-                    android:id="@+id/labelSharedAlbum"
-                    style="?attr/textAppearanceTitleMedium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:labelFor="@+id/switchSharedAlbum"
-                    android:text="@string/switch_shared_album" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchSharedAlbum"
-                    style="?attr/materialSwitchStyle"
+                <Button
+                    android:id="@+id/togglePrivate"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false" />
-            </LinearLayout>
+                    android:layout_weight="1"
+                    android:text="@string/album_visibility_private" />
+
+                <Button
+                    android:id="@+id/toggleShared"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/album_visibility_shared" />
+
+                <Button
+                    android:id="@+id/togglePublic"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/album_visibility_public" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:id="@+id/labelAlbumVisibilityExplanation"
+                style="?attr/textAppearanceLabelLarge"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/switchSharedAlbum"
+                android:drawablePadding="@dimen/textview_drawable_padding"
+                android:text="@string/label_album_visibility_public_explanation"
+                app:drawableStartCompat="@drawable/ic_menu_info_24" />
 
             <LinearLayout
                 android:id="@+id/sharedSettings"

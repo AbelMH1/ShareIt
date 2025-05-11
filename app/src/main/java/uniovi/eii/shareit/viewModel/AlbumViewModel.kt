@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Album.ChatPermission
 import uniovi.eii.shareit.model.Album.ImagePermission
+import uniovi.eii.shareit.model.Album.Visibility
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.repository.FirebaseAuthService
@@ -97,7 +98,7 @@ class AlbumViewModel : ViewModel() {
     }
 
     fun isAlbumPrivate(): Boolean {
-        return _album.value!!.visibility == Album.PRIVATE
+        return _album.value!!.visibility == Visibility.PRIVATE
     }
 
     fun hasChatSeePermission(): Boolean {

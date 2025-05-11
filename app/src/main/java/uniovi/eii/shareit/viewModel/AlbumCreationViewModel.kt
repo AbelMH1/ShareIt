@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Album.Visibility
 import uniovi.eii.shareit.model.Album.ImagePermission
 import uniovi.eii.shareit.model.Album.ChatPermission
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
@@ -41,7 +42,7 @@ class AlbumCreationViewModel : ViewModel() {
                 this.name = name
                 this.startDate = startDate.toDate()
                 this.endDate = endDate.toDate()
-                this.visibility = if (shared) Album.SHARED else Album.PRIVATE
+                this.visibility = if (shared) Visibility.SHARED else Visibility.PRIVATE
             }
         }
         return dataValidation

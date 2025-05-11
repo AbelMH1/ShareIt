@@ -12,6 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationSharedBinding
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Album.Visibility
 import uniovi.eii.shareit.view.MainActivity.ErrorCleaningTextWatcher
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
 import uniovi.eii.shareit.viewModel.AlbumViewModel
@@ -33,7 +34,6 @@ class AlbumInformationSharedFragment : Fragment() {
         _binding = FragmentAlbumInformationSharedBinding.inflate(inflater, container, false)
         enableEdition(false)
         setUpListeners(albumViewModel.isCurrentUserOwner())
-        binding.switchSharedAlbum.isEnabled = albumViewModel.isCurrentUserOwner()
         albumViewModel.album.observe(viewLifecycleOwner) {
             updateUI(it)
         }
@@ -49,37 +49,44 @@ class AlbumInformationSharedFragment : Fragment() {
             Toast.makeText(context, "Copy", Toast.LENGTH_SHORT).show()
             // TODO: Copy to clipboard
         }
-        if(!currentUserOwner) {
-            binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
-                binding.sharedSettings.isVisible = isChecked
-            }
-            return
-        }
-        binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
+        binding.visibilityToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
-                binding.sharedSettings.visibility = View.VISIBLE
-                saveData()
-            } else {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(resources.getString(R.string.warn_disable_shared_title))
-                    .setMessage(resources.getString(R.string.warn_disable_shared_message))
-                    .setCancelable(false)
-                    .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
-                        binding.switchSharedAlbum.isChecked = true
-                    }.setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
-                        binding.sharedSettings.visibility = View.GONE
-                        saveData()
-                        binding.editFAB.hide()
-                    }.show()
+                binding.sharedSettings.isVisible = checkedId != R.id.togglePrivate
+                when (checkedId) {
+                    R.id.togglePublic -> {
+                        binding.albumVisibilityValue.text = resources.getString(R.string.album_visibility_public)
+                        binding.labelAlbumVisibilityExplanation.text = resources.getString(R.string.label_album_visibility_public_explanation)
+                    }
+                    R.id.toggleShared -> {
+                        binding.albumVisibilityValue.text = resources.getString(R.string.album_visibility_shared)
+                        binding.labelAlbumVisibilityExplanation.text = resources.getString(R.string.label_album_visibility_shared_explanation)
+                    }
+                    R.id.togglePrivate -> {
+                        binding.albumVisibilityValue.text = resources.getString(R.string.album_visibility_private)
+                        binding.labelAlbumVisibilityExplanation.text = resources.getString(R.string.label_album_visibility_private_explanation)
+                    }
+                }
             }
         }
+        if (!currentUserOwner) return
         binding.editFAB.setOnClickListener {
             enableEdition(true)
             binding.editFAB.hide()
             binding.saveFAB.show()
         }
         binding.saveFAB.setOnClickListener {
-            saveData()
+            if (viewModel.isDisablingSharing(binding.visibilityToggleButton.checkedButtonId)) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(resources.getString(R.string.warn_disable_shared_title))
+                    .setMessage(resources.getString(R.string.warn_disable_shared_message))
+                    .setNeutralButton(resources.getString(R.string.btn_cancel), null)
+                    .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
+                        saveData()
+                    }.show()
+            }
+            else {
+                saveData()
+            }
         }
 
         binding.membersImagesPermissionEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.membersImagesPermissionLayout))
@@ -92,8 +99,13 @@ class AlbumInformationSharedFragment : Fragment() {
         enableEdition(false)
         val imagesPermissions = resources.getStringArray(R.array.ImagesPermission)
         val chatPermissions = resources.getStringArray(R.array.ChatPermission)
+        val visibility = when (binding.visibilityToggleButton.checkedButtonId) {
+            R.id.togglePublic -> Visibility.PUBLIC
+            R.id.toggleShared -> Visibility.SHARED
+            else -> Visibility.PRIVATE
+        }
         val dataValidationResult = viewModel.saveSharedData(
-            binding.switchSharedAlbum.isChecked,
+            visibility,
             imagesPermissions.indexOf(binding.membersImagesPermissionEditText.text.toString()),
             chatPermissions.indexOf(binding.membersChatPermissionEditText.text.toString()),
             imagesPermissions.indexOf(binding.guestsImagesPermissionEditText.text.toString()),
@@ -141,6 +153,7 @@ class AlbumInformationSharedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (albumViewModel.isCurrentUserOwner()) binding.editFAB.show()
         enableEdition(false)
         updateUI(albumViewModel.getAlbumInfo())
     }
@@ -158,8 +171,10 @@ class AlbumInformationSharedFragment : Fragment() {
     }
 
     private fun enableEdition(enable: Boolean) {
-        val editView = if (enable) View.VISIBLE else View.GONE
-        binding.switchInvitationLink.visibility = editView
+        binding.albumVisibilityValue.isVisible = !enable
+        binding.visibilityToggleButton.isVisible = enable
+        binding.labelAlbumVisibilityExplanation.isVisible = enable
+        binding.switchInvitationLink.isVisible = enable
         binding.guestsChatPermissionLayout.isEnabled = enable
         binding.guestsImagesPermissionLayout.isEnabled = enable
         binding.membersChatPermissionLayout.isEnabled = enable
@@ -167,22 +182,36 @@ class AlbumInformationSharedFragment : Fragment() {
     }
 
     private fun updateUI(album: Album) {
-        binding.switchSharedAlbum.isChecked = album.visibility == Album.SHARED
-        if (album.visibility == Album.SHARED) {
-            if (albumViewModel.isCurrentUserOwner()) binding.editFAB.show()
+        when (album.visibility) {
+            Visibility.PRIVATE -> {
+                binding.visibilityToggleButton.check(R.id.togglePrivate)
+                binding.albumVisibilityValue.text = resources.getString(R.string.album_visibility_private)
+                binding.labelAlbumVisibilityExplanation.text = resources.getString(R.string.label_album_visibility_private_explanation)
+                binding.membersImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
+                binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
+                binding.guestsImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
+                binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
+            }
+            Visibility.SHARED -> {
+                binding.visibilityToggleButton.check(R.id.toggleShared)
+                binding.albumVisibilityValue.text = resources.getString(R.string.album_visibility_shared)
+                binding.labelAlbumVisibilityExplanation.text = resources.getString(R.string.label_album_visibility_shared_explanation)
+            }
+            Visibility.PUBLIC -> {
+                binding.visibilityToggleButton.check(R.id.togglePublic)
+                binding.albumVisibilityValue.text = resources.getString(R.string.album_visibility_public)
+                binding.labelAlbumVisibilityExplanation.text = resources.getString(R.string.label_album_visibility_public_explanation)
+            }
+        }
+        if (album.visibility != Visibility.PRIVATE) {
             val imagesPermissions = resources.getStringArray(R.array.ImagesPermission)
             val chatPermissions = resources.getStringArray(R.array.ChatPermission)
             binding.membersImagesPermissionEditText.setText(imagesPermissions[album.membersImagesPermission!!.ordinal], false)
             binding.membersChatPermissionEditText.setText(chatPermissions[album.membersChatPermission!!.ordinal], false)
             binding.guestsImagesPermissionEditText.setText(imagesPermissions[album.guestsImagesPermission!!.ordinal], false)
             binding.guestsChatPermissionEditText.setText(chatPermissions[album.guestsChatPermission!!.ordinal], false)
-        } else {
-            binding.membersImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
-            binding.membersChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
-            binding.guestsImagesPermissionEditText.setText(getString(R.string.images_permission_see), false)
-            binding.guestsChatPermissionEditText.setText(getString(R.string.chat_permission_hidden), false)
         }
-        if (album.visibility == Album.SHARED && album.invitationLinkEnabled) {
+        if (album.visibility != Visibility.PRIVATE && album.invitationLinkEnabled) {
             binding.invitationLinkEditText.setText(album.invitationLink)
             binding.switchInvitationLink.isChecked = true
         } else {

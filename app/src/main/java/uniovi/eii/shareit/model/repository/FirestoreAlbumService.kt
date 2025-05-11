@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.model.Album.Visibility.SHARED
+import uniovi.eii.shareit.model.Album.Visibility.PUBLIC
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.User
@@ -401,7 +401,7 @@ object FirestoreAlbumService {
         val db = Firebase.firestore
         try {
             var query = db.collection("albums")
-                .whereEqualTo("visibility", SHARED) // TODO: Cambiar a PUBLIC
+                .whereEqualTo("visibility", PUBLIC)
                 .orderBy("lastUpdate", Query.Direction.DESCENDING)
                 .limit(2) // TODO: Cambiar a 18
             if (lastAlbumLoaded != null) {

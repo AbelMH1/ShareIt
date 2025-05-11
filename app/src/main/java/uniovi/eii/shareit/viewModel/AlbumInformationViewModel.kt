@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Album
+import uniovi.eii.shareit.model.Album.Visibility
 import uniovi.eii.shareit.model.Album.ImagePermission
 import uniovi.eii.shareit.model.Album.ChatPermission
 import uniovi.eii.shareit.model.Participant
@@ -59,6 +60,10 @@ class AlbumInformationViewModel : ViewModel() {
         albumParticipantsListenerRegistration?.remove()
     }
 
+    fun isDisablingSharing(checkedButtonId: Int): Boolean {
+        return checkedButtonId == R.id.togglePrivate && album.visibility != Visibility.PRIVATE
+    }
+
     fun saveGeneralData(
         name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
     ): GeneralValidationResult {
@@ -72,7 +77,7 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     fun saveSharedData(
-        isShared: Boolean,
+        visibility: Visibility,
         membersImagesPermission: Int,
         membersChatPermission: Int,
         guestsImagesPermission: Int,
@@ -80,7 +85,7 @@ class AlbumInformationViewModel : ViewModel() {
         invitationLinkEnabled: Boolean
     ): SharedValidationResult {
         val dataValidation = checkValidData(
-            isShared,
+            visibility,
             membersImagesPermission,
             membersChatPermission,
             guestsImagesPermission,
@@ -90,7 +95,7 @@ class AlbumInformationViewModel : ViewModel() {
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
                 FirestoreAlbumService.updateCurrentAlbumData(album.albumId, dataValidation.dataToUpdate)
-                if (!isShared) {
+                if (dataValidation.dataToUpdate.getOrDefault("visibility", null) == Visibility.PRIVATE) {
                     val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
                     FirestoreAlbumService.deleteSharedAlbumData(album.albumId, currentUserId)
                 }
@@ -193,15 +198,19 @@ class AlbumInformationViewModel : ViewModel() {
         return GeneralValidationResult(true, dataToUpdate=dataToUpdate)
     }
 
-    private fun checkValidData(shared: Boolean,
-                               membersImagesPermissionPos: Int,
-                               membersChatPermissionPos: Int,
-                               guestsImagesPermissionPos: Int,
-                               guestsChatPermissionPos: Int,
-                               invitationLinkEnabled: Boolean
+    private fun checkValidData(
+        visibility: Visibility,
+        membersImagesPermissionPos: Int,
+        membersChatPermissionPos: Int,
+        guestsImagesPermissionPos: Int,
+        guestsChatPermissionPos: Int,
+        invitationLinkEnabled: Boolean
     ): SharedValidationResult {
         val dataToUpdate: HashMap<String, Any?> = HashMap()
-        if (shared) {
+        if (visibility != album.visibility) {
+            dataToUpdate["visibility"] = visibility
+        }
+        if (visibility != Visibility.PRIVATE) {
             if (membersImagesPermissionPos < 0) {
                 return SharedValidationResult(membersImagesPermissionError = R.string.err_empty_field)
             }
@@ -230,10 +239,6 @@ class AlbumInformationViewModel : ViewModel() {
             if (guestsChatPermission != album.guestsChatPermission) {
                 dataToUpdate["guestsChatPermission"] = guestsChatPermission
             }
-        }
-        val visibility = if(shared) Album.SHARED else Album.PRIVATE
-        if (visibility != album.visibility) {
-            dataToUpdate["visibility"] = visibility
         }
         return SharedValidationResult(true, dataToUpdate=dataToUpdate)
     }

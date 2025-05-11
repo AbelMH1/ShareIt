@@ -15,7 +15,7 @@ data class Album(
     var startDate: Date? = null,
     var endDate: Date? = null,
     var location: LatLng? = null,
-    var visibility: String = PRIVATE,
+    var visibility: Visibility = Visibility.PRIVATE,
     var membersImagesPermission: ImagePermission? = null,
     var membersChatPermission: ChatPermission? = null,
     var guestsImagesPermission: ImagePermission? = null,
@@ -33,6 +33,12 @@ data class Album(
         SEE,
         VOTE,
         ADD
+    }
+
+    enum class Visibility {
+        PRIVATE,
+        SHARED,
+        PUBLIC,
     }
 
     fun toUserAlbum(): UserAlbum {
@@ -76,11 +82,5 @@ data class Album(
         result = 31 * result + invitationLinkEnabled.hashCode()
         result = 31 * result + (invitationLink?.hashCode() ?: 0)
         return result
-    }
-
-    companion object Visibility {
-        const val PUBLIC = "Public"
-        const val PRIVATE = "Private"
-        const val SHARED = "Shared"
     }
 }

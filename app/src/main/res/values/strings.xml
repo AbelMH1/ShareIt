@@ -142,6 +142,13 @@
     <string name="fab_edit_desc">Edit the information displayed</string>
     <string name="fab_save_desc">Save the modified information</string>
     <!--    Album Information Shared   -->
+    <string name="label_album_visibility">Visibility</string>
+    <string name="label_album_visibility_private_explanation">Only you can see the album\'s images</string>
+    <string name="label_album_visibility_shared_explanation">You can choose who you share your album with</string>
+    <string name="label_album_visibility_public_explanation">Anyone can join your album as Guest and see the images</string>
+    <string name="album_visibility_private">Private</string>
+    <string name="album_visibility_shared">Shared</string>
+    <string name="album_visibility_public">Public</string>
     <string name="images_permission_see">Solo ver</string>
     <string name="images_permission_vote">Ver y valorar</string>
     <string name="images_permission_vote_add">Ver, valorar y añadir</string>
@@ -149,7 +156,7 @@
     <string name="chat_permission_see">Solo ver</string>
     <string name="chat_permission_see_comment">Ver y comentar</string>
     <!--    Album Information Participants   -->
-    <string name="warn_disable_shared_title">Disable shared album?</string>
+    <string name="warn_disable_shared_title">Make album private?</string>
     <string name="warn_disable_shared_message">This will permanently delete all participants from the album and their shared photos.</string>
     <string name="btn_accept">Accept</string>
     <string name="btn_cancel">Cancel</string>

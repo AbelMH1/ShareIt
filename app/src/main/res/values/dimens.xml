@@ -26,4 +26,5 @@
     <dimen name="cover_image_size_on_album_info">130dp</dimen>
     <dimen name="participants_vertical_padding">8dp</dimen>
     <dimen name="participants_image_end_margin">12dp</dimen>
+    <dimen name="textview_drawable_padding">5dp</dimen>
 </resources>
