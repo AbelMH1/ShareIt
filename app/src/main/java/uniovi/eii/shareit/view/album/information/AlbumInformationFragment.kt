@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumInformationBinding
+import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.view.adapter.AlbumInformationViewPagerAdapter
 import uniovi.eii.shareit.viewModel.AlbumInformationViewModel
@@ -44,21 +45,14 @@ class AlbumInformationFragment : Fragment() {
         viewModel.registerAlbumParticipantsListener(args.albumID)
 
         albumViewModel.album.observe(viewLifecycleOwner) { album ->
+            if (album.visibility != Album.Visibility.PUBLIC && !albumViewModel.isCurrentUserParticipant()) {
+                showAccessDeniedDialog()
+            }
             viewModel.updateAlbumData(album)
         }
         albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
-            if (it == Role.NONE) { // TODO: && album.visibility != public
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
-                    .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
-                    .setCancelable(false)
-                    .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
-                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
-                    }
-                    .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
-                        albumViewModel.deleteUserAlbum(args.albumID)
-                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
-                    }.show()
+            if (it == Role.NONE && !albumViewModel.isAlbumPublic()) {
+                showAccessDeniedDialog()
             }
         }
 
@@ -80,7 +74,7 @@ class AlbumInformationFragment : Fragment() {
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+                val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
                 toolbar.isTitleCentered = true
             }
 
@@ -106,4 +100,14 @@ class AlbumInformationFragment : Fragment() {
         }.attach()
     }
 
+    private fun showAccessDeniedDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
+            .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
+            .setCancelable(false)
+            .setPositiveButton(resources.getString(R.string.bt_exit)) { _, _ ->
+                albumViewModel.deleteUserAlbum(args.albumID)
+                findNavController().navigate(R.id.action_exit_album_to_nav_home)
+            }.show()
+    }
 }

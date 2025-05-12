@@ -75,8 +75,15 @@ class AlbumInformationGeneralFragment : Fragment() {
             updateAlbumUI(it)
         }
         albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
-            if (it != Role.NONE) {
-                updateRoleUI(it == Role.OWNER)
+            updateRoleUI(it)
+        }
+        viewModel.joinResultCorrect.observe(viewLifecycleOwner) {
+            if (it) Toast.makeText(requireContext(), getString(R.string.info_album_joined), Toast.LENGTH_SHORT).show()
+            else {
+                Toast.makeText(requireContext(), getString(R.string.error_album_not_joined), Toast.LENGTH_SHORT).show()
+                binding.progressBar.isVisible = false
+                binding.joinAlbumButton.text = getString(R.string.btn_join_album)
+                binding.joinAlbumButton.isEnabled = true
             }
         }
         return binding.root
@@ -156,6 +163,12 @@ class AlbumInformationGeneralFragment : Fragment() {
                         viewModel.dropAlbum()
                         findNavController().navigate(R.id.action_exit_album_to_nav_home)
                     }.show()
+            }
+            binding.joinAlbumButton.setOnClickListener {
+                binding.progressBar.isVisible = true
+                binding.joinAlbumButton.isEnabled = false
+                binding.joinAlbumButton.text = null
+                viewModel.joinAlbum()
             }
             binding.deleteAlbumButton.setOnClickListener(null)
             binding.editFAB.setOnClickListener(null)
@@ -320,11 +333,13 @@ class AlbumInformationGeneralFragment : Fragment() {
         }
     }
 
-    private fun updateRoleUI(isOwner: Boolean) {
-        setUpListeners(isOwner)
-        binding.dropAlbumButton.isVisible = !isOwner
-        binding.deleteAlbumButton.isVisible = isOwner
-        if(!isOwner) {
+    private fun updateRoleUI(role: Role) {
+        setUpListeners(role == Role.OWNER)
+        binding.progressBar.isVisible = false
+        binding.dropAlbumButton.isVisible = role == Role.MEMBER || role == Role.GUEST
+        binding.deleteAlbumButton.isVisible = role == Role.OWNER
+        binding.joinAlbumButton.isVisible = role == Role.NONE
+        if(role != Role.OWNER) {
             binding.editFAB.hide()
             binding.saveFAB.hide()
         } else if(!binding.editFAB.isVisible && !binding.saveFAB.isVisible) {

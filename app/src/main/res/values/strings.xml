@@ -128,6 +128,10 @@
     <string name="label_use_last_image">Use last image</string>
     <string name="cover_custom_btn_desc">Set a custom Album cover</string>
     <string name="label_date">Date of the album</string>
+    <string name="btn_join_album">Join album</string>
+    <string name="progress_join_album_btn_desc">Trying to join the album</string>
+    <string name="info_album_joined">Album joined!</string>
+    <string name="error_album_not_joined">An error occurred while trying to join</string>
     <string name="btn_delete_album">Delete album</string>
     <string name="warn_delete_album_title">Delete album?</string>
     <string name="warn_delete_album_message">This will permanently delete the album, including all its photos, participants and messages.</string>
@@ -135,7 +139,8 @@
     <string name="warn_drop_album_title">Drop album?</string>
     <string name="warn_drop_album_message">You will lose access to all its photos and messages.</string>
     <string name="warn_eliminated_from_album_title">Access denied</string>
-    <string name="warn_eliminated_from_album_message">Either you were eliminated from this album or the album itself got deleted. Do you want to remove it from your albums?</string>
+    <string name="warn_eliminated_from_album_message">Either you were eliminated from this album or the album itself got deleted.</string>
+    <string name="bt_exit">Exit</string>
     <string name="label_date_disabled">Date not enabled</string>
     <string name="label_location">Location of the Album</string>
     <string name="label_location_disabled">Location not enabled</string>

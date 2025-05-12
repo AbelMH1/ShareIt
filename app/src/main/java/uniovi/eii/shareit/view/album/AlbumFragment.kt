@@ -21,6 +21,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumBinding
+import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.Section
@@ -64,23 +65,16 @@ class AlbumFragment : Fragment() {
         imagesViewModel.registerAlbumImagesListener(args.albumID)
 
         albumViewModel.album.observe(viewLifecycleOwner) {
+            if (it.visibility != Album.Visibility.PUBLIC && !albumViewModel.isCurrentUserParticipant()) {
+                showAccessDeniedDialog()
+            }
             val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
             toolbar.title = it.name
             checkPermissions()
         }
         albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
-            if (it == Role.NONE) { // TODO: && album.visibility != public
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
-                    .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
-                    .setCancelable(false)
-                    .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
-                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
-                    }
-                    .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
-                        albumViewModel.deleteUserAlbum(args.albumID)
-                        findNavController().navigate(R.id.action_exit_album_to_nav_home)
-                    }.show()
+            if (it == Role.NONE && !albumViewModel.isAlbumPublic()) {
+                showAccessDeniedDialog()
             } else {
                 checkPermissions()
             }
@@ -224,5 +218,16 @@ class AlbumFragment : Fragment() {
         } else {
             binding.fab.hide()
         }
+    }
+
+    private fun showAccessDeniedDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
+            .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
+            .setCancelable(false)
+            .setPositiveButton(resources.getString(R.string.bt_exit)) { _, _ ->
+                albumViewModel.deleteUserAlbum(args.albumID)
+                findNavController().navigate(R.id.action_exit_album_to_nav_home)
+            }.show()
     }
 }

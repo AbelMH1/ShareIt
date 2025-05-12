@@ -127,6 +127,21 @@ object FirestoreAlbumService {
     }
 
     /**
+     * Adición del usuario [participant] a los participantes del [album] dado en firestore.
+     * Se devuelve un booleano indicando si la operación fue exitosa o no. Usado cuando el
+     * usuario se añade a sí mismo al álbum (albumes públicos).
+     */
+    suspend fun addNewGuestToAlbum(
+        album: Album,
+        participant: Participant
+    ): Boolean {
+        var error = addParticipantToAlbum(album.albumId, participant)
+        if (error != null) return false
+        error = createUserAlbumDenormalizedData(album.toUserAlbum(), participant.participantId)
+        return error == null
+    }
+
+    /**
      * Adición del participante [participant] bajo la subcolección de participantes del álbum
      * con el [albumId] dado en firestore.
      */
@@ -141,7 +156,7 @@ object FirestoreAlbumService {
             Log.d(TAG, "addParticipantToAlbum:success")
             null
         } catch (e: Exception) {
-            Log.e(TAG, "addParticipantToAlbum:failure")
+            Log.e(TAG, "addParticipantToAlbum:failure", e)
             e.message
         }
     }
@@ -193,7 +208,7 @@ object FirestoreAlbumService {
             Log.d(TAG, "createUserAlbumDenormalizedData:success")
             null
         } catch (e: Exception) {
-            Log.e(TAG, "createUserAlbumDenormalizedData:failure")
+            Log.e(TAG, "createUserAlbumDenormalizedData:failure", e)
             e.message
         }
     }

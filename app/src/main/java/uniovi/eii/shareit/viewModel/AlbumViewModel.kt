@@ -97,8 +97,16 @@ class AlbumViewModel : ViewModel() {
         return _currentUserRole.value == Role.OWNER
     }
 
+    fun isCurrentUserParticipant(): Boolean {
+        return _currentUserRole.value != Role.NONE
+    }
+
     fun isAlbumPrivate(): Boolean {
         return _album.value!!.visibility == Visibility.PRIVATE
+    }
+
+    fun isAlbumPublic(): Boolean {
+        return _album.value!!.visibility == Visibility.PUBLIC
     }
 
     fun hasChatSeePermission(): Boolean {

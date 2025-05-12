@@ -28,6 +28,7 @@ class AddImageViewModel : ViewModel() {
         val newImage = Image(
             authorId = currentUser.userId,
             authorName = currentUser.name,
+            authorImage = currentUser.imagePath,
             albumId = albumId,
             albumName = albumName
         )

@@ -35,6 +35,9 @@ class AlbumInformationViewModel : ViewModel() {
     private val _addParticipantAttempt = MutableLiveData(ParticipantValidationResult())
     val addParticipantAttempt: LiveData<ParticipantValidationResult> = _addParticipantAttempt
 
+    private val _joinResultCorrect = MutableLiveData<Boolean>()
+    val joinResultCorrect: LiveData<Boolean> = _joinResultCorrect
+
     private var albumParticipantsListenerRegistration: ListenerRegistration? = null
 
     fun updateAlbumData(newAlbumData: Album) {
@@ -153,6 +156,20 @@ class AlbumInformationViewModel : ViewModel() {
         val currentUserId = FirestoreUserService.getCurrentUserData()?.userId ?: ""
         viewModelScope.launch(Dispatchers.IO) {
             FirestoreAlbumService.deleteAlbum(album.albumId, currentUserId)
+        }
+    }
+
+    fun joinAlbum() {
+        val currentUserAsParticipant = FirestoreUserService.getCurrentUserData()?.toParticipant()
+        if (currentUserAsParticipant == null) {
+            _joinResultCorrect.value = false
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            Thread.sleep(2000)
+            _joinResultCorrect.postValue(
+                FirestoreAlbumService.addNewGuestToAlbum(album, currentUserAsParticipant)
+            )
         }
     }
 

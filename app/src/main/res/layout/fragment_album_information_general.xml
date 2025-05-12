@@ -299,6 +299,35 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/joinAlbumButton"
+                        style="?attr/materialButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/btn_join_album"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/progressBar"
+                        style="@style/Widget.Material3.CircularProgressIndicator.ExtraSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/progress_join_album_btn_desc"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/joinAlbumButton"
+                        app:layout_constraintEnd_toEndOf="@+id/joinAlbumButton"
+                        app:layout_constraintStart_toStartOf="@+id/joinAlbumButton"
+                        app:layout_constraintTop_toTopOf="@+id/joinAlbumButton" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <Button
                     android:id="@+id/dropAlbumButton"
                     style="?attr/materialButtonStyle"
