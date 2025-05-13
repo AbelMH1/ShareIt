@@ -16,6 +16,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumImageBinding
+import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.view.adapter.ImageViewPagerAdapter
 import uniovi.eii.shareit.viewModel.AlbumViewModel
@@ -52,19 +53,14 @@ class ImageFragment : Fragment() {
                 findNavController().getViewModelStoreOwner(R.id.navigation_album)
             )[AlbumViewModel::class.java]
 
+            albumViewModel.album.observe(viewLifecycleOwner) { album ->
+                if (album.visibility != Album.Visibility.PUBLIC && !albumViewModel.isCurrentUserParticipant()) {
+                    showAccessDeniedDialog()
+                }
+            }
             albumViewModel.currentUserRole.observe(viewLifecycleOwner) {
-                if (it == Role.NONE) { // TODO: && album.visibility != public
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
-                        .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
-                        .setCancelable(false)
-                        .setNeutralButton(resources.getString(R.string.btn_cancel)) { _, _ ->
-                            findNavController().navigate(R.id.action_exit_album_to_nav_home)
-                        }
-                        .setPositiveButton(resources.getString(R.string.btn_accept)) { _, _ ->
-                            albumViewModel.deleteUserAlbum(albumViewModel.getAlbumInfo().albumId)
-                            findNavController().navigate(R.id.action_exit_album_to_nav_home)
-                        }.show()
+                if (it == Role.NONE && !albumViewModel.isAlbumPublic()) {
+                    showAccessDeniedDialog()
                 }
             }
         }
@@ -123,4 +119,14 @@ class ImageFragment : Fragment() {
         )
     }
 
+    private fun showAccessDeniedDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(resources.getString(R.string.warn_eliminated_from_album_title))
+            .setMessage(resources.getString(R.string.warn_eliminated_from_album_message))
+            .setCancelable(false)
+            .setPositiveButton(resources.getString(R.string.bt_exit)) { _, _ ->
+                albumViewModel.deleteUserAlbum(albumViewModel.getAlbumInfo().albumId)
+                findNavController().navigate(R.id.action_exit_album_to_nav_home)
+            }.show()
+    }
 }
