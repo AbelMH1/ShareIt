@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.Query
@@ -33,6 +34,7 @@ import java.util.Date
 object FirestoreAlbumService {
 
     private const val TAG = "FirestoreAlbumService"
+    const val PAGE_SIZE: Long = 12
 
     /**
      * Asigna [currentUser] como creador del [album] dado y crea dicho [album] en la colección
@@ -418,7 +420,7 @@ object FirestoreAlbumService {
             var query = db.collection("albums")
                 .whereEqualTo("visibility", PUBLIC)
                 .orderBy("lastUpdate", Query.Direction.DESCENDING)
-                .limit(2) // TODO: Cambiar a 18
+                .limit(PAGE_SIZE)
             if (lastAlbumLoaded != null) {
                 query = query.startAfter(lastAlbumLoaded)
             }
@@ -430,7 +432,12 @@ object FirestoreAlbumService {
                 Log.d(TAG, "getPublicAlbums: no more albums")
                 onExistMoreAlbums(false)
             } else {
-                Log.d(TAG, "getPublicAlbums: more albums available")
+                if (albumsDocs.size < PAGE_SIZE) {
+                    Log.d(TAG, "getPublicAlbumsSearch: no more albums")
+                    onExistMoreAlbums(false)
+                } else {
+                    Log.d(TAG, "getPublicAlbums: more albums available")
+                }
                 onNewAlbumBatch(
                     albumsDocs
                     .mapNotNull { it.toObject(Album::class.java) }
@@ -441,6 +448,70 @@ object FirestoreAlbumService {
             Log.d(TAG, "getPublicAlbums:success")
         } catch (e: Exception) {
             Log.e(TAG, "getPublicAlbums:failure", e)
+        }
+    }
+
+    /**
+     * Obtención de los álbumes públicos de la colección de álbumes en firestore que cumplen con el
+     * filtro de búsqueda [queryFilter]. Se devuelve una lista de [UserAlbum] y el último álbum
+     * recibido para la paginación por medio de los callbacks [onNewAlbumBatch], [onExistMoreAlbums]
+     * y [onLastAlbumReceived].
+     */
+    suspend fun getPublicAlbumsSearch(
+        queryFilter: String,
+        lastAlbumLoaded: DocumentSnapshot?,
+        onNewAlbumBatch: (List<UserAlbum>) -> Unit,
+        onExistMoreAlbums: (Boolean) -> Unit,
+        onLastAlbumReceived: (DocumentSnapshot) -> Unit,
+    ) {
+        // TODO: Elegir opción de búsqueda
+        //  - Busqueda actual, por correspondencia en los primeros carácteres del nombre.
+        //          Ej: "El sol brillante" -> "El", "El sol", "El sol br"
+        //  - Búsqueda por palabras completas, sin importar el orden. Crecimiento exponencial (máximo 5 palabras)
+        //          Ej: "El sol brillante" -> "sol", "brillante", "El brillante sol"
+        val db = Firebase.firestore
+        try {
+            var query = db.collection("albums")
+                .whereEqualTo("visibility", PUBLIC)
+                .where(Filter.or(
+                    Filter.and(
+                        Filter.greaterThanOrEqualTo("name", queryFilter),
+                        Filter.lessThanOrEqualTo("name", queryFilter + "\uf8ff")
+                    ),
+                    Filter.and(
+                        Filter.greaterThanOrEqualTo("creatorName", queryFilter),
+                        Filter.lessThanOrEqualTo("creatorName", queryFilter + "\uf8ff")
+                    )
+                ))
+                .limit(PAGE_SIZE)
+            if (lastAlbumLoaded != null) {
+                query = query.startAfter(lastAlbumLoaded)
+            }
+
+            val albumsDocs = query.get().await().documents
+            val lastAlbum = albumsDocs.lastOrNull()
+
+            if (lastAlbum == null) {
+                Log.d(TAG, "getPublicAlbumsSearch: no more albums")
+                onExistMoreAlbums(false)
+                onNewAlbumBatch(emptyList())
+            } else {
+                if (albumsDocs.size < PAGE_SIZE) {
+                    Log.d(TAG, "getPublicAlbumsSearch: no more albums")
+                    onExistMoreAlbums(false)
+                } else {
+                    Log.d(TAG, "getPublicAlbumsSearch: more albums available")
+                }
+                onNewAlbumBatch(
+                    albumsDocs
+                        .mapNotNull { it.toObject(Album::class.java) }
+                        .map { it.toUserAlbum() }
+                )
+                onLastAlbumReceived(lastAlbum)
+            }
+            Log.d(TAG, "getPublicAlbumsSearch:success")
+        } catch (e: Exception) {
+            Log.e(TAG, "getPublicAlbumsSearch:failure", e)
         }
     }
 }

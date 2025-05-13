@@ -15,27 +15,40 @@ class ExploreViewModel : ViewModel() {
 
     companion object {
         private const val TAG = "ExploreViewModel"
-
-        private val albums = (1..23)
-            .map { UserAlbum("$it", "$it", "Author $it", "Album $it") }
     }
-    private var _lastAlbumRetrieved: DocumentSnapshot? = null
-    private var _areMoreAlbumsAvailable = true
 
-    private var _albumList = MutableLiveData<List<UserAlbum>>(emptyList())
-    val albumList: LiveData<List<UserAlbum>> = _albumList
     private var _isSearchMoreEnabled = MutableLiveData(true)
     val isSearchMoreEnabled: LiveData<Boolean> = _isSearchMoreEnabled
+    private var _displayAlbumList = MutableLiveData<List<UserAlbum>>(emptyList())
+    val displayAlbumList: LiveData<List<UserAlbum>> = _displayAlbumList
 
-    init {
-        // Initialize the album list with some mocked data
-        _albumList.value = albums.subList(0, 10)
+    private var _searchMode = false
+
+    private var _lastAlbumRetrieved: DocumentSnapshot? = null
+    private var _albumList: List<UserAlbum> = emptyList()
+
+    private var _lastAlbumSearchRetrieved: DocumentSnapshot? = null
+    private var _albumSearchList: List<UserAlbum> = emptyList()
+    private var _lastQuery: String = ""
+
+    fun loadMoreAlbums() {
+        if (_searchMode) {
+            loadMoreSearchAlbums()
+        } else {
+            loadMorePublicAlbums()
+        }
     }
 
     fun updateAreMoreAlbumsAvailable(areMore: Boolean) {
         Log.d(TAG, "updateAreMoreAlbumsAvailable: $areMore")
-        _areMoreAlbumsAvailable = areMore
         _isSearchMoreEnabled.postValue(areMore)
+    }
+
+    fun addNewAlbumBatch(newAlbums: List<UserAlbum>) {
+        Log.d(TAG, "addNewAlbumBatch: $newAlbums")
+        val newAlbumList = _albumList.plus(newAlbums)
+        _albumList = newAlbumList
+        _displayAlbumList.postValue(newAlbumList)
     }
 
     fun updateLastAlbumRetrieved(lastAlbum: DocumentSnapshot) {
@@ -43,26 +56,64 @@ class ExploreViewModel : ViewModel() {
         _lastAlbumRetrieved = lastAlbum
     }
 
-    fun addNewAlbumBatch(newAlbums: List<UserAlbum>) {
-        Log.d(TAG, "addNewAlbumBatch: $newAlbums")
-        _albumList.postValue(_albumList.value!!.plus(newAlbums))
-    }
-
     fun loadInitialData() {
+        if (_albumList.isNotEmpty()) return
+        Log.d(TAG, "loadInitialData")
         _isSearchMoreEnabled.value = true
-        _areMoreAlbumsAvailable = true
-        if (_albumList.value!!.isNotEmpty()) return
-        loadMoreAlbums()
+        loadMorePublicAlbums()
     }
 
-    fun loadMoreAlbums() {
+    private fun loadMorePublicAlbums() {
         viewModelScope.launch(Dispatchers.IO) {
-            Thread.sleep(2000)
             FirestoreAlbumService.getPublicAlbums(
                 _lastAlbumRetrieved,
                 ::addNewAlbumBatch,
                 ::updateAreMoreAlbumsAvailable,
                 ::updateLastAlbumRetrieved
+            )
+        }
+    }
+
+    fun restoreExploreList() {
+        if (!_searchMode) return
+        _searchMode = false
+        _lastQuery = ""
+        _displayAlbumList.value = _albumList
+        if (_albumList.size >= FirestoreAlbumService.PAGE_SIZE)
+            _isSearchMoreEnabled.value = true
+    }
+
+    fun updateLastAlbumSearchRetrieved(lastAlbum: DocumentSnapshot) {
+        Log.d(TAG, "updateLastAlbumSearchRetrieved: $lastAlbum")
+        _lastAlbumSearchRetrieved = lastAlbum
+    }
+
+    fun addNewAlbumSearchBatch(newAlbums: List<UserAlbum>) {
+        Log.d(TAG, "addNewAlbumSearchBatch: $newAlbums")
+        val newAlbumList = _albumSearchList.plus(newAlbums)
+        _albumSearchList = newAlbumList
+        _displayAlbumList.postValue(newAlbumList)
+    }
+
+    fun loadInitialSearchData(query: String) {
+        if (query == _lastQuery || query.isBlank()) return
+        Log.d(TAG, "loadInitialSearchData: $query")
+        _isSearchMoreEnabled.value = true
+        _searchMode = true
+        _lastAlbumSearchRetrieved = null
+        _lastQuery = query
+        _albumSearchList = emptyList()
+        loadMoreSearchAlbums()
+    }
+
+    private fun loadMoreSearchAlbums() {
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreAlbumService.getPublicAlbumsSearch(
+                _lastQuery,
+                _lastAlbumSearchRetrieved,
+                ::addNewAlbumSearchBatch,
+                ::updateAreMoreAlbumsAvailable,
+                ::updateLastAlbumSearchRetrieved
             )
         }
     }
