@@ -12,17 +12,6 @@
         tools:listitem="@layout/line_recycler_view_image_section" />
 
     <TextView
-        android:id="@+id/noAlbumImagesTextView"
-        style="?attr/textAppearanceHeadline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:text="@string/label_no_albums_images"
-        android:textAlignment="center"
-        android:visibility="gone" />
-
-    <TextView
         android:id="@+id/noImagesTextView"
         style="?attr/textAppearanceHeadline5"
         android:layout_width="wrap_content"

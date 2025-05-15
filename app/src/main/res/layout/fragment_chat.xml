@@ -75,6 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/text_margin"
+                android:drawablePadding="@dimen/textview_drawable_padding"
+                android:gravity="center_vertical"
                 android:text="@string/label_not_permission_to_comment"
                 app:drawableStartCompat="@drawable/ic_menu_info_24" />
 

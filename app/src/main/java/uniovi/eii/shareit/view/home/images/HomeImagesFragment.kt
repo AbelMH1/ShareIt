@@ -67,11 +67,7 @@ class HomeImagesFragment : Fragment() {
         )[GENERAL_VIEW, ImagesDisplayViewModel::class.java]
 
         val albumsDisplayViewModel: AlbumsDisplayViewModel by activityViewModels()
-        val albumIds = albumsDisplayViewModel.getAlbumListIds()
-        if (albumIds.isEmpty()) {
-            binding.noAlbumImagesTextView.isVisible = true
-        } else {
-            binding.noAlbumImagesTextView.isVisible = false
+        if (albumsDisplayViewModel.getAlbumListIds().isNotEmpty()) {
             viewModel.registerUserImagesListener(
                 albumsDisplayViewModel.getAlbumListIds()
             )
