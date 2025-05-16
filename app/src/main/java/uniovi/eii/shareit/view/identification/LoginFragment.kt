@@ -46,8 +46,7 @@ class LoginFragment : Fragment() {
             enableForm(false)
             viewModel.attemptLogin(
                 binding.emailEditText.text?.toString() ?: "",
-                binding.passwordEditText.text?.toString() ?: "",
-                binding.checkboxRememberMe.isChecked
+                binding.passwordEditText.text?.toString() ?: ""
             )
         }
 
@@ -92,7 +91,6 @@ class LoginFragment : Fragment() {
     private fun enableForm(enabled: Boolean) {
         binding.emailLayout.isEnabled = enabled
         binding.passwordLayout.isEnabled = enabled
-        binding.checkboxRememberMe.isEnabled = enabled
         binding.btForgotPassword.isEnabled = enabled
         binding.btLogIn.isEnabled = enabled
         binding.btLogIn.text = if (enabled) getString(R.string.btn_logIn) else ""

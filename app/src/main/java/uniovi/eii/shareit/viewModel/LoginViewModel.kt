@@ -19,7 +19,7 @@ class LoginViewModel : ViewModel() {
     private val _loginAttempt = MutableLiveData(LoginResult())
     val loginAttempt: LiveData<LoginResult> = _loginAttempt
 
-    fun attemptLogin(email: String, password: String, rememberMe: Boolean) {
+    fun attemptLogin(email: String, password: String) {
         if (!checkValidData(email, password)) return
         viewModelScope.launch(Dispatchers.IO) {
             _loginAttempt.postValue(
