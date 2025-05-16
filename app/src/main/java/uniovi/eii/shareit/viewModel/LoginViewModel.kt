@@ -1,10 +1,14 @@
 package uniovi.eii.shareit.viewModel
 
 import android.util.Patterns
+import androidx.credentials.Credential
+import androidx.credentials.CustomCredential
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
@@ -21,6 +25,23 @@ class LoginViewModel : ViewModel() {
             _loginAttempt.postValue(
                 FirebaseAuthService.signInWithEmailAndPassword(email, password)
             )
+        }
+    }
+
+    fun attemptLoginWithGoogle(credential: Credential) {
+        // Check if credential is of type Google ID
+        if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            // Create Google ID Token
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+
+            // Sign in to Firebase with using the token
+            viewModelScope.launch(Dispatchers.IO) {
+                _loginAttempt.postValue(
+                    FirebaseAuthService.signInWithGoogle(googleIdTokenCredential.idToken)
+                )
+            }
+        } else {
+            _loginAttempt.value = LoginResult(firebaseError = "Credential is not of type Google ID!")
         }
     }
 

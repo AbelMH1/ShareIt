@@ -3,7 +3,9 @@ package uniovi.eii.shareit.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.repository.FirebaseAuthService
 
 class MainViewModel : ViewModel() {
@@ -16,6 +18,8 @@ class MainViewModel : ViewModel() {
     }
 
     fun logOut() {
-        _loggedUser.value = FirebaseAuthService.signOut()
+        viewModelScope.launch {
+            _loggedUser.postValue(FirebaseAuthService.signOut())
+        }
     }
 }
