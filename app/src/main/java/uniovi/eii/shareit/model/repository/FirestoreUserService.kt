@@ -54,7 +54,7 @@ object FirestoreUserService {
         val db = Firebase.firestore
         return db.collection("users")
             .document(userId)
-            .collection("albums")
+            .collection("userAlbums")
             .addSnapshotListener(
             UserAlbumsListener(updateVMEvent)
         )

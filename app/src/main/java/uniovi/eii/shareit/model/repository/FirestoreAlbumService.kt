@@ -204,7 +204,7 @@ object FirestoreAlbumService {
         return try {
             db.collection("users")
                 .document(userId)
-                .collection("albums")
+                .collection("userAlbums")
                 .document(userAlbum.albumId)
                 .set(userAlbum).await()
             Log.d(TAG, "createUserAlbumDenormalizedData:success")
@@ -244,7 +244,7 @@ object FirestoreAlbumService {
         try {
             db.collection("users")
                 .document(participantId)
-                .collection("albums")
+                .collection("userAlbums")
                 .document(albumId)
                 .delete()
                 .addOnSuccessListener { Log.d(TAG, "eliminateUserAlbumFromParticipant:success") }
