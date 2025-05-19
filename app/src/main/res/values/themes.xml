@@ -86,4 +86,17 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/image_corner_radius</item>
     </style>
+
+    <style name="circularImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">60dp</item>
+    </style>
+
+    <style name="shape_appearance_login_card">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">70dp</item>
+        <item name="cornerSizeTopRight">70dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
 </resources>
