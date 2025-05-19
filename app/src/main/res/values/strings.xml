@@ -88,7 +88,6 @@
     <string name="err_passwords_dont_match">Passwords do not match</string>
     <!--    Home    -->
     <string name="label_no_images">There are no images yet. Add one to an album!</string>
-    <string name="label_no_albums_images">There are no images yet. Create an album and start!</string>
     <string name="label_no_albums">There are no albums yet. Create one!</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Search for albums</string>
@@ -122,6 +121,8 @@
     <string name="label_permission_images">Images</string>
     <string name="label_permission_guests">Guests</string>
     <string name="label_permission_chat">Chat</string>
+    <!--    Album    -->
+    <string name="label_no_album_images">There are no images in this album yet.</string>
     <!--    Album Information General   -->
     <string name="label_name">Name</string>
     <string name="label_cover">Album\'s Cover</string>
