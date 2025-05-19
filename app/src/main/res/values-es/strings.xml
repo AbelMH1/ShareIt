@@ -1,0 +1,205 @@
+<resources>
+    <string name="navigation_drawer_open">Abrir el cajón de navegación</string>
+    <string name="navigation_drawer_close">Cerrar el cajón de navegación</string>
+    <string name="nav_header_desc">Encabezado de navegación</string>
+
+    <!--    AppBar titles    -->
+    <string name="menu_home">Inicio</string>
+    <string name="menu_album_creation">Crear álbum</string>
+    <string name="menu_album_information">Información</string>
+    <string name="menu_album_image">Imágenes</string>
+    <string name="menu_explore">Explorar</string>
+    <string name="menu_account">Mi cuenta</string>
+    <string name="menu_logOut">Cerrar sesión</string>
+    <string name="menu_album_add_image">Agregar nueva imagen</string>
+    <!--    AppBar subtitles    -->
+    <string name="menu_album_creation_general">Información general</string>
+    <string name="menu_album_creation_shared">Información de compartición</string>
+    <!--    Tabs titles    -->
+    <string name="tab_images">Imágenes</string>
+    <string name="tab_albums">Álbumes</string>
+    <string name="tab_general">General</string>
+    <string name="tab_shared">Compartido</string>
+    <string name="tab_participants">Participantes</string>
+    <!--    Main Activity    -->
+    <string name="fab_main">Botón de acción flotante</string>
+    <string name="read_only">Texto de soporte de solo lectura</string>
+    <string name="not_enabled">No habilitado</string>
+    <string name="required">*obligatorio</string>
+    <string name="err_empty_field">Este campo es obligatorio</string>
+    <string name="err_invalid_date">No es una fecha válida</string>
+    <string name="err_invalid_later_date">Debe ser posterior a la fecha de inicio</string>
+    <string name="toast_successful_logout">Has cerrado sesión de tu cuenta</string>
+    <!--    Menus    -->
+    <string name="action_account">Cuenta</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_chat">Chat</string>
+    <string name="action_info">Información</string>
+    <string name="action_order">Ordenar por…</string>
+    <string name="action_order_album">Álbum</string>
+    <string name="action_order_date">Fecha</string>
+    <string name="action_order_likes">Me gusta</string>
+    <string name="action_order_custom">Personalizado</string>
+    <string name="action_order_creation_date">Fecha de creación</string>
+    <string name="action_order_name">Nombre</string>
+    <string name="action_order_last_update">Última actualización</string>
+    <string name="action_order_ascending">Ascendente</string>
+    <string name="action_order_descending">Descendente</string>
+    <string name="action_filter">Filtrar por…</string>
+    <string name="action_filter_all">Todas las imágenes</string>
+    <string name="action_filter_mine">Mis imágenes</string>
+    <string name="action_most_liked">Más valoradas</string>
+    <string name="action_choose_one">Seleccione uno</string>
+    <string name="action_promote_to_member">Promover a miembro</string>
+    <string name="action_demote_to_guest">Degradar a invitado</string>
+    <string name="action_eliminate_participant">Eliminar participante</string>
+    <string name="action_delete_image">Eliminar imagen</string>
+    <!--    Login and Register    -->
+    <string name="label_signUp">Registrarse</string>
+    <string name="label_login">Iniciar sesión</string>
+    <string name="label_email">Correo electrónico</string>
+    <string name="label_password">Contraseña</string>
+    <string name="label_password_repeat">Repetir contraseña</string>
+    <string name="placeholder_email">Correo electrónico*</string>
+    <string name="placeholder_password">Contraseña*</string>
+    <string name="placeholder_password_repeat">Repetir contraseña*</string>
+    <string name="btn_signUp">Registrarse</string>
+    <string name="btn_logIn">Iniciar sesión</string>
+    <string name="label_other_methods">o inicia sesión con</string>
+    <string name="btn_forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="progress_login_btn_desc">Intentando iniciar sesión en tu cuenta</string>
+    <string name="progress_signup_btn_desc">Intentando crear una cuenta</string>
+    <string name="google_login_btn_desc">Iniciar sesión con tu cuenta de Google</string>
+    <string name="btn_already_have_account">¿Ya tienes una cuenta? Inicia sesión</string>
+    <string name="btn_do_not_have_account">¿No tienes una cuenta? Regístrate</string>
+    <string name="toast_successful_login">Has iniciado sesión en tu cuenta</string>
+    <string name="toast_successful_signup">Tu cuenta ha sido creada exitosamente</string>
+    <string name="help_text_password">Las contraseñas deben tener al menos 1 dígito, 1 letra minúscula y 1 letra mayúscula</string>
+    <string name="err_not_an_email">No es un correo electrónico válido</string>
+    <string name="err_password_too_short">Las contraseñas deben tener al menos %1$d caracteres</string>
+    <string name="err_invalid_password">Se requieren 1 dígito, 1 letra minúscula y 1 letra mayúscula</string>
+    <string name="err_passwords_dont_match">Las contraseñas no coinciden</string>
+    <!--    Home    -->
+    <string name="label_no_images">Aún no hay imágenes. ¡Agrega una a un álbum!</string>
+    <string name="label_no_albums">Aún no hay álbumes. ¡Crea uno!</string>
+    <!--    Explore    -->
+    <string name="searchbar_hint">Buscar álbumes</string>
+    <!--    User Profile    -->
+    <string name="label_user_name">Nombre de usuario</string>
+    <string name="label_user_email">Correo del usuario</string>
+    <string name="btn_edit">Editar datos</string>
+    <string name="btn_save">Guardar datos</string>
+    <string name="btn_logOut">Cerrar sesión</string>
+    <string name="btn_exit">Salir de la app</string>
+    <string name="err_name_too_long">Este nombre es demasiado largo</string>
+    <string name="profile_image_desc">Foto de perfil del usuario</string>
+    <string name="edit_profile_image_desc">Editar foto de perfil del usuario</string>
+    <!--    Album Creation    -->
+    <string name="album_name">Nombre del álbum</string>
+    <string name="label_date_selection">Seleccionar fecha para el álbum</string>
+    <string name="date_selection_none">Ninguna</string>
+    <string name="date_selection_single">Única</string>
+    <string name="date_selection_range">Rango</string>
+    <string name="date_format">DD/MM/YYYY</string>
+    <string name="album_date_start">Fecha de inicio</string>
+    <string name="album_date_end">Fecha de fin</string>
+    <string name="switch_location_selection">Seleccionar ubicación para el álbum</string>
+    <string name="switch_shared_album">Álbum Compartido</string>
+    <string name="btn_continue">Continuar</string>
+    <string name="btn_create">Crear</string>
+    <string name="btn_add">Agregar</string>
+    <string name="switch_invitation_link">Enlace de invitación</string>
+    <string name="label_permission_settings">Configuración de permisos</string>
+    <string name="label_permission_members">Miembros</string>
+    <string name="label_permission_images">Imágenes</string>
+    <string name="label_permission_guests">Invitados</string>
+    <string name="label_permission_chat">Chat</string>
+    <!--    Album    -->
+    <string name="label_no_album_images">Aún no hay imágenes en este álbum.</string>
+    <!--    Album Information General   -->
+    <string name="label_name">Nombre</string>
+    <string name="label_cover">Portada del álbum</string>
+    <string name="label_use_last_image">Usar última imagen</string>
+    <string name="cover_custom_btn_desc">Establecer una portada personalizada</string>
+    <string name="label_date">Fecha del álbum</string>
+    <string name="btn_join_album">Unirse al álbum</string>
+    <string name="progress_join_album_btn_desc">Intentando unirse al álbum</string>
+    <string name="info_album_joined">¡Te has unido al álbum!</string>
+    <string name="error_album_not_joined">Ocurrió un error al intentar unirse</string>
+    <string name="btn_delete_album">Eliminar álbum</string>
+    <string name="warn_delete_album_title">¿Eliminar álbum?</string>
+    <string name="warn_delete_album_message">Esto eliminará permanentemente el álbum, incluyendo todas sus fotos, participantes y mensajes.</string>
+    <string name="btn_drop_album">Abandonar álbum</string>
+    <string name="warn_drop_album_title">¿Abandonar álbum?</string>
+    <string name="warn_drop_album_message">Perderás acceso a todas sus fotos y mensajes.</string>
+    <string name="warn_eliminated_from_album_title">Acceso denegado</string>
+    <string name="warn_eliminated_from_album_message">O fuiste eliminado de este álbum o el álbum fue eliminado.</string>
+    <string name="bt_exit">Salir</string>
+    <string name="label_date_disabled">Fecha no habilitada</string>
+    <string name="label_location">Ubicación del álbum</string>
+    <string name="label_location_disabled">Ubicación no habilitada</string>
+    <string name="fab_edit_desc">Editar la información mostrada</string>
+    <string name="fab_save_desc">Guardar la información modificada</string>
+    <!--    Album Information Shared   -->
+    <string name="label_album_visibility">Visibilidad</string>
+    <string name="label_album_visibility_private_explanation">Solo tú puedes ver las imágenes del álbum</string>
+    <string name="label_album_visibility_shared_explanation">Puedes elegir con quién compartes tu álbum</string>
+    <string name="label_album_visibility_public_explanation">Cualquiera puede unirse a tu álbum como invitado y ver las imágenes</string>
+    <string name="album_visibility_private">Privado</string>
+    <string name="album_visibility_shared">Compartido</string>
+    <string name="album_visibility_public">Público</string>
+    <string name="images_permission_see">Solo ver</string>
+    <string name="images_permission_vote">Ver y valorar</string>
+    <string name="images_permission_vote_add">Ver, valorar y añadir</string>
+    <string name="chat_permission_hidden">Oculto</string>
+    <string name="chat_permission_see">Solo ver</string>
+    <string name="chat_permission_see_comment">Ver y comentar</string>
+    <!--    Album Information Participants   -->
+    <string name="warn_disable_shared_title">¿Hacer el álbum privado?</string>
+    <string name="warn_disable_shared_message">Esto eliminará permanentemente todos los participantes del álbum y sus fotos compartidas.</string>
+    <string name="btn_accept">Aceptar</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="label_participants">Participantes</string>
+    <string name="add_participant">Correo del participante</string>
+    <string name="label_enable_shared_to_add_participant">Debes habilitar "Álbum compartido" para añadir participantes</string>
+    <string name="participant_profile_image_desc">Foto de perfil del participante</string>
+    <string name="progress_add_participant_btn_desc">Intentando añadir un participante al álbum</string>
+    <string name="err_participant_already_in_album">El participante ya está en el álbum</string>
+    <string name="participant_role_owner">Propietario</string>
+    <string name="participant_role_guest">Invitado</string>
+    <string name="participant_role_member">Miembro</string>
+    <string name="participant_role_none">Ninguno</string>
+    <!--    Image Display    -->
+    <string name="author_profile_image_desc">Foto de perfil del autor de la imagen</string>
+    <string name="upload_image_desc">Imagen subida al álbum</string>
+    <string name="label_by">Por</string>
+    <string name="more_options_btn_desc">Mostrar más opciones de la imagen</string>
+    <string name="like_switch_btn_desc">Cambiar tu estado de me gusta/no me gusta en esta imagen</string>
+    <string name="label_likes">Me gusta</string>
+    <string name="label_upload_date">Subida el</string>
+    <string name="warn_like_only_enabled_in_albums">El me gusta solo está disponible dentro de los álbumes</string>
+    <string name="warn_delete_image_title">¿Eliminar imagen?</string>
+    <string name="warn_delete_image_message">Esta acción eliminará permanentemente esta imagen del álbum.</string>
+    <string name="info_image_deleted">Imagen eliminada</string>
+    <string name="error_deleting_image">Error al eliminar la imagen</string>
+    <!--    Chat    -->
+    <string name="fab_send_desc">Enviar el mensaje escrito</string>
+    <string name="hint_write_message">Escribe un mensaje</string>
+    <string name="label_not_permission_to_comment">No tienes permiso para comentar</string>
+    <string name="warn_chat_see_permission_revoked_title">Permiso denegado</string>
+    <string name="warn_chat_see_permission_revoked_message">Los permisos han cambiado y ya no puedes acceder al chat.</string>
+    <!--    Add Image    -->
+    <string name="btn_select_image">Seleccionar imagen</string>
+    <string name="btn_upload_image">Subir imagen</string>
+    <string name="uploaded_image_desc">Imagen seleccionada para subir al álbum</string>
+    <string name="warn_image_add_permission_revoked_title">Permiso denegado</string>
+    <string name="warn_image_add_permission_revoked_message">Los permisos han cambiado y ya no puedes subir imágenes.</string>
+    <string name="error_gallery_permission_denied">Permiso denegado para acceder a la galería</string>
+    <string name="error_camera_permission_denied">Permiso denegado para acceder a la cámara</string>
+    <string name="error_loading_image">Error al cargar la imagen</string>
+    <string name="error_uploading_image">Error al subir la imagen</string>
+    <string name="info_success_uploading_image">Imagen subida con éxito</string>
+    <string name="select_source_title">Seleccionar fuente</string>
+    <string name="select_source_camera">Cámara</string>
+    <string name="select_source_gallery">Galería</string>
+</resources>

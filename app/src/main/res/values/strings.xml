@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">ShareIt</string>
+    <string name="app_name" translatable="false">ShareIt</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
     <!--    AppBar titles    -->
@@ -58,7 +58,6 @@
     <string name="action_eliminate_participant">Eliminate participant</string>
     <string name="action_delete_image">Delete image</string>
     <!--    Login and Register    -->
-    <string name="label_welcome">Welcome to</string> <!--  TODO: Decide Op1: <string name="label_welcome">Welcome</string> -->
     <string name="label_signUp">Register</string>
     <string name="label_login">Login</string>
     <string name="label_email">Email</string>
@@ -69,14 +68,11 @@
     <string name="placeholder_password_repeat">Repeat password*</string>
     <string name="btn_signUp">Sign Up</string>
     <string name="btn_logIn">Log In</string>
-    <string name="label_remember">Remember me</string>
     <string name="label_other_methods">or Log in with</string>
     <string name="btn_forgot_password">Forgot password?</string>
     <string name="progress_login_btn_desc">Trying to log in to your account</string>
     <string name="progress_signup_btn_desc">Trying to create an account</string>
     <string name="google_login_btn_desc">Log in using your Google account</string>
-    <string name="facebook_login_btn_desc">Log in using your Facebook account</string>
-    <string name="twitter_login_btn_desc">Log in using your Twitter account</string>
     <string name="btn_already_have_account">Already have an account? Log in</string>
     <string name="btn_do_not_have_account">Don\'t have an account? Sign up</string>
     <string name="toast_successful_login">You have been logged in to your account</string>
@@ -155,12 +151,12 @@
     <string name="album_visibility_private">Private</string>
     <string name="album_visibility_shared">Shared</string>
     <string name="album_visibility_public">Public</string>
-    <string name="images_permission_see">Solo ver</string>
-    <string name="images_permission_vote">Ver y valorar</string>
-    <string name="images_permission_vote_add">Ver, valorar y añadir</string>
-    <string name="chat_permission_hidden">Oculto</string>
-    <string name="chat_permission_see">Solo ver</string>
-    <string name="chat_permission_see_comment">Ver y comentar</string>
+    <string name="images_permission_see">Just see</string>
+    <string name="images_permission_vote">See and like</string>
+    <string name="images_permission_vote_add">See, like and add</string>
+    <string name="chat_permission_hidden">Hidden</string>
+    <string name="chat_permission_see">Just see</string>
+    <string name="chat_permission_see_comment">See and comment</string>
     <!--    Album Information Participants   -->
     <string name="warn_disable_shared_title">Make album private?</string>
     <string name="warn_disable_shared_message">This will permanently delete all participants from the album and their shared photos.</string>
