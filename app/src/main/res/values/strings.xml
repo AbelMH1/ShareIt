@@ -185,7 +185,7 @@
     <string name="label_upload_date">Uploaded on</string>
     <string name="warn_like_only_enabled_in_albums">Like is only available inside albums</string>
     <string name="warn_delete_image_title">¿Delete image?</string>
-    <string name="warn_delete_image_message">This action will delete permanently this image from the album.</string>
+    <string name="warn_delete_image_message">This action will permanently delete this image from the album.</string>
     <string name="info_image_deleted">Image deleted</string>
     <string name="error_deleting_image">Error deleting the image</string>
     <!--    Chat    -->

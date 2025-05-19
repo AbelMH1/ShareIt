@@ -20,6 +20,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.Album.Visibility.PUBLIC
+import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant
 import uniovi.eii.shareit.model.Participant.Role
 import uniovi.eii.shareit.model.User
@@ -88,7 +89,16 @@ object FirestoreAlbumService {
         val docRef = db.collection("albums").document(albumId)
         deleteFullCollection(docRef, "chat")
         deleteFullCollection(docRef, "participants", currentUserId)
-
+        docRef.collection("images").get()
+            .addOnSuccessListener {
+                for (doc in it) {
+                    val image = doc.toObject(Image::class.java)
+                    if(image.authorId != currentUserId) {
+                        doc.reference.delete()
+                            .addOnFailureListener { e -> Log.w(TAG, "Error deleting image ${doc.id}", e) }
+                    }
+                }
+            }
     }
 
     private fun deleteFullCollection(
