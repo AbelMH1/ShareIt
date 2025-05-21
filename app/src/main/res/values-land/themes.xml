@@ -1,0 +1,9 @@
+<resources>
+    <style name="shape_appearance_login_card">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">70dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">70dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+</resources>
