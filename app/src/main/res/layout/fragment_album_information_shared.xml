@@ -69,11 +69,11 @@
             <TextView
                 android:id="@+id/labelAlbumVisibilityExplanation"
                 style="?attr/textAppearanceLabelLarge"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:labelFor="@+id/switchSharedAlbum"
                 android:drawablePadding="@dimen/textview_drawable_padding"
+                android:gravity="center_vertical"
+                android:labelFor="@+id/switchSharedAlbum"
                 android:text="@string/label_album_visibility_public_explanation"
                 app:drawableStartCompat="@drawable/ic_menu_info_24" />
 
@@ -109,6 +109,7 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
                     android:enabled="false"
                     android:hint="@string/label_permission_images"
                     android:labelFor="@id/membersImagesPermissionEditText">
@@ -128,6 +129,7 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
                     android:enabled="false"
                     android:hint="@string/label_permission_chat"
                     android:labelFor="@id/membersChatPermissionEditText">
@@ -142,13 +144,12 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-
                 <TextView
                     android:id="@+id/labelPermissionGuests"
                     style="?attr/textAppearanceTitleMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginTop="@dimen/divider_margin"
                     android:text="@string/label_permission_guests" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -156,6 +157,7 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
                     android:enabled="false"
                     android:hint="@string/label_permission_images"
                     android:labelFor="@id/guestsImagesPermissionEditText">
@@ -175,6 +177,7 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
                     android:enabled="false"
                     android:hint="@string/label_permission_chat"
                     android:labelFor="@id/guestsChatPermissionEditText">
@@ -214,13 +217,15 @@
                         style="?attr/materialSwitchStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:checked="false"
+                        android:enabled="false" />
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/invitationLinkLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:endIconDrawable="@drawable/ic_copy_24"
                     app:endIconMode="custom"
                     app:helperText="@string/read_only"

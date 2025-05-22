@@ -271,7 +271,8 @@
                     android:id="@+id/switchLocationSelection"
                     style="?attr/materialSwitchStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:enabled="false" />
             </LinearLayout>
 
             <TextView
@@ -282,10 +283,10 @@
                 android:layout_marginTop="@dimen/text_margin"
                 android:text="@string/label_location_disabled" />
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <!--            <com.google.android.gms.maps.MapView-->
+            <!--                android:id="@+id/mapView"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content" />-->
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"

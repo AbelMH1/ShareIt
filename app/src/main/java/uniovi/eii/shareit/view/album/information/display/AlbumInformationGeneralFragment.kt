@@ -117,19 +117,20 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) toggleDatesEditTexts(checkedId)
         }
-        binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
-            when (isChecked) {
-                true -> {
-                    binding.labelLocationNotEnabled.visibility = View.GONE
-                    binding.mapView.visibility = View.VISIBLE
-                }
-
-                false -> {
-                    binding.labelLocationNotEnabled.visibility = View.VISIBLE
-                    binding.mapView.visibility = View.GONE
-                }
-            }
-        }
+//        TODO: Borrar
+//        binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
+//            when (isChecked) {
+//                true -> {
+//                    binding.labelLocationNotEnabled.visibility = View.GONE
+////                    binding.mapView.visibility = View.VISIBLE
+//                }
+//
+//                false -> {
+//                    binding.labelLocationNotEnabled.visibility = View.VISIBLE
+////                    binding.mapView.visibility = View.GONE
+//                }
+//            }
+//        }
         if (currentUserOwner) {
             binding.dropAlbumButton.setOnClickListener(null)
             binding.deleteAlbumButton.setOnClickListener {
@@ -315,9 +316,9 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.switchCoverLastImage.isChecked = album.useLastImageAsCover
         requireContext().loadImageIntoView(album.coverImage, album.lastUpdate.time, binding.albumCover)
         binding.switchLocationSelection.isChecked = album.location != null
-        if (album.location != null) {
-            // TODO: Establecer ubicación en el mapa
-        }
+//        if (album.location != null) {
+//            // TODO: Establecer ubicación en el mapa
+//        }
         if (album.endDate != null && album.startDate != null) {
             binding.dateStartEditText.setText(album.startDate!!.toFormattedString())
             binding.dateEndEditText.setText(album.endDate!!.toFormattedString())

@@ -44,17 +44,18 @@ class AlbumCreationFragment : Fragment() {
         }
         binding.toggleNone.performClick()
 
-        binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
-            when (isChecked) {
-                true -> {
-                    binding.mapView.visibility = View.VISIBLE
-                }
-
-                false -> {
-                    binding.mapView.visibility = View.GONE
-                }
-            }
-        }
+//        TODO: Borrar
+//        binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
+//            when (isChecked) {
+//                true -> {
+//                    binding.mapView.visibility = View.VISIBLE
+//                }
+//
+//                false -> {
+//                    binding.mapView.visibility = View.GONE
+//                }
+//            }
+//        }
 
         binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
@@ -106,7 +107,7 @@ class AlbumCreationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+        val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
         toolbar.subtitle = null
         _binding = null
     }
@@ -114,7 +115,7 @@ class AlbumCreationFragment : Fragment() {
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+                val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
                 toolbar.isTitleCentered = false
                 toolbar.subtitle = resources.getString(R.string.menu_album_creation_general)
             }

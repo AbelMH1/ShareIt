@@ -9,7 +9,7 @@
     <dimen name="text_margin">5dp</dimen>
     <dimen name="images_margin">1dp</dimen>
     <dimen name="images_padding">10dp</dimen>
-    <dimen name="divider_margin">10dp</dimen>
+    <dimen name="divider_margin">15dp</dimen>
     <dimen name="profile_image_size">40dp</dimen>
     <dimen name="fab_send_message_margin">16dp</dimen>
     <item name="message_maxLines" type="integer">4</item>
