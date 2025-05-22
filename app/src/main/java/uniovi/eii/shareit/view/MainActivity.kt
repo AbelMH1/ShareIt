@@ -54,11 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navController = findNavController(R.id.nav_host_fragment_content_main)
 
         destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
-            binding.appBarMain.toolbar.isVisible = arguments?.getBoolean("ShowAppBar", true) ?: true // TODO: Decide Op2:
-            // TODO: Decide Op1:
-//            if (arguments?.getBoolean("ShowAppBar", true) == true)
-//                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//            else supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            binding.appBarMain.toolbar.isVisible = arguments?.getBoolean("ShowAppBar", true) ?: true
+
             Log.d("BACKSTACK", controller.currentBackStack.value.map { stackEntry -> stackEntry.destination.displayName }.toString())
         }
         // Passing each menu ID as a set of Ids because each
@@ -77,8 +74,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mainViewModel.loggedUser.observe(this) {
             if (it != null) profileViewModel.registerUserDataListener(it.uid)
             else {
-                navController.navigate(R.id.log_out_to_nav_login)
-                profileViewModel.unregisterUserDataListener()
+                try {
+                    navController.getBackStackEntry(R.id.nav_login)
+                    Log.d("NAV", "nav_login already in backstack")
+                } catch (e: IllegalArgumentException) {
+                    Log.d("NAV", "No backstack entry for nav_login")
+                    navController.navigate(R.id.log_out_to_nav_login)
+                } finally {
+                    profileViewModel.unregisterUserDataListener()
+                }
             }
         }
 
@@ -105,6 +109,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 mainViewModel.logOut()
                 Toast.makeText(this, getString(R.string.toast_successful_logout), Toast.LENGTH_SHORT).show()
             }
+
             else -> successNavigation = NavigationUI.onNavDestinationSelected(item, navController)
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -142,7 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val header = binding.navView.getHeaderView(0)
         val imgView: ImageView = header.findViewById(R.id.imgProfile)
         val nameTv: TextView = header.findViewById(R.id.displayName)
-        val emailTv : TextView = header.findViewById(R.id.email)
+        val emailTv: TextView = header.findViewById(R.id.email)
         nameTv.text = user.name
         emailTv.text = user.email
         baseContext.loadProfileImageIntoView(
@@ -152,7 +157,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 
-    class ErrorCleaningTextWatcher (private val etLayout: TextInputLayout) : TextWatcher {
+    class ErrorCleaningTextWatcher(private val etLayout: TextInputLayout) : TextWatcher {
         override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
         override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
         override fun afterTextChanged(editable: Editable) {
