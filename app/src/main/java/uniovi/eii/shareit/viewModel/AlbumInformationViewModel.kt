@@ -68,9 +68,16 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     fun saveGeneralData(
-        name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
+        name: String,
+        useLastImageAsCover: Boolean,
+        imageUri: Uri?,
+        startDate: String,
+        endDate: String,
+        toggleDateSelected: Int,
+        tags: List<Int>,
+        location: Boolean
     ): GeneralValidationResult {
-        val dataValidation = checkValidData(name, useLastImageAsCover, imageUri, startDate, endDate, toggleDateSelected, location)
+        val dataValidation = checkValidData(name, useLastImageAsCover, imageUri, startDate, endDate, toggleDateSelected, tags, location)
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
                 FirestoreAlbumService.updateCurrentAlbumData(album.albumId, dataValidation.dataToUpdate)
@@ -174,7 +181,7 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     private fun checkValidData(
-        name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, location: Boolean
+        name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, tags: List<Int>, location: Boolean
     ): GeneralValidationResult {
         // Todo: location (LatLng(0.0, 0.0))
         val dataToUpdate: HashMap<String, Any?> = HashMap()
@@ -189,6 +196,10 @@ class AlbumInformationViewModel : ViewModel() {
         }
         if (imageUri != null && !useLastImageAsCover) {
             dataToUpdate["coverImage"] = imageUri
+        }
+        val enumTags = tags.map { Album.Tags.entries[it] }
+        if (album.tags != enumTags) {
+            dataToUpdate["tags"] = enumTags
         }
         if (toggleDateSelected == R.id.toggleNone) {
             if (album.startDate != null) dataToUpdate["startDate"] = null
@@ -278,7 +289,13 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     fun saveUnsavedData(
-        name: String, useLastImageAsCover: Boolean, startDate: String?, endDate: String?, toggleDateSelected: Int, location: Boolean
+        name: String,
+        useLastImageAsCover: Boolean,
+        startDate: String?,
+        endDate: String?,
+        toggleDateSelected: Int,
+        tags: MutableList<Album.Tags>,
+        location: Boolean
     ) {
         Log.d("saveUnsavedData", "saveUnsavedData")
         unsavedData = Album(
@@ -287,7 +304,8 @@ class AlbumInformationViewModel : ViewModel() {
             useLastImageAsCover = useLastImageAsCover,
             startDate = if (toggleDateSelected != R.id.toggleNone) startDate?.toDate() else null,
             endDate = if (toggleDateSelected == R.id.toggleRange) endDate?.toDate() else null,
-            location = if (location) album.location else null
+            location = if (location) album.location else null,
+            tags = tags
         )
     }
 

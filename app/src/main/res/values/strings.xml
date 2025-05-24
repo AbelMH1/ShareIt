@@ -143,6 +143,17 @@
     <string name="label_location_disabled">Location not enabled</string>
     <string name="fab_edit_desc">Edit the information displayed</string>
     <string name="fab_save_desc">Save the modified information</string>
+    <string name="label_tags">Tags</string>
+    <string name="tags_party">Party</string>
+    <string name="tags_humor">Humor</string>
+    <string name="tags_travel">Travel</string>
+    <string name="tags_nature">Nature</string>
+    <string name="tags_events">Events</string>
+    <string name="tags_food">Food</string>
+    <string name="tags_animals">Animals</string>
+    <string name="tags_sports">Sports</string>
+    <string name="tags_culture">Culture</string>
+    <string name="tags_people">People</string>
     <!--    Album Information Shared   -->
     <string name="label_album_visibility">Visibility</string>
     <string name="label_album_visibility_private_explanation">Only you can see the album\'s images</string>

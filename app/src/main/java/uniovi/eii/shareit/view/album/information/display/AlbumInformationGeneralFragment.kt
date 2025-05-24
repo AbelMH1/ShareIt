@@ -11,11 +11,13 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.util.Pair
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -248,15 +250,15 @@ class AlbumInformationGeneralFragment : Fragment() {
     }
 
     private fun enableEdition(enable: Boolean) {
-        val editView = if (enable) View.VISIBLE else View.GONE
-        val displayView = if (enable) View.GONE else View.VISIBLE
-        binding.displayNameLayout.visibility = displayView
-        binding.editNameLayout.visibility = editView
-        binding.dateToggleButton.visibility = editView
-        binding.switchLocationSelection.visibility = editView
+        binding.displayNameLayout.isVisible = !enable
+        binding.editNameLayout.isVisible = enable
+        binding.dateToggleButton.isVisible = enable
+        binding.switchLocationSelection.isVisible = enable
         binding.dateStartLayout.isEnabled = enable
         binding.dateEndLayout.isEnabled = enable
-        binding.coverSettingsButton.visibility = editView
+        binding.coverSettingsButton.isVisible = enable
+        binding.displayChipGroup.isVisible = !enable
+        binding.chipGroup.isVisible = enable
         if (enable) {
             binding.dateStartLayout.setEndIconDrawable(R.drawable.ic_calendar_24)
             binding.dateEndLayout.setEndIconDrawable(R.drawable.ic_calendar_24)
@@ -272,6 +274,11 @@ class AlbumInformationGeneralFragment : Fragment() {
 
     private fun saveData() {
         enableEdition(false)
+        val tags = binding.chipGroup.checkedChipIds.map { id ->
+            val tag = binding.chipGroup.findViewById<Chip>(id)
+            val tagIndex = binding.chipGroup.indexOfChild(tag)
+            tagIndex
+        }
         val dataValidationResult = viewModel.saveGeneralData(
             binding.nameEditText.text?.toString() ?: "",
             binding.switchCoverLastImage.isChecked,
@@ -279,6 +286,7 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.dateStartEditText.text?.toString() ?: "",
             binding.dateEndEditText.text?.toString() ?: "",
             binding.dateToggleButton.checkedButtonId,
+            tags,
             binding.switchLocationSelection.isChecked
         )
         if (dataValidationResult.isDataValid) {
@@ -319,6 +327,18 @@ class AlbumInformationGeneralFragment : Fragment() {
 //        if (album.location != null) {
 //            // TODO: Establecer ubicación en el mapa
 //        }
+        binding.displayChipGroup.removeAllViews()
+        binding.chipGroup.checkedChipIds.clear()
+        val tagsNames = resources.getStringArray(R.array.Tags)
+        val chips = binding.chipGroup.children
+        album.tags.forEach { tag ->
+            binding.displayChipGroup.addView(
+                Chip(requireContext()).apply {
+                    text = tagsNames[tag.ordinal]
+                }
+            )
+            (chips.elementAt(tag.ordinal) as Chip).isChecked = true
+        }
         if (album.endDate != null && album.startDate != null) {
             binding.dateStartEditText.setText(album.startDate!!.toFormattedString())
             binding.dateEndEditText.setText(album.endDate!!.toFormattedString())
@@ -398,12 +418,19 @@ class AlbumInformationGeneralFragment : Fragment() {
     }
 
     private fun saveUnsavedData() {
+        val tags = mutableListOf<Album.Tags>()
+        binding.chipGroup.children.forEachIndexed { index, view ->
+            if (view is Chip && view.isChecked) {
+                tags.add(Album.Tags.entries[index])
+            }
+        }
         viewModel.saveUnsavedData(
             binding.nameEditText.text?.toString() ?: "",
             binding.switchCoverLastImage.isChecked,
             binding.dateStartEditText.text?.toString(),
             binding.dateEndEditText.text?.toString(),
             binding.dateToggleButton.checkedButtonId,
+            tags,
             binding.switchLocationSelection.isChecked
         )
     }

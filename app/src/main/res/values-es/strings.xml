@@ -140,6 +140,17 @@
     <string name="label_location_disabled">Ubicación no habilitada</string>
     <string name="fab_edit_desc">Editar la información mostrada</string>
     <string name="fab_save_desc">Guardar la información modificada</string>
+    <string name="label_tags">Etiquetas</string>
+    <string name="tags_food">Comidas</string>
+    <string name="tags_animals">Animales</string>
+    <string name="tags_sports">Deportes</string>
+    <string name="tags_culture">Cultura</string>
+    <string name="tags_people">Personas</string>
+    <string name="tags_party">Fiesta</string>
+    <string name="tags_humor">Humor</string>
+    <string name="tags_nature">Naturaleza</string>
+    <string name="tags_events">Eventos</string>
+    <string name="tags_travel">Viajes</string>
     <!--    Album Information Shared   -->
     <string name="label_album_visibility">Visibilidad</string>
     <string name="label_album_visibility_private_explanation">Solo tú puedes ver las imágenes del álbum</string>

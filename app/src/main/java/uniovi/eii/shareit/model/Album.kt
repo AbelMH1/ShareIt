@@ -21,7 +21,8 @@ data class Album(
     var guestsImagesPermission: ImagePermission? = null,
     var guestsChatPermission: ChatPermission? = null,
     var invitationLinkEnabled: Boolean = false,
-    var invitationLink: String? = null
+    var invitationLink: String? = null,
+    var tags: List<Tags> = emptyList(),
 ) {
     enum class ChatPermission {
         HIDDEN,
@@ -39,6 +40,19 @@ data class Album(
         PRIVATE,
         SHARED,
         PUBLIC,
+    }
+
+    enum class Tags {
+        PARTY,
+        HUMOR,
+        TRAVEL,
+        NATURE,
+        EVENTS,
+        FOOD,
+        ANIMALS,
+        SPORTS,
+        CULTURE,
+        PEOPLE,
     }
 
     fun toUserAlbum(): UserAlbum {
