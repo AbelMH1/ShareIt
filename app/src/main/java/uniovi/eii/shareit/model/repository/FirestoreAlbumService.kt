@@ -466,6 +466,7 @@ object FirestoreAlbumService {
      */
     suspend fun getPublicAlbumsSearch(
         queryFilter: String,
+        currentFilterTags: List<Album.Tags>,
         lastAlbumLoaded: DocumentSnapshot?,
         onNewAlbumBatch: (List<UserAlbum>) -> Unit,
         onExistMoreAlbums: (Boolean) -> Unit,
@@ -480,17 +481,25 @@ object FirestoreAlbumService {
         try {
             var query = db.collection("albums")
                 .whereEqualTo("visibility", PUBLIC)
-                .where(Filter.or(
-                    Filter.and(
-                        Filter.greaterThanOrEqualTo("name", queryFilter),
-                        Filter.lessThanOrEqualTo("name", queryFilter + "\uf8ff")
-                    ),
-                    Filter.and(
-                        Filter.greaterThanOrEqualTo("creatorName", queryFilter),
-                        Filter.lessThanOrEqualTo("creatorName", queryFilter + "\uf8ff")
+            if (queryFilter.isNotBlank()) {
+                query = query
+                    .where(
+                        Filter.or(
+                            Filter.and(
+                                Filter.greaterThanOrEqualTo("name", queryFilter),
+                                Filter.lessThanOrEqualTo("name", queryFilter + "\uf8ff")
+                            ),
+                            Filter.and(
+                                Filter.greaterThanOrEqualTo("creatorName", queryFilter),
+                                Filter.lessThanOrEqualTo("creatorName", queryFilter + "\uf8ff")
+                            )
+                        )
                     )
-                ))
-                .limit(PAGE_SIZE)
+            }
+            if (currentFilterTags.isNotEmpty()) {
+                query = query.whereArrayContainsAny("tags", currentFilterTags)
+            }
+            query = query.limit(PAGE_SIZE)
             if (lastAlbumLoaded != null) {
                 query = query.startAfter(lastAlbumLoaded)
             }

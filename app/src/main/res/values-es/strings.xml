@@ -91,6 +91,7 @@
     <string name="toast_info_images_filter">Filtrando imágenes: %1$s</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Buscar álbumes</string>
+    <string name="toast_no_more_albums">No hay más álbumes disponibles</string>
     <!--    User Profile    -->
     <string name="label_user_name">Nombre de usuario</string>
     <string name="label_user_email">Correo del usuario</string>

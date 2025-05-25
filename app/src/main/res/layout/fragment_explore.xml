@@ -12,6 +12,95 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <HorizontalScrollView
+            android:id="@+id/chipsScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:paddingHorizontal="@dimen/tags_horizontal_padding"
+            android:paddingVertical="@dimen/tags_vertical_padding"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_party"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_party" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_humor"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_humor" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_travel"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_travel" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_nature"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_nature" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_events"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_events" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_food"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_food" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_animals"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_animals" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_sports"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_sports" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_culture"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_culture" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tags_people"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tags_people" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/albumRecyclerView"
             android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import uniovi.eii.shareit.model.Album
 import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.model.repository.FirestoreAlbumService
 
@@ -30,6 +31,7 @@ class ExploreViewModel : ViewModel() {
     private var _lastAlbumSearchRetrieved: DocumentSnapshot? = null
     private var _albumSearchList: List<UserAlbum> = emptyList()
     private var _lastQuery: String = ""
+    private var _currentFilterTags = emptyList<Album.Tags>()
 
     fun loadMoreAlbums() {
         if (_searchMode) {
@@ -78,6 +80,7 @@ class ExploreViewModel : ViewModel() {
         if (!_searchMode) return
         _searchMode = false
         _lastQuery = ""
+        _currentFilterTags = emptyList()
         _displayAlbumList.value = _albumList
         if (_albumList.size >= FirestoreAlbumService.PAGE_SIZE)
             _isSearchMoreEnabled.value = true
@@ -95,13 +98,18 @@ class ExploreViewModel : ViewModel() {
         _displayAlbumList.postValue(newAlbumList)
     }
 
-    fun loadInitialSearchData(query: String) {
-        if (query == _lastQuery || query.isBlank()) return
+    fun loadInitialSearchData(query: String = _lastQuery, filterTags: List<Album.Tags> = _currentFilterTags) {
+        if (query == _lastQuery && filterTags == _currentFilterTags) return
+        if (query.isBlank() && filterTags.isEmpty()) {
+            restoreExploreList()
+            return
+        }
         Log.d(TAG, "loadInitialSearchData: $query")
         _isSearchMoreEnabled.value = true
         _searchMode = true
         _lastAlbumSearchRetrieved = null
         _lastQuery = query
+        _currentFilterTags = filterTags
         _albumSearchList = emptyList()
         loadMoreSearchAlbums()
     }
@@ -110,6 +118,7 @@ class ExploreViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             FirestoreAlbumService.getPublicAlbumsSearch(
                 _lastQuery,
+                _currentFilterTags,
                 _lastAlbumSearchRetrieved,
                 ::addNewAlbumSearchBatch,
                 ::updateAreMoreAlbumsAvailable,

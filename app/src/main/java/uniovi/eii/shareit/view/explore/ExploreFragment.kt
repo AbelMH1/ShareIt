@@ -21,6 +21,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentExploreBinding
 import uniovi.eii.shareit.model.UserAlbum
+import uniovi.eii.shareit.utils.IdToTagMap
 import uniovi.eii.shareit.view.adapter.AlbumListAdapter
 import uniovi.eii.shareit.viewModel.ExploreViewModel
 
@@ -79,10 +80,16 @@ class ExploreFragment : Fragment() {
                 binding.progressBar.isVisible = true
                 binding.exploreNestedScrollView.setOnScrollChangeListener(onScrollChangeListener)
             } else{
-                Toast.makeText(context, "No more albums available", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, resources.getString(R.string.toast_no_more_albums), Toast.LENGTH_SHORT).show()
                 binding.exploreNestedScrollView.setOnScrollChangeListener(null as View.OnScrollChangeListener?)
                 binding.progressBar.isVisible = false
             }
+        }
+
+        binding.chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            val selectedTags = checkedIds.mapNotNull { IdToTagMap[it] }
+            Log.d("ChipGroup", "Selected Tags: $selectedTags")
+            viewModel.loadInitialSearchData(filterTags=selectedTags)
         }
 
         return binding.root
@@ -138,10 +145,13 @@ class ExploreFragment : Fragment() {
                 searchItem.setOnActionExpandListener(object :
                     MenuItem.OnActionExpandListener {
                     override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
+                        binding.chipsScrollView.isVisible = true
                         return true
                     }
                     override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
                         viewModel.restoreExploreList()
+                        binding.chipGroup.clearCheck()
+                        binding.chipsScrollView.isVisible = false
                         return true
                     }
                 })
@@ -154,6 +164,9 @@ class ExploreFragment : Fragment() {
                         return true
                     }
                     override fun onQueryTextChange(newText: String?): Boolean {
+                        if (newText.isNullOrEmpty()) {
+                            viewModel.loadInitialSearchData("")
+                        }
                         return true
                     }
                 })
