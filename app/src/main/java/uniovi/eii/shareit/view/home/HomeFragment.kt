@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeBinding
@@ -46,7 +47,7 @@ class HomeFragment : Fragment() {
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+                val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
                 toolbar.isTitleCentered = true
             }
 
@@ -58,18 +59,25 @@ class HomeFragment : Fragment() {
 
     private fun configureTabs() {
         binding.pager.adapter = HomeViewPagerAdapter(this)
-        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
-            when (position) {
-                0 -> {
-                    tab.text = resources.getString(R.string.tab_albums)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)
-                }
+        // Obtener referencia al contenedor en AppBarLayout
+        view?.post {
+            val tabContainer = requireActivity().findViewById<TabLayout>(R.id.tabLayoutAppBar)
 
-                1 -> {
-                    tab.text = resources.getString(R.string.tab_images)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
-                }
+            // Verificar que no sea nulo antes de usar
+            if (tabContainer != null) {
+                TabLayoutMediator(tabContainer, binding.pager) { tab, position ->
+                    when (position) {
+                        0 -> {
+                            tab.text = resources.getString(R.string.tab_albums)
+                            tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_gallery, null)
+                        }
+                        1 -> {
+                            tab.text = resources.getString(R.string.tab_images)
+                            tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_image_24, null)
+                        }
+                    }
+                }.attach()
             }
-        }.attach()
+        }
     }
 }

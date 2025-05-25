@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
             binding.appBarMain.toolbar.isVisible = arguments?.getBoolean("ShowAppBar", true) ?: true
-
+            binding.appBarMain.tabLayoutAppBar.isVisible = arguments?.getBoolean("ShowTabLayout", false) ?: false
             Log.d("BACKSTACK", controller.currentBackStack.value.map { stackEntry -> stackEntry.destination.displayName }.toString())
         }
         // Passing each menu ID as a set of Ids because each
