@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
 
                 1 -> {
                     tab.text = resources.getString(R.string.tab_images)
-                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_menu_camera, null)
+                    tab.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_image_24, null)
                 }
             }
         }.attach()

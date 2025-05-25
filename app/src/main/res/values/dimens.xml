@@ -27,4 +27,6 @@
     <dimen name="participants_vertical_padding">8dp</dimen>
     <dimen name="participants_image_end_margin">12dp</dimen>
     <dimen name="textview_drawable_padding">5dp</dimen>
+    <dimen name="tags_horizontal_padding">5dp</dimen>
+    <dimen name="tags_vertical_padding">10dp</dimen>
 </resources>

@@ -46,6 +46,7 @@
     <string name="action_order_ascending">Ascendente</string>
     <string name="action_order_descending">Descendente</string>
     <string name="action_filter">Filtrar por…</string>
+    <string name="action_filter_show_tags">Mostrar Etiquetas</string>
     <string name="action_filter_all">Todas las imágenes</string>
     <string name="action_filter_mine">Mis imágenes</string>
     <string name="action_most_liked">Más valoradas</string>
@@ -82,6 +83,8 @@
     <!--    Home    -->
     <string name="label_no_images">Aún no hay imágenes. ¡Agrega una a un álbum!</string>
     <string name="label_no_albums">Aún no hay álbumes. ¡Crea uno!</string>
+    <string name="toast_info_order">Ordenando álbumes por %1$s</string>
+    <string name="toast_info_order_direction">Cambiada dirección de ordenamiento: %1$s</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Buscar álbumes</string>
     <!--    User Profile    -->

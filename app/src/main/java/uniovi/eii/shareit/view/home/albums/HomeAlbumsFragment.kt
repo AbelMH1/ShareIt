@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
 import uniovi.eii.shareit.model.UserAlbum
+import uniovi.eii.shareit.utils.IdToTagMap
 import uniovi.eii.shareit.view.adapter.AlbumListAdapter
 import uniovi.eii.shareit.view.home.HomeFragmentDirections
 import uniovi.eii.shareit.viewModel.AlbumsDisplayViewModel
@@ -65,6 +66,15 @@ class HomeAlbumsFragment : Fragment() {
             binding.noAlbumsTextView.isVisible = it.isEmpty()
         }
 
+        viewModel.showFilterTags.observe(viewLifecycleOwner) { showFilter ->
+            binding.chipsScrollView.isVisible = showFilter
+        }
+        binding.chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            val selectedTags = checkedIds.mapNotNull { IdToTagMap[it] }
+            Log.d("ChipGroup", "Selected Tags: $selectedTags")
+            viewModel.applyFilter(selectedTags)
+        }
+
         viewModel.registerUserAlbumsListener()
 
         return binding.root
@@ -84,22 +94,28 @@ class HomeAlbumsFragment : Fragment() {
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.album_order, menu)
+                menuInflater.inflate(R.menu.album_order_filter, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_order_custom, R.id.action_order_creation_date, R.id.action_order_name, R.id.action_order_last_update -> {
                         menuItem.isChecked = !menuItem.isChecked
-                        Toast.makeText(context, "Ordering albums by ${menuItem.title}", Toast.LENGTH_SHORT).show()
-                        viewModel.applyOrder(order = menuItem.itemId)
+                        if(viewModel.applyOrder(order = menuItem.itemId))
+                            Toast.makeText(context, resources.getString(R.string.toast_info_order, menuItem.title), Toast.LENGTH_SHORT).show()
                         true
                     }
 
                     R.id.action_order_ascending, R.id.action_order_descending -> {
                         menuItem.isChecked = !menuItem.isChecked
-                        Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
-                        viewModel.applyOrder(direction = menuItem.itemId)
+                        if(viewModel.applyOrder(direction = menuItem.itemId))
+                            Toast.makeText(context, resources.getString(R.string.toast_info_order_direction, menuItem.title), Toast.LENGTH_SHORT).show()
+                        true
+                    }
+
+                    R.id.action_filter_tags -> {
+                        menuItem.isChecked = !menuItem.isChecked
+                        viewModel.toggleShowFilterTags(menuItem.isChecked)
                         true
                     }
 
@@ -111,13 +127,13 @@ class HomeAlbumsFragment : Fragment() {
                 super.onPrepareMenu(menu)
                 menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrder.value!!)?.isChecked = true
                 menu.findItem(R.id.action_order)?.subMenu?.findItem(viewModel.currentOrderDirection.value!!)?.isChecked = true
+                menu.findItem(R.id.action_filter)?.subMenu?.findItem(R.id.action_filter_tags)?.isChecked = binding.chipsScrollView.isVisible
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     fun clickOnCardViewItem(album: UserAlbum, position: Int) {
         Log.i("Click adapter", "Item Clicked at index $position: $album")
-        Toast.makeText(context, "Item Clicked ${album.name}", Toast.LENGTH_SHORT).show()
         val graph = findNavController().graph.findNode(R.id.navigation_album)
         if (graph is NavGraph) {
             graph.setStartDestination(R.id.nav_album)
@@ -127,8 +143,7 @@ class HomeAlbumsFragment : Fragment() {
     }
 
     fun clickOnInfoButtonItem(album: UserAlbum, position: Int) {
-        Log.i("Click adapter", "Item Clicked at index $position: $album")
-        Toast.makeText(context, "Info Clicked ${album.name}", Toast.LENGTH_SHORT).show()
+        Log.i("Click adapter", "Item Info Clicked at index $position: $album")
         val graph = findNavController().graph.findNode(R.id.navigation_album)
         if (graph is NavGraph) {
             graph.setStartDestination(R.id.nav_album_information)

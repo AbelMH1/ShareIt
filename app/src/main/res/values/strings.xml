@@ -49,6 +49,7 @@
     <string name="action_order_ascending">Ascending</string>
     <string name="action_order_descending">Descending</string>
     <string name="action_filter">Filter By…</string>
+    <string name="action_filter_show_tags">Show Tags</string>
     <string name="action_filter_all">All images</string>
     <string name="action_filter_mine">My images</string>
     <string name="action_most_liked">Most liked</string>
@@ -85,6 +86,8 @@
     <!--    Home    -->
     <string name="label_no_images">There are no images yet. Add one to an album!</string>
     <string name="label_no_albums">There are no albums yet. Create one!</string>
+    <string name="toast_info_order">Ordering albums by %1$s</string>
+    <string name="toast_info_order_direction">Changed order direction: %1$s</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Search for albums</string>
     <!--    User Profile    -->

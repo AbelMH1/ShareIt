@@ -98,7 +98,6 @@ class ImagesDisplayViewModel : ViewModel() {
                 loadLikeCountForImages(newImages)
             }
         }
-
     }
 
     private fun loadLikeCountForImages(newImages: List<Image> = allImageList.value!!) {
