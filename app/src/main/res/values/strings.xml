@@ -83,11 +83,15 @@
     <string name="err_password_too_short">Passwords must have at least %1$d characters</string>
     <string name="err_invalid_password">1 digit, 1 lower case and 1 upper case letter are required</string>
     <string name="err_passwords_dont_match">Passwords do not match</string>
+    <string name="toast_error_google_credential">Error while retrieving Google credentials</string>
+    <string name="toast_error_authentication">Authentication failed: %1$s</string>
     <!--    Home    -->
     <string name="label_no_images">There are no images yet. Add one to an album!</string>
     <string name="label_no_albums">There are no albums yet. Create one!</string>
-    <string name="toast_info_order">Ordering albums by %1$s</string>
+    <string name="toast_info_albums_order">Ordering albums by %1$s</string>
     <string name="toast_info_order_direction">Changed order direction: %1$s</string>
+    <string name="toast_info_images_order">Ordering images by %1$s</string>
+    <string name="toast_info_images_filter">Filtering images: %1$s</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Search for albums</string>
     <!--    User Profile    -->

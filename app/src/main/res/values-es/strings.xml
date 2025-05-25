@@ -80,11 +80,15 @@
     <string name="err_password_too_short">Las contraseñas deben tener al menos %1$d caracteres</string>
     <string name="err_invalid_password">Se requieren 1 dígito, 1 letra minúscula y 1 letra mayúscula</string>
     <string name="err_passwords_dont_match">Las contraseñas no coinciden</string>
+    <string name="toast_error_google_credential">Error al obtener las credenciales de Google</string>
+    <string name="toast_error_authentication">Error de autenticación: %1$s</string>
     <!--    Home    -->
     <string name="label_no_images">Aún no hay imágenes. ¡Agrega una a un álbum!</string>
     <string name="label_no_albums">Aún no hay álbumes. ¡Crea uno!</string>
-    <string name="toast_info_order">Ordenando álbumes por %1$s</string>
+    <string name="toast_info_albums_order">Ordenando álbumes por %1$s</string>
     <string name="toast_info_order_direction">Cambiada dirección de ordenamiento: %1$s</string>
+    <string name="toast_info_images_order">Ordenando imágenes por %1$s</string>
+    <string name="toast_info_images_filter">Filtrando imágenes: %1$s</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Buscar álbumes</string>
     <!--    User Profile    -->

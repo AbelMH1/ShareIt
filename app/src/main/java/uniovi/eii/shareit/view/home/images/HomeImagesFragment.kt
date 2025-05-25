@@ -124,21 +124,21 @@ class HomeImagesFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.action_order_album, R.id.action_order_date, R.id.action_order_likes -> {
                         menuItem.isChecked = !menuItem.isChecked
-                        Toast.makeText(context, "Ordering images by ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resources.getString(R.string.toast_info_images_order, menuItem.title), Toast.LENGTH_SHORT).show()
                         viewModel.applyOrder(order = menuItem.itemId)
                         true
                     }
 
                     R.id.action_order_ascending, R.id.action_order_descending -> {
                         menuItem.isChecked = !menuItem.isChecked
-                        Toast.makeText(context, "Changed order direction: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resources.getString(R.string.toast_info_order_direction, menuItem.title), Toast.LENGTH_SHORT).show()
                         viewModel.applyOrder(direction = menuItem.itemId)
                         true
                     }
 
                     R.id.action_filter_all, R.id.action_filter_mine -> {
                         menuItem.isChecked = !menuItem.isChecked
-                        Toast.makeText(context, "Filtering images: ${menuItem.title}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resources.getString(R.string.toast_info_images_filter, menuItem.title), Toast.LENGTH_SHORT).show()
                         viewModel.applyFilter(menuItem.itemId)
                         true
                     }

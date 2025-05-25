@@ -102,7 +102,7 @@ class SignUpFragment : Fragment() {
             binding.passwordRepeatEditText.requestFocus()
         }
         if (firebaseError != null) {
-            Toast.makeText(context, "Authentication failed: $firebaseError", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, resources.getString(R.string.toast_error_authentication, firebaseError), Toast.LENGTH_LONG,).show()
         }
     }
 

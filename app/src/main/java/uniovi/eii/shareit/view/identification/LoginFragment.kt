@@ -109,7 +109,7 @@ class LoginFragment : Fragment() {
             binding.passwordEditText.requestFocus()
         }
         if (firebaseError != null) {
-            Toast.makeText(context, "Authentication failed: $firebaseError", Toast.LENGTH_LONG,).show()
+            Toast.makeText(context, resources.getString(R.string.toast_error_authentication, firebaseError), Toast.LENGTH_LONG,).show()
         }
     }
 
@@ -175,7 +175,7 @@ class LoginFragment : Fragment() {
                 viewModel.attemptLoginWithGoogle(result.credential)
             } catch (e: GetCredentialException) {
                 Log.e("LoginFragment","Error al obtener la credencial: ${e.localizedMessage}")
-                Toast.makeText(requireContext(), "Error al obtener las credenciales de Google", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), resources.getString(R.string.toast_error_google_credential), Toast.LENGTH_LONG).show()
             }
         }
     }
