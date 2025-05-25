@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Section
+import uniovi.eii.shareit.model.repository.FirebaseAuthService
 import uniovi.eii.shareit.model.repository.FirestoreImageService
 import uniovi.eii.shareit.utils.toFormattedChatDateString
 
@@ -162,9 +163,10 @@ class ImagesDisplayViewModel : ViewModel() {
     }
 
     private fun filterImageList(filter: Int, newImages: List<Image>): List<Image> {
+        val currentUserId = FirebaseAuthService.getCurrentUser()!!.uid
         return when (filter) {
             R.id.action_filter_all -> newImages
-            R.id.action_filter_mine -> newImages.filter { img -> img.authorName == "Author 0" }
+            R.id.action_filter_mine -> newImages.filter { img -> img.authorId == currentUserId }
             else -> emptyList()
         }
     }
