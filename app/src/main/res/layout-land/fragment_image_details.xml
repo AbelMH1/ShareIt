@@ -21,6 +21,7 @@
             android:id="@+id/userImage"
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
+            android:layout_marginEnd="@dimen/participants_image_end_margin"
             android:contentDescription="@string/author_profile_image_desc"
             android:src="@drawable/ic_person_24" />
 

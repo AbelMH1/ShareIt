@@ -1,6 +1,7 @@
 package uniovi.eii.shareit.utils
 
  import android.Manifest.permission.CAMERA
+ import android.Manifest.permission.POST_NOTIFICATIONS
  import android.Manifest.permission.READ_EXTERNAL_STORAGE
  import android.Manifest.permission.READ_MEDIA_IMAGES
  import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
@@ -37,4 +38,12 @@ fun getRequiredGalleryPermissions(): Array<String> {
 
 fun Context.hasCameraPermission(): Boolean {
     return ContextCompat.checkSelfPermission(this, CAMERA) == PERMISSION_GRANTED
+}
+
+fun Context.hasNotificationPermission(): Boolean {
+    return if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+        ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PERMISSION_GRANTED
+    } else {
+        true // Notification permission is not required for versions below Android 13
+    }
 }

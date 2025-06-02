@@ -224,4 +224,8 @@
     <string name="select_source_title">Select Source</string>
     <string name="select_source_camera">Camera</string>
     <string name="select_source_gallery">Gallery</string>
+    <!--    ImageUploadService    -->
+    <string name="notification_channel_name">Image Upload Service Channel</string>
+    <string name="notification_title_image_upload">Uploading image…</string>
+    <string name="notification_desc_image_upload">Uploading image to album: %1$s</string>
 </resources>

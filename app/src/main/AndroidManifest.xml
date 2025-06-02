@@ -21,6 +21,9 @@
     <!--  Required to use firebase  -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -31,6 +34,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShareIt"
         tools:targetApi="31">
+        <service
+            android:name=".model.service.ImageUploadService"
+            android:foregroundServiceType="shortService"
+            android:exported="false">
+        </service>
+
         <!-- Trigger Google Play services to install the backported photo picker module. -->
         <!--suppress AndroidDomInspection -->
         <service android:name="com.google.android.gms.metadata.ModuleDependencies"

@@ -10,13 +10,13 @@
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/divider_margin"
         android:contentDescription="@string/upload_image_desc"
         android:src="@drawable/ic_image_24"
         app:layout_constraintBottom_toTopOf="@+id/selectImageButton"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/selectImageButton"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toStartOf="@id/uploadImageButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95" />
+        app:layout_constraintVertical_bias="0.9" />
 
     <Button
         android:id="@+id/uploadImageButton"
@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/selectImageButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95" />
+        app:layout_constraintVertical_bias="0.9" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/uploadProgressIndicator"

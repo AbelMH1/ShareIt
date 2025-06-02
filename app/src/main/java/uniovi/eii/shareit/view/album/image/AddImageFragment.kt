@@ -1,9 +1,17 @@
 package uniovi.eii.shareit.view.album.image
 
 import android.Manifest.permission.CAMERA
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,12 +31,14 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAddImageBinding
 import uniovi.eii.shareit.model.Participant.Role
+import uniovi.eii.shareit.model.service.ImageUploadService
 import uniovi.eii.shareit.utils.compressImage
 import uniovi.eii.shareit.utils.createTempImageFile
 import uniovi.eii.shareit.utils.getRequiredGalleryPermissions
 import uniovi.eii.shareit.utils.getSecureUriForFile
 import uniovi.eii.shareit.utils.hasCameraPermission
 import uniovi.eii.shareit.utils.hasGalleryPermission
+import uniovi.eii.shareit.utils.hasNotificationPermission
 import uniovi.eii.shareit.utils.registerCameraPicker
 import uniovi.eii.shareit.utils.registerGalleryPicker
 import uniovi.eii.shareit.utils.registerPermissionRequest
@@ -38,11 +48,18 @@ import uniovi.eii.shareit.viewModel.AlbumViewModel
 
 class AddImageFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "AddImageFragment"
+    }
+
     private var _binding: FragmentAddImageBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AddImageViewModel by viewModels()
     private val albumViewModel: AlbumViewModel by navGraphViewModels(R.id.navigation_album)
+
     private var imageUri: Uri? = null
+    private var exampleService: ImageUploadService? = null
+    private var serviceBoundState = false
 
     // Lanzador para seleccionar la imagen de la galería
     private val pickImageLauncher = registerGalleryPicker(::processImage)
@@ -52,6 +69,31 @@ class AddImageFragment : Fragment() {
     private val requestPermissions = registerPermissionsRequest(::openGallery, R.string.error_gallery_permission_denied)
     // Lanzador para solicitar el permiso de la cámara
     private val requestCameraPermission = registerPermissionRequest(::takePicture, R.string.error_camera_permission_denied)
+    // Lanzador para solicitar el permiso de notificaciones (necesario para Android 13 y superior)
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission())
+        { // Si el permiso fue denegado, el servicio aún puede ejecutarse, solo que la notificación no será visible
+            uploadImage()
+        }
+
+    // Necesario para vincular el servicio de carga de imágenes
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            // Al vincularnos al servicio, obtenemos una instancia de él y actualizamos el estado del servicio.
+            Log.d(TAG, "onServiceConnected")
+            val binder = service as ImageUploadService.LocalBinder
+            exampleService = binder.getService()
+
+            onServiceConnected()
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            // Se llama cuando la conexión con el servicio se ha desconectado. Limpieza.
+            Log.d(TAG, "onServiceDisconnected")
+            serviceBoundState = false
+            exampleService = null
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,13 +131,14 @@ class AddImageFragment : Fragment() {
             }
         }
 
-        viewModel.isCompletedImageUpload.observe(viewLifecycleOwner) { isCompleted ->
-            if (isCompleted) {
-                Toast.makeText(requireContext(), resources.getString(R.string.info_success_uploading_image), Toast.LENGTH_SHORT).show()
-                findNavController().navigateUp()
-            } else {
-                Toast.makeText(requireContext(), resources.getString(R.string.error_uploading_image), Toast.LENGTH_SHORT).show()
-                enableUploadButton(true)
+        viewModel.isServiceRunning.observe(viewLifecycleOwner) { isRunning ->
+            Log.d(TAG, "Service running: $isRunning")
+            if (isRunning) {
+                enableUploadButton(false)
+                if (!serviceBoundState){
+                    Log.d(TAG, "Re-binding service")
+                    bindService()
+                }
             }
         }
 
@@ -104,10 +147,7 @@ class AddImageFragment : Fragment() {
         }
 
         binding.uploadImageButton.setOnClickListener {
-            enableUploadButton(false)
-            with(albumViewModel.getAlbumInfo()) {
-                viewModel.uploadImage(albumId, name)
-            }
+            checkNotificationPermission()
         }
 
         return binding.root
@@ -127,6 +167,9 @@ class AddImageFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        if (serviceBoundState) {
+            unbindService()
+        }
         _binding = null
     }
 
@@ -203,5 +246,62 @@ class AddImageFragment : Fragment() {
         dialog.show()
     }
 
+    /**
+     *  Verifica si se tiene el permiso de notificaciones y, si es así, procede a subir la imagen.
+     */
+    private fun checkNotificationPermission() {
+        if (requireContext().hasNotificationPermission()) {
+            uploadImage()
+        } else {
+            if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU)
+                requestNotificationPermission.launch(POST_NOTIFICATIONS)
+        }
+    }
 
+    private fun onServiceConnected() {
+        serviceBoundState = true
+        viewModel.setServiceRunning(true)
+        exampleService?.isUploadCompleted?.observe(viewLifecycleOwner) { isCompleted ->
+            if (isCompleted != null) {
+                viewModel.setServiceRunning(false)
+                if (isCompleted) {
+                    findNavController().navigateUp()
+                } else {
+                    enableUploadButton(true)
+                }
+                // Desvincularse después de recibir el resultado
+                if (serviceBoundState) {
+                    unbindService()
+                    exampleService = null
+                }
+            }
+        }
+    }
+
+    private fun uploadImage() {
+        enableUploadButton(false)
+
+        val image = viewModel.getImageToUpload(albumViewModel.getAlbumInfo())
+        if (image == null) {
+            Toast.makeText(requireContext(), resources.getString(R.string.error_uploading_image), Toast.LENGTH_SHORT).show()
+            enableUploadButton(true)
+            return
+        }
+
+        ImageUploadService.startService(requireContext(), image)
+
+        // Vincular para recibir actualizaciones
+        bindService()
+    }
+
+    private fun bindService() {
+        Intent(requireContext(), ImageUploadService::class.java).also { intent ->
+            requireContext().bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    private fun unbindService() {
+        requireContext().unbindService(connection)
+        serviceBoundState = false
+    }
 }

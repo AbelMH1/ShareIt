@@ -221,4 +221,8 @@
     <string name="select_source_title">Seleccionar fuente</string>
     <string name="select_source_camera">Cámara</string>
     <string name="select_source_gallery">Galería</string>
+    <!--    ImageUploadService    -->
+    <string name="notification_channel_name">Servicio de Subida de Imágenes</string>
+    <string name="notification_title_image_upload">Subiendo imagen…</string>
+    <string name="notification_desc_image_upload">Subiendo imagen al álbum: %1$s</string>
 </resources>
