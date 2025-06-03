@@ -113,7 +113,7 @@ class AlbumInformationParticipantsFragment : Fragment() {
             binding.addParticipantEditText.requestFocus()
         }
         if (firestoreError != null) {
-            Toast.makeText(context, "Error adding participant: $firestoreError", Toast.LENGTH_LONG)
+            Toast.makeText(context, resources.getString(R.string.toast_error_adding_participant, firestoreError), Toast.LENGTH_LONG)
                 .show()
         }
     }
@@ -127,19 +127,19 @@ class AlbumInformationParticipantsFragment : Fragment() {
 
     private fun eliminateParticipant(participant: Participant) {
         viewModel.eliminateParticipant(participant)
-        Toast.makeText(context, "Participant eliminated: ${participant.name}", Toast.LENGTH_SHORT)
+        Toast.makeText(context, resources.getString(R.string.toast_participant_removed, participant.name), Toast.LENGTH_SHORT)
             .show()
     }
 
     private fun promoteParticipant(participant: Participant) {
         viewModel.promoteParticipant(participant)
-        Toast.makeText(context, "Participant promoted ${participant.name}", Toast.LENGTH_SHORT)
+        Toast.makeText(context, resources.getString(R.string.toast_participant_promoted, participant.name), Toast.LENGTH_SHORT)
             .show()
     }
 
     private fun demoteParticipant(participant: Participant) {
         viewModel.demoteParticipant(participant)
-        Toast.makeText(context, "Participant demoted: ${participant.name}", Toast.LENGTH_SHORT)
+        Toast.makeText(context, resources.getString(R.string.toast_participant_demoted, participant.name), Toast.LENGTH_SHORT)
             .show()
     }
 }

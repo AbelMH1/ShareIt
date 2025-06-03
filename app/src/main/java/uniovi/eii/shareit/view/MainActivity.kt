@@ -124,21 +124,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun configureToolBar() {
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-//                menuInflater.inflate(R.menu.main, menu)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     binding.appBarMain.toolbar.menu.setGroupDividerEnabled(true)
                 } else MenuCompat.setGroupDividerEnabled(menu, true)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.action_account -> {
-                        Toast.makeText(this@MainActivity, "Account...", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-
-                    else -> false
-                }
+                return false
             }
         }, this)
     }

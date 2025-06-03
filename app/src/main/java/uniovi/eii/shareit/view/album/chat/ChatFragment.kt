@@ -109,11 +109,6 @@ class ChatFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
-
-            override fun onPrepareMenu(menu: Menu) {
-                super.onPrepareMenu(menu)
-                menu.removeItem(R.id.action_account)
-            }
         }, viewLifecycleOwner)
     }
 

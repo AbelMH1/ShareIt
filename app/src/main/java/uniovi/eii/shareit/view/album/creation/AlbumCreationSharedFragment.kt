@@ -41,8 +41,8 @@ class AlbumCreationSharedFragment : Fragment() {
         }
 
         viewModel.isCompletedAlbumCreation.observe(viewLifecycleOwner) {
-            if (it) Toast.makeText(context, "Se ha creado el álbum", Toast.LENGTH_LONG).show()
-            else Toast.makeText(context, "Se ha producido un error al crear el álbum", Toast.LENGTH_LONG).show()
+            if (it) Toast.makeText(context, R.string.toast_album_created, Toast.LENGTH_LONG).show()
+            else Toast.makeText(context, R.string.toast_error_creating_album, Toast.LENGTH_LONG).show()
             findNavController().navigate(
                 AlbumCreationSharedFragmentDirections.actionNavAlbumCreationSharedToNavHome()
             )
@@ -86,11 +86,6 @@ class AlbumCreationSharedFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
-            }
-
-            override fun onPrepareMenu(menu: Menu) {
-                super.onPrepareMenu(menu)
-                menu.removeItem(R.id.action_account)
             }
         }, viewLifecycleOwner)
     }

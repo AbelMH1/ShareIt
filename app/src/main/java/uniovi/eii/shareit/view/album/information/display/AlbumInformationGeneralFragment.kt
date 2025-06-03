@@ -437,16 +437,20 @@ class AlbumInformationGeneralFragment : Fragment() {
 
     private fun processImage(uri: Uri? = imageUri) {
         Log.d("Camera", "Selected URI: $uri")
+        if (uri == null) {
+            Toast.makeText(requireContext(), R.string.toast_error_loading_image, Toast.LENGTH_SHORT).show()
+            return
+        }
         lifecycleScope.launch {
             val context = requireContext()
             val outputFile = context.createTempImageFile()
-            val processed = context.compressImage(uri!!, outputFile)
+            val processed = context.compressImage(uri, outputFile)
             if (processed) {
                 imageUri = context.getSecureUriForFile(outputFile)
                 binding.switchCoverLastImage.isChecked = false
                 context.loadImageIntoView(imageUri!!, binding.albumCover)
             } else {
-                Toast.makeText(context, "Error picking image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.toast_error_processing_image, Toast.LENGTH_LONG).show()
             }
         }
     }

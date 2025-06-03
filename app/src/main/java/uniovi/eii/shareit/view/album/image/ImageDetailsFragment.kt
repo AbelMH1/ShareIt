@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.view.album.image
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -59,7 +60,12 @@ class ImageDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            image = it.getParcelable(IMAGE) ?: Image()
+            image = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getParcelable(IMAGE, Image::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                it.getParcelable(IMAGE)
+            } ?: Image()
             position = it.getInt(POSITION, 0)
             usingViewModel = it.getString(USINGVIEWMODEL)!!
         }
@@ -129,11 +135,9 @@ class ImageDetailsFragment : Fragment() {
                 if (binding.likeBtn.isChecked) {
                     viewModel.likeImage(image)
                     imagesViewModel.incrementImageLikes(image.imageId, 1)
-                    Toast.makeText(context, "Liked Image", Toast.LENGTH_SHORT).show()
                 } else {
                     viewModel.unlikeImage(image)
                     imagesViewModel.incrementImageLikes(image.imageId, -1)
-                    Toast.makeText(context, "Removed like", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {

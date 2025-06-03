@@ -34,7 +34,6 @@
     <string name="err_invalid_later_date">It must be later than the start date</string>
     <string name="toast_successful_logout">You have logged out from your account</string>
     <!--    Menus    -->
-    <string name="action_account">Account</string>
     <string name="action_search">Search</string>
     <string name="action_chat">Chat</string>
     <string name="action_info">Information</string>
@@ -125,6 +124,8 @@
     <string name="label_permission_images">Images</string>
     <string name="label_permission_guests">Guests</string>
     <string name="label_permission_chat">Chat</string>
+    <string name="toast_album_created">Album created successfully</string>
+    <string name="toast_error_creating_album">An error occurred while creating the album</string>
     <!--    Album    -->
     <string name="label_no_album_images">There are no images in this album yet.</string>
     <!--    Album Information General   -->
@@ -191,6 +192,10 @@
     <string name="participant_role_guest">Guest</string>
     <string name="participant_role_member">Member</string>
     <string name="participant_role_none">None</string>
+    <string name="toast_error_adding_participant">Error adding participant: %1$s</string>
+    <string name="toast_participant_removed">Participant eliminated: %1$s</string>
+    <string name="toast_participant_promoted">Participant promoted: %1$s</string>
+    <string name="toast_participant_demoted">Participant demoted: %1$s</string>
     <!--    Image Display    -->
     <string name="author_profile_image_desc">Image\'s author profile picture</string>
     <string name="upload_image_desc">Image uploaded to the album</string>
@@ -218,7 +223,8 @@
     <string name="warn_image_add_permission_revoked_message">Permissions have changed and you can\'t upload images anymore.</string>
     <string name="error_gallery_permission_denied">Permission denied to access gallery</string>
     <string name="error_camera_permission_denied">Permission denied to access camera</string>
-    <string name="error_loading_image">Error loading image</string>
+    <string name="toast_error_loading_image">Error loading image</string>
+    <string name="toast_error_processing_image">Error processing image: Image too big</string>
     <string name="error_uploading_image">Error uploading the image</string>
     <string name="info_success_uploading_image">Image uploaded successfully</string>
     <string name="select_source_title">Select Source</string>

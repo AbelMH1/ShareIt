@@ -192,10 +192,14 @@ class ProfileFragment : Fragment() {
 
     private fun processImage(uri: Uri? = imageUri) {
         Log.d("processImage", "Selected URI: $uri")
+        if (uri == null) {
+            Toast.makeText(requireContext(), R.string.toast_error_loading_image, Toast.LENGTH_SHORT).show()
+            return
+        }
         lifecycleScope.launch {
             val context = requireContext()
             val outputFile = context.createTempImageFile()
-            val processed = context.compressImage(uri!!, outputFile)
+            val processed = context.compressImage(uri, outputFile)
             if (processed) {
                 imageUri = context.getSecureUriForFile(outputFile)
                 context.loadCircularImageIntoView(
@@ -204,7 +208,7 @@ class ProfileFragment : Fragment() {
                     R.drawable.ic_person_24,
                     R.drawable.ic_person_24)
             } else {
-                Toast.makeText(requireContext(), resources.getString(R.string.error_loading_image), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.toast_error_processing_image, Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -31,7 +31,6 @@
     <string name="err_invalid_later_date">Debe ser posterior a la fecha de inicio</string>
     <string name="toast_successful_logout">Has cerrado sesión de tu cuenta</string>
     <!--    Menus    -->
-    <string name="action_account">Cuenta</string>
     <string name="action_search">Buscar</string>
     <string name="action_chat">Chat</string>
     <string name="action_info">Información</string>
@@ -122,6 +121,8 @@
     <string name="label_permission_images">Imágenes</string>
     <string name="label_permission_guests">Invitados</string>
     <string name="label_permission_chat">Chat</string>
+    <string name="toast_album_created">Se ha creado el álbum</string>
+    <string name="toast_error_creating_album">Se ha producido un error al crear el álbum</string>
     <!--    Album    -->
     <string name="label_no_album_images">Aún no hay imágenes en este álbum.</string>
     <!--    Album Information General   -->
@@ -188,6 +189,10 @@
     <string name="participant_role_guest">Invitado</string>
     <string name="participant_role_member">Miembro</string>
     <string name="participant_role_none">Ninguno</string>
+    <string name="toast_error_adding_participant">Error al añadir participante: %1$s</string>
+    <string name="toast_participant_removed">Participante eliminado: %1$s</string>
+    <string name="toast_participant_promoted">Participante ascendido: %1$s</string>
+    <string name="toast_participant_demoted">Participante degradado: %1$s</string>
     <!--    Image Display    -->
     <string name="author_profile_image_desc">Foto de perfil del autor de la imagen</string>
     <string name="upload_image_desc">Imagen subida al álbum</string>
@@ -215,7 +220,8 @@
     <string name="warn_image_add_permission_revoked_message">Los permisos han cambiado y ya no puedes subir imágenes.</string>
     <string name="error_gallery_permission_denied">Permiso denegado para acceder a la galería</string>
     <string name="error_camera_permission_denied">Permiso denegado para acceder a la cámara</string>
-    <string name="error_loading_image">Error al cargar la imagen</string>
+    <string name="toast_error_loading_image">Error al cargar la imagen</string>
+    <string name="toast_error_processing_image">Error al procesar la imagen: Imagen demasiado grande</string>
     <string name="error_uploading_image">Error al subir la imagen</string>
     <string name="info_success_uploading_image">Imagen subida con éxito</string>
     <string name="select_source_title">Seleccionar fuente</string>

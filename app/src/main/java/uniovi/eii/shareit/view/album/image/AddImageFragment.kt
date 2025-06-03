@@ -214,14 +214,18 @@ class AddImageFragment : Fragment() {
 
     private fun processImage(uri: Uri? = imageUri) {
         Log.d("processImage", "Selected URI: $uri")
+        if (uri == null) {
+            Toast.makeText(requireContext(), R.string.toast_error_loading_image, Toast.LENGTH_SHORT).show()
+            return
+        }
         lifecycleScope.launch {
             val context = requireContext()
             val outputFile = context.createTempImageFile()
-            val processed = context.compressImage(uri!!, outputFile)
+            val processed = context.compressImage(uri, outputFile)
             if (processed) {
                 viewModel.loadImage(context.getSecureUriForFile(outputFile))
             } else {
-                Toast.makeText(requireContext(), resources.getString(R.string.error_loading_image), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.toast_error_processing_image, Toast.LENGTH_LONG).show()
             }
         }
     }
