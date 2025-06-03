@@ -21,6 +21,7 @@
             android:id="@+id/userImage"
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
+            android:layout_marginVertical="@dimen/participants_image_end_margin"
             android:layout_marginEnd="@dimen/participants_image_end_margin"
             android:contentDescription="@string/author_profile_image_desc"
             android:src="@drawable/ic_person_24" />
@@ -55,24 +56,30 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/upload_image_desc"
+        android:scaleType="fitCenter"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@id/details_layout"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_layout"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
         app:srcCompat="@drawable/ic_menu_gallery" />
 
     <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image">
+        app:layout_constraintTop_toBottomOf="@+id/image"
+        app:layout_constraintVertical_bias="0">
 
         <CheckBox
             android:id="@+id/likeBtn"

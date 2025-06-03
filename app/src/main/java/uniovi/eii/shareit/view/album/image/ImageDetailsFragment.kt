@@ -157,7 +157,7 @@ class ImageDetailsFragment : Fragment() {
     private fun updateImageDetails(image: Image) {
         binding.userName.text = image.authorName
         binding.dateUpload.text = image.creationDate.toFormattedImageDetailsString()
-        requireContext().loadImageIntoView(image.imagePath.toUri(), binding.image)
+        requireContext().loadImageIntoView(image.imagePath.toUri(), binding.image, centerCrop = false)
         requireContext().loadCircularImageIntoView(image.authorImage, Date().getMinutesStableValue(), binding.userImage)
     }
 

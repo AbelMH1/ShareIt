@@ -21,15 +21,24 @@ import java.io.File
 fun Context.loadImageIntoView(
     uri: Uri,
     imageView: ImageView,
+    centerCrop: Boolean = true,
     placeholder: Int = R.drawable.ic_image_24,
     error: Int = R.drawable.ic_image_not_supported_24
 ) {
-    Glide.with(this)
-        .load(uri)
-        .placeholder(placeholder)
-        .error(error)
-        .centerCrop()
-        .into(imageView)
+    if (centerCrop) {
+        Glide.with(this)
+            .load(uri)
+            .placeholder(placeholder)
+            .error(error)
+            .centerCrop()
+            .into(imageView)
+    } else {
+        Glide.with(this)
+            .load(uri)
+            .placeholder(placeholder)
+            .error(error)
+            .into(imageView)
+    }
 }
 
 fun Context.loadImageIntoView(
@@ -123,7 +132,10 @@ private fun getCompressFormat(mimeType: String?): Bitmap.CompressFormat {
         "image/jpeg" -> Bitmap.CompressFormat.JPEG
         "image/webp" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Bitmap.CompressFormat.WEBP_LOSSLESS
-        } else Bitmap.CompressFormat.WEBP
+        } else {
+            @Suppress("DEPRECATION")
+            Bitmap.CompressFormat.WEBP
+        }
 
         else -> Bitmap.CompressFormat.JPEG
     }
