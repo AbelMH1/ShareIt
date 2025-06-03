@@ -69,6 +69,7 @@
     <string name="btn_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="progress_login_btn_desc">Intentando iniciar sesión en tu cuenta</string>
     <string name="progress_signup_btn_desc">Intentando crear una cuenta</string>
+    <string name="progress_forgot_password_btn_desc">Intentando enviar correo de recuperación</string>
     <string name="google_login_btn_desc">Iniciar sesión con tu cuenta de Google</string>
     <string name="btn_already_have_account">¿Ya tienes una cuenta? Inicia sesión</string>
     <string name="btn_do_not_have_account">¿No tienes una cuenta? Regístrate</string>
@@ -81,6 +82,9 @@
     <string name="err_passwords_dont_match">Las contraseñas no coinciden</string>
     <string name="toast_error_google_credential">Error al obtener las credenciales de Google</string>
     <string name="toast_error_authentication">Error de autenticación: %1$s</string>
+    <string name="toast_successful_reset_password">Se ha enviado correctamente un email de recuperación. Comprueba tu correo</string>
+    <string name="toast_error_repeated_reset_password_email">Ya se ha enviado un email de recuperación a este correo</string>
+    <string name="toast_error_type_google_credential">¡La credential no es de tipo Google ID!</string>
     <!--    Home    -->
     <string name="label_no_images">Aún no hay imágenes. ¡Agrega una a un álbum!</string>
     <string name="label_no_albums">Aún no hay álbumes. ¡Crea uno!</string>

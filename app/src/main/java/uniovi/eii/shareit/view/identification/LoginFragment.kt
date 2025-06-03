@@ -63,6 +63,14 @@ class LoginFragment : Fragment() {
             handleLoginWithGoogle()
         }
 
+        binding.btForgotPassword.setOnClickListener {
+            binding.btForgotPassword.isEnabled = false
+            binding.progressBarForgotPassword.isVisible = true
+            viewModel.resetPassword(
+                binding.emailEditText.text?.toString() ?: ""
+            )
+        }
+
         viewModel.loginAttempt.observe(viewLifecycleOwner) {
             if (it.isUserLogged) {
                 findNavController().navigate(LoginFragmentDirections.actionNavLoginToNavHome())
@@ -71,8 +79,18 @@ class LoginFragment : Fragment() {
                 mainViewModel.logIn()
             } else {
                 enableForm(true)
-                updateErrors(it.emailError, it.passwordError, it.firebaseError)
+                updateErrors(it.emailError, it.passwordError, it.firebaseError, it.errorCode)
             }
+        }
+
+        viewModel.resetPasswordAttempt.observe(viewLifecycleOwner) {
+            if (it.isEmailSentSuccessful) {
+                Toast.makeText(context, R.string.toast_successful_reset_password, Toast.LENGTH_LONG).show()
+            } else {
+                updateErrors(it.emailError, null, it.firebaseError, it.errorCode)
+            }
+            binding.progressBarForgotPassword.isVisible = false
+            binding.btForgotPassword.isEnabled = true
         }
 
         return binding.root
@@ -99,7 +117,7 @@ class LoginFragment : Fragment() {
         binding.btSwitchToSignUp.isEnabled = enabled
     }
 
-    private fun updateErrors(emailError: Int?, passwordError: Int?, firebaseError: String?) {
+    private fun updateErrors(emailError: Int?, passwordError: Int?, firebaseError: String?, errorCode: Int?) {
         if (emailError != null) {
             binding.emailLayout.error = resources.getString(emailError)
             binding.emailEditText.requestFocus()
@@ -109,7 +127,10 @@ class LoginFragment : Fragment() {
             binding.passwordEditText.requestFocus()
         }
         if (firebaseError != null) {
-            Toast.makeText(context, resources.getString(R.string.toast_error_authentication, firebaseError), Toast.LENGTH_LONG,).show()
+            Toast.makeText(context, resources.getString(R.string.toast_error_authentication, firebaseError), Toast.LENGTH_LONG).show()
+        }
+        if (errorCode != null) {
+            Toast.makeText(context, errorCode, Toast.LENGTH_LONG).show()
         }
     }
 

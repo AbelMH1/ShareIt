@@ -72,6 +72,7 @@
     <string name="btn_forgot_password">Forgot password?</string>
     <string name="progress_login_btn_desc">Trying to log in to your account</string>
     <string name="progress_signup_btn_desc">Trying to create an account</string>
+    <string name="progress_forgot_password_btn_desc">Trying to send recovery email</string>
     <string name="google_login_btn_desc">Log in using your Google account</string>
     <string name="btn_already_have_account">Already have an account? Log in</string>
     <string name="btn_do_not_have_account">Don\'t have an account? Sign up</string>
@@ -84,6 +85,9 @@
     <string name="err_passwords_dont_match">Passwords do not match</string>
     <string name="toast_error_google_credential">Error while retrieving Google credentials</string>
     <string name="toast_error_authentication">Authentication failed: %1$s</string>
+    <string name="toast_successful_reset_password">Reset password email successfully sent. Check your email</string>
+    <string name="toast_error_repeated_reset_password_email">You have already sent a reset password email</string>
+    <string name="toast_error_type_google_credential">Credential is not of type Google ID!</string>
     <!--    Home    -->
     <string name="label_no_images">There are no images yet. Add one to an album!</string>
     <string name="label_no_albums">There are no albums yet. Create one!</string>

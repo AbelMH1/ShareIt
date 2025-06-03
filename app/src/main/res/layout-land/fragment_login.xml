@@ -106,6 +106,18 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressBarForgotPassword"
+                    style="@style/Widget.Material3.CircularProgressIndicator.ExtraSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/progress_forgot_password_btn_desc"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/btForgotPassword"
+                    app:layout_constraintEnd_toStartOf="@id/btForgotPassword"
+                    app:layout_constraintTop_toTopOf="@+id/btForgotPassword" />
+
                 <Button
                     android:id="@+id/btForgotPassword"
                     style="?attr/borderlessButtonStyle"

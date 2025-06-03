@@ -19,6 +19,10 @@ class LoginViewModel : ViewModel() {
     private val _loginAttempt = MutableLiveData(LoginResult())
     val loginAttempt: LiveData<LoginResult> = _loginAttempt
 
+    private var _emailsSentResetPasswordEmail = mutableSetOf<String>()
+    private val _resetPasswordAttempt = MutableLiveData<ResetPasswordResult>()
+    val resetPasswordAttempt: LiveData<ResetPasswordResult> = _resetPasswordAttempt
+
     fun attemptLogin(email: String, password: String) {
         if (!checkValidData(email, password)) return
         viewModelScope.launch(Dispatchers.IO) {
@@ -41,7 +45,7 @@ class LoginViewModel : ViewModel() {
                 )
             }
         } else {
-            _loginAttempt.value = LoginResult(firebaseError = "Credential is not of type Google ID!")
+            _loginAttempt.value = LoginResult(errorCode = R.string.toast_error_type_google_credential)
         }
     }
 
@@ -61,10 +65,38 @@ class LoginViewModel : ViewModel() {
         return true
     }
 
+    fun resetPassword(email: String) {
+        if (_emailsSentResetPasswordEmail.contains(email)) {
+            _resetPasswordAttempt.value = ResetPasswordResult(
+                errorCode = R.string.toast_error_repeated_reset_password_email
+            )
+            return
+        }
+        if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _resetPasswordAttempt.value = ResetPasswordResult(emailError = R.string.err_not_an_email)
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = FirebaseAuthService.sendPasswordResetEmail(email)
+            if (result.isEmailSentSuccessful) {
+                _emailsSentResetPasswordEmail.add(email)
+            }
+            _resetPasswordAttempt.postValue(result)
+        }
+    }
+
     data class LoginResult(
         var isUserLogged: Boolean = false,
         var firebaseError: String? = null,
+        var errorCode: Int? = null,
         var emailError: Int? = null,
         var passwordError: Int? = null
+    )
+
+    data class ResetPasswordResult(
+        var isEmailSentSuccessful: Boolean = false,
+        var firebaseError: String? = null,
+        var errorCode: Int? = null,
+        var emailError: Int? = null,
     )
 }

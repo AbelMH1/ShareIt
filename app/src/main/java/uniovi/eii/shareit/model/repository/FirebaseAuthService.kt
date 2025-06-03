@@ -13,6 +13,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import uniovi.eii.shareit.model.User
+import uniovi.eii.shareit.viewModel.LoginViewModel.ResetPasswordResult
 import uniovi.eii.shareit.viewModel.LoginViewModel.LoginResult
 import uniovi.eii.shareit.viewModel.SignUpViewModel.SignUpResult
 import java.util.Locale
@@ -87,6 +88,18 @@ object FirebaseAuthService {
         } catch (e: Exception) {
             Log.w(TAG, "signInWithGoogle:failure", e)
             LoginResult(firebaseError = e.message)
+        }
+    }
+
+    suspend fun sendPasswordResetEmail(email: String): ResetPasswordResult {
+        return try {
+            auth.useAppLanguage()
+            auth.sendPasswordResetEmail(email).await()
+            Log.d(TAG, "sendPasswordResetEmail:success")
+            ResetPasswordResult(true)
+        } catch (e: Exception) {
+            Log.w(TAG, "sendPasswordResetEmail:failure", e)
+            ResetPasswordResult(firebaseError = e.message)
         }
     }
 
