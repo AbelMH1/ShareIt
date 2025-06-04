@@ -73,6 +73,7 @@ class HomeImagesFragment : Fragment() {
             )
         }
 
+        columnCount = resources.getInteger(R.integer.images_per_row)+1 // Para que se vean más imágenes que dentro del álbum
         sectionListAdapter =
             SectionListAdapter(listener = object : ImageListAdapter.OnItemClickListener {
                 override fun onItemClick(item: Image, position: Int) {

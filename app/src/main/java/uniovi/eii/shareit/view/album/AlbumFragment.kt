@@ -81,6 +81,7 @@ class AlbumFragment : Fragment() {
             }
         }
 
+        columnCount = resources.getInteger(R.integer.images_per_row)
         val onClickListener = object : ImageListAdapter.OnItemClickListener {
             override fun onItemClick(item: Image, position: Int) {
                 clickOnItem(item, position)

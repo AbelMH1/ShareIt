@@ -53,7 +53,7 @@ class HomeAlbumsFragment : Fragment() {
                 }
             })
 
-        binding.albumRecyclerView.layoutManager = GridLayoutManager(context, 2)
+        binding.albumRecyclerView.layoutManager = GridLayoutManager(context, resources.getInteger(R.integer.albums_per_row))
         binding.albumRecyclerView.adapter = albumListAdapter
 
         binding.fab.setOnClickListener {

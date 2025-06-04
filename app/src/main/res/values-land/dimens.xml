@@ -2,4 +2,6 @@
     <dimen name="fab_margin">48dp</dimen>
     <item name="message_maxLines" type="integer">2</item>
     <dimen name="my_profile_image_size">200dp</dimen>
+    <item name="albums_per_row" type="integer">3</item>
+    <item name="images_per_row" type="integer">5</item>
 </resources>
