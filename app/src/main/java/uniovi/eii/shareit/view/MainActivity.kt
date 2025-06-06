@@ -17,6 +17,8 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.MenuCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -53,17 +55,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         navController = findNavController(R.id.nav_host_fragment_content_main)
 
+        val topLevelDestinations = setOf(
+            R.id.nav_home, R.id.nav_account, R.id.nav_explore
+        )
         destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
             binding.appBarMain.toolbar.isVisible = arguments?.getBoolean("ShowAppBar", true) ?: true
+            binding.drawerLayout.setDrawerLockMode(
+                if (topLevelDestinations.contains(destination.id)) LOCK_MODE_UNLOCKED
+                else LOCK_MODE_LOCKED_CLOSED
+            )
 
             Log.d("BACKSTACK", controller.currentBackStack.value.map { stackEntry -> stackEntry.destination.displayName }.toString())
         }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_account, R.id.nav_explore
-            ), binding.drawerLayout
+            topLevelDestinations, binding.drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
