@@ -5,6 +5,7 @@
     android:id="@+id/exploreNestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionGroup="true"
     tools:context=".view.explore.ExploreFragment">
 
     <LinearLayout

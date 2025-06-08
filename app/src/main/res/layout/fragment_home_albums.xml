@@ -138,7 +138,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
-        android:contentDescription="@string/fab_main"
-        android:src="@android:drawable/ic_input_add" />
+        android:contentDescription="@string/fab_add_album_desc"
+        android:src="@android:drawable/ic_input_add"
+        android:transitionName="@string/fab_add_album_desc" />
 
 </FrameLayout>

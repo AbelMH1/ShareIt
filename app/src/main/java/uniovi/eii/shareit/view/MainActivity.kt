@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -116,7 +117,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 mainViewModel.logOut()
                 Toast.makeText(this, getString(R.string.toast_successful_logout), Toast.LENGTH_SHORT).show()
             }
+            R.id.nav_home, R.id.nav_account, R.id.nav_explore -> {
+                val navOptions = NavOptions.Builder()
+                    .setEnterAnim(android.R.anim.fade_in)
+                    .setExitAnim(android.R.anim.fade_out)
+                    .setPopEnterAnim(android.R.anim.fade_in)
+                    .setPopExitAnim(android.R.anim.fade_out)
+                    .build()
 
+                successNavigation = try {
+                    navController.navigate(item.itemId, null, navOptions)
+                    true
+                } catch (e: Exception) {
+                    Log.e("Navigation", "Error al navegar: ${e.message}")
+                    false
+                }
+            }
             else -> successNavigation = NavigationUI.onNavDestinationSelected(item, navController)
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)

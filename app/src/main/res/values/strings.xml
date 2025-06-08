@@ -25,7 +25,6 @@
     <string name="tab_shared">Shared</string>
     <string name="tab_participants">Participants</string>
     <!--    Main Activity    -->
-    <string name="fab_main">Floating Action Button</string>
     <string name="read_only">Read only supporting text</string>
     <string name="not_enabled">Not enabled</string>
     <string name="required">*required</string>
@@ -89,6 +88,7 @@
     <string name="toast_error_repeated_reset_password_email">You have already sent a reset password email</string>
     <string name="toast_error_type_google_credential">Credential is not of type Google ID!</string>
     <!--    Home    -->
+    <string name="fab_add_album_desc">Create a new album</string>
     <string name="label_no_images">There are no images yet. Add one to an album!</string>
     <string name="label_no_albums">There are no albums yet. Create one!</string>
     <string name="toast_info_albums_order">Ordering albums by %1$s</string>
@@ -132,6 +132,7 @@
     <string name="toast_error_creating_album">An error occurred while creating the album</string>
     <!--    Album    -->
     <string name="label_no_album_images">There are no images in this album yet.</string>
+    <string name="fab_add_image_desc">Add a new image</string>
     <!--    Album Information General   -->
     <string name="label_name">Name</string>
     <string name="label_cover">Album\'s Cover</string>

@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.transition.Hold
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumBinding
 import uniovi.eii.shareit.model.Album
@@ -109,7 +112,9 @@ class AlbumFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(AlbumFragmentDirections.actionNavAlbumToAddImageFragment())
+            exitTransition = Hold()
+            val extras = FragmentNavigatorExtras(binding.fab to resources.getString(R.string.fab_add_image_desc))
+            findNavController().navigate(AlbumFragmentDirections.actionNavAlbumToAddImageFragment(), extras)
         }
 
         return binding.root
@@ -118,6 +123,13 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureToolBar()
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        exitTransition = null
     }
 
     override fun onDestroyView() {

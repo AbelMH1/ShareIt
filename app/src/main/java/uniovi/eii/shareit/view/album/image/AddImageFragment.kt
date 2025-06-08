@@ -27,6 +27,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAddImageBinding
@@ -92,6 +93,17 @@ class AddImageFragment : Fragment() {
             Log.d(TAG, "onServiceDisconnected")
             serviceBoundState = false
             exampleService = null
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition  = MaterialContainerTransform().apply {
+//            isDrawDebugEnabled = true
+            scrimColor = Color.TRANSPARENT
+            containerColor = requireContext().getColor(R.color.md_theme_surface)
+            startContainerColor = requireContext().getColor(R.color.md_theme_secondary)
+            endContainerColor = requireContext().getColor(R.color.md_theme_surface)
         }
     }
 

@@ -5,6 +5,7 @@
     android:name="uniovi.eii.shareit.ui.album.AlbumFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:transitionGroup="true"
     tools:context=".view.album.AlbumFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        android:contentDescription="@string/fab_main"
-        android:src="@android:drawable/ic_input_add" />
+        android:contentDescription="@string/fab_add_image_desc"
+        android:src="@android:drawable/ic_input_add"
+        android:transitionName="@string/fab_add_image_desc" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

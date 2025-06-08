@@ -15,8 +15,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraph
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.transition.Hold
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeAlbumsBinding
 import uniovi.eii.shareit.model.UserAlbum
@@ -57,8 +59,10 @@ class HomeAlbumsFragment : Fragment() {
         binding.albumRecyclerView.adapter = albumListAdapter
 
         binding.fab.setOnClickListener {
+            parentFragment?.exitTransition = Hold()
+            val extras = FragmentNavigatorExtras(binding.fab to resources.getString(R.string.fab_add_album_desc))
             findNavController().navigate(HomeFragmentDirections
-                .actionNavHomeToNavAlbumCreation())
+                .actionNavHomeToNavAlbumCreation(), extras)
         }
 
         viewModel.displayAlbumList.observe(viewLifecycleOwner) {

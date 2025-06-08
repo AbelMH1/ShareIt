@@ -8,12 +8,16 @@
     <action
         android:id="@+id/log_out_to_nav_login"
         app:destination="@id/nav_login"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
         app:popUpTo="@id/mobile_navigation"
         app:popUpToInclusive="true" />
 
     <action
         android:id="@+id/action_exit_album_to_nav_home"
         app:destination="@id/nav_home"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
         app:popUpTo="@id/nav_home"
         app:popUpToInclusive="true" />
 
@@ -29,11 +33,17 @@
         <action
             android:id="@+id/action_nav_login_to_nav_home"
             app:destination="@id/nav_home"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             app:popUpTo="@id/nav_login"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_nav_login_to_nav_signup"
-            app:destination="@id/nav_signup" />
+            app:destination="@id/nav_signup"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
 
     <fragment
@@ -48,6 +58,10 @@
         <action
             android:id="@+id/action_nav_signup_to_nav_login"
             app:destination="@id/nav_login"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/nav_login"
             app:popUpToInclusive="true" />
     </fragment>
@@ -59,13 +73,23 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_nav_album_image"
-            app:destination="@id/nav_general_image" />
+            app:destination="@id/nav_general_image"
+            app:enterAnim="@anim/z_axis_forward_enter"
+            app:exitAnim="@anim/z_axis_forward_exit"
+            app:popEnterAnim="@anim/z_axis_backward_enter"
+            app:popExitAnim="@anim/z_axis_backward_exit" />
         <action
             android:id="@+id/action_nav_home_to_navigation_album"
-            app:destination="@id/navigation_album" />
+            app:destination="@id/navigation_album"
+            app:enterAnim="@anim/x_axis_forward_enter"
+            app:exitAnim="@anim/x_axis_forward_exit"
+            app:popEnterAnim="@anim/x_axis_backward_enter"
+            app:popExitAnim="@anim/x_axis_backward_exit" />
         <action
             android:id="@+id/action_nav_home_to_nav_album_creation"
-            app:destination="@id/navigation_album_creation" />
+            app:destination="@id/navigation_album_creation"
+            app:exitAnim="@anim/z_axis_forward_exit"
+            app:popEnterAnim="@anim/z_axis_backward_enter" />
     </fragment>
 
     <fragment
@@ -104,13 +128,25 @@
             tools:layout="@layout/fragment_album">
             <action
                 android:id="@+id/action_nav_album_to_nav_album_information"
-                app:destination="@id/nav_album_information" />
+                app:destination="@id/nav_album_information"
+                app:enterAnim="@anim/x_axis_forward_enter"
+                app:exitAnim="@anim/x_axis_forward_exit"
+                app:popEnterAnim="@anim/x_axis_backward_enter"
+                app:popExitAnim="@anim/x_axis_backward_exit" />
             <action
                 android:id="@+id/action_nav_album_to_nav_album_image"
-                app:destination="@id/nav_album_image" />
+                app:destination="@id/nav_album_image"
+                app:enterAnim="@anim/z_axis_forward_enter"
+                app:exitAnim="@anim/z_axis_forward_exit"
+                app:popEnterAnim="@anim/z_axis_backward_enter"
+                app:popExitAnim="@anim/z_axis_backward_exit" />
             <action
                 android:id="@+id/action_nav_album_to_nav_album_chat"
-                app:destination="@id/nav_album_chat" />
+                app:destination="@id/nav_album_chat"
+                app:enterAnim="@anim/x_axis_forward_enter"
+                app:exitAnim="@anim/x_axis_forward_exit"
+                app:popEnterAnim="@anim/x_axis_backward_enter"
+                app:popExitAnim="@anim/x_axis_backward_exit" />
             <argument
                 android:name="COLUMN_COUNT"
                 android:defaultValue="4"
@@ -186,7 +222,11 @@
             tools:layout="@layout/fragment_album_creation">
             <action
                 android:id="@+id/action_nav_album_creation_to_nav_album_creation_shared"
-                app:destination="@id/nav_album_creation_shared" />
+                app:destination="@id/nav_album_creation_shared"
+                app:enterAnim="@anim/x_axis_forward_enter"
+                app:exitAnim="@anim/x_axis_forward_exit"
+                app:popEnterAnim="@anim/x_axis_backward_enter"
+                app:popExitAnim="@anim/x_axis_backward_exit" />
             <action
                 android:id="@+id/action_nav_album_creation_to_nav_home"
                 app:destination="@id/nav_home"
@@ -210,10 +250,14 @@
         android:id="@+id/nav_explore"
         android:name="uniovi.eii.shareit.view.explore.ExploreFragment"
         android:label="@string/menu_explore"
-        tools:layout="@layout/fragment_explore" >
+        tools:layout="@layout/fragment_explore">
         <action
             android:id="@+id/action_nav_explore_to_navigation_album"
-            app:destination="@id/navigation_album" />
+            app:destination="@id/navigation_album"
+            app:enterAnim="@anim/x_axis_forward_enter"
+            app:exitAnim="@anim/x_axis_forward_exit"
+            app:popEnterAnim="@anim/x_axis_backward_enter"
+            app:popExitAnim="@anim/x_axis_backward_exit" />
     </fragment>
 
 </navigation>

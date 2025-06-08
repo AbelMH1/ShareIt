@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -36,6 +37,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         configureToolBar()
         configureTabs()
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        exitTransition = null
     }
 
     override fun onDestroyView() {
@@ -46,7 +54,7 @@ class HomeFragment : Fragment() {
     private fun configureToolBar() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                val toolbar = requireActivity().findViewById(R.id.toolbar) as MaterialToolbar
+                val toolbar: MaterialToolbar = requireActivity().findViewById(R.id.toolbar)
                 toolbar.isTitleCentered = true
             }
 

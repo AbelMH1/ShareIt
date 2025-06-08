@@ -22,7 +22,6 @@
     <string name="tab_shared">Compartido</string>
     <string name="tab_participants">Participantes</string>
     <!--    Main Activity    -->
-    <string name="fab_main">Botón de acción flotante</string>
     <string name="read_only">Texto de soporte de solo lectura</string>
     <string name="not_enabled">No habilitado</string>
     <string name="required">*obligatorio</string>
@@ -86,6 +85,7 @@
     <string name="toast_error_repeated_reset_password_email">Ya se ha enviado un email de recuperación a este correo</string>
     <string name="toast_error_type_google_credential">¡La credential no es de tipo Google ID!</string>
     <!--    Home    -->
+    <string name="fab_add_album_desc">Crea un nuevo álbum</string>
     <string name="label_no_images">Aún no hay imágenes. ¡Agrega una a un álbum!</string>
     <string name="label_no_albums">Aún no hay álbumes. ¡Crea uno!</string>
     <string name="toast_info_albums_order">Ordenando álbumes por %1$s</string>
@@ -129,6 +129,7 @@
     <string name="toast_error_creating_album">Se ha producido un error al crear el álbum</string>
     <!--    Album    -->
     <string name="label_no_album_images">Aún no hay imágenes en este álbum.</string>
+    <string name="fab_add_image_desc">Añade una nueva imagen</string>
     <!--    Album Information General   -->
     <string name="label_name">Nombre</string>
     <string name="label_cover">Portada del álbum</string>

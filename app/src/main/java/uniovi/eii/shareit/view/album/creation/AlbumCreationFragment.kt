@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.view.album.creation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.transition.MaterialContainerTransform
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationBinding
 import uniovi.eii.shareit.utils.toDate
@@ -33,6 +35,17 @@ class AlbumCreationFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private val viewModel: AlbumCreationViewModel by navGraphViewModels(R.id.navigation_album_creation)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition  = MaterialContainerTransform().apply {
+//            isDrawDebugEnabled = true
+            scrimColor = Color.TRANSPARENT
+            containerColor = requireContext().getColor(R.color.md_theme_surface)
+            startContainerColor = requireContext().getColor(R.color.md_theme_secondary)
+            endContainerColor = requireContext().getColor(R.color.md_theme_surface)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
