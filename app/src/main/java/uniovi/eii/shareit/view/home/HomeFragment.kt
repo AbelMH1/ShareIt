@@ -1,5 +1,6 @@
 package uniovi.eii.shareit.view.home
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,6 +14,7 @@ import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.MaterialContainerTransform
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentHomeBinding
 import uniovi.eii.shareit.view.adapter.HomeViewPagerAdapter
@@ -25,11 +27,21 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition  = MaterialContainerTransform().apply {
+//            isDrawDebugEnabled = true
+            scrimColor = Color.TRANSPARENT
+            containerColor = requireContext().getColor(R.color.md_theme_surface)
+            startContainerColor = requireContext().getColor(R.color.md_theme_secondary)
+            endContainerColor = requireContext().getColor(R.color.md_theme_surface)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
 
         return binding.root
     }

@@ -39,11 +39,7 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_nav_login_to_nav_signup"
-            app:destination="@id/nav_signup"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out" />
+            app:destination="@id/nav_signup" />
     </fragment>
 
     <fragment
@@ -58,10 +54,6 @@
         <action
             android:id="@+id/action_nav_signup_to_nav_login"
             app:destination="@id/nav_login"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/nav_login"
             app:popUpToInclusive="true" />
     </fragment>
@@ -87,9 +79,7 @@
             app:popExitAnim="@anim/x_axis_backward_exit" />
         <action
             android:id="@+id/action_nav_home_to_nav_album_creation"
-            app:destination="@id/navigation_album_creation"
-            app:exitAnim="@anim/z_axis_forward_exit"
-            app:popEnterAnim="@anim/z_axis_backward_enter" />
+            app:destination="@id/navigation_album_creation" />
     </fragment>
 
     <fragment

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.util.Pair
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
@@ -102,8 +103,9 @@ class AlbumCreationFragment : Fragment() {
         viewModel.isCompletedAlbumCreation.observe(viewLifecycleOwner) {
             if (it) Toast.makeText(context, R.string.toast_album_created, Toast.LENGTH_LONG).show()
             else Toast.makeText(context, R.string.toast_error_creating_album, Toast.LENGTH_LONG).show()
+            val extras = FragmentNavigatorExtras(binding.root to resources.getString(R.string.fab_add_album_desc))
             findNavController().navigate(
-                AlbumCreationFragmentDirections.actionNavAlbumCreationToNavHome())
+                AlbumCreationFragmentDirections.actionNavAlbumCreationToNavHome(), extras)
         }
 
         binding.nameEditText.addTextChangedListener(ErrorCleaningTextWatcher(binding.nameLayout))
