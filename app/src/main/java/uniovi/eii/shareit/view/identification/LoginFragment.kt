@@ -1,12 +1,13 @@
 package uniovi.eii.shareit.view.identification
 
 import android.os.Bundle
-import android.transition.Fade
+import androidx.transition.Fade
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
@@ -105,7 +106,11 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handleBottomSheetLogin()
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+            handleBottomSheetLogin()
+        }
     }
 
     override fun onDestroyView() {

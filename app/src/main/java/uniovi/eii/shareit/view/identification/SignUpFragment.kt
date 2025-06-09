@@ -1,7 +1,7 @@
 package uniovi.eii.shareit.view.identification
 
 import android.os.Bundle
-import android.transition.Fade
+import androidx.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
