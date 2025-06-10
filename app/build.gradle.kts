@@ -9,6 +9,17 @@ plugins {
 }
 
 android {
+    val properties = Properties()
+    properties.load(project.rootProject.file("other.properties").inputStream())
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(properties.getProperty("AndroidReleaseKeyStoreFile"))
+            storePassword = properties.getProperty("AndroidReleaseKeyStorePassword")
+            keyAlias = properties.getProperty("AndroidReleaseKeyAlias")
+            keyPassword = properties.getProperty("AndroidReleaseKeyPassword")
+        }
+    }
     namespace = "uniovi.eii.shareit"
     compileSdk = 34
 
@@ -21,9 +32,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-
-        val properties = Properties()
-        properties.load(project.rootProject.file("other.properties").inputStream())
         buildConfigField("String", "ServerClientId", "\"${properties.getProperty("ServerClientId")}\"")
     }
 
@@ -34,6 +42,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

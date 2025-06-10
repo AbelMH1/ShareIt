@@ -24,3 +24,10 @@
 -keep class androidx.credentials.playservices.** {
     *;
 }
+
+# Mantener todas las clases del modelo y sus constructores públicos
+-keep class uniovi.eii.shareit.model.** { <init>(...); *; }
+-keepclassmembers class uniovi.eii.shareit.model.** { *; }
+-keepclassmembers class * {
+    public <init>(...);
+}
