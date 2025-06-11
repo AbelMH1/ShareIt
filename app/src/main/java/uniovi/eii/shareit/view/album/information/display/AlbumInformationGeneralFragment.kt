@@ -257,6 +257,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.dateStartLayout.isEnabled = enable
         binding.dateEndLayout.isEnabled = enable
         binding.coverSettingsButton.isVisible = enable
+        binding.layoutLabelCoverSwitch.isVisible = enable
         binding.displayChipGroup.isVisible = !enable
         binding.chipGroup.isVisible = enable
         if (enable) {

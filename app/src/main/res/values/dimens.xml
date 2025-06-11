@@ -29,6 +29,7 @@
     <dimen name="textview_drawable_padding">5dp</dimen>
     <dimen name="tags_horizontal_padding">5dp</dimen>
     <dimen name="tags_vertical_padding">10dp</dimen>
+    <dimen name="vertical_scrollview_bottom_padding">65dp</dimen>
     <item name="albums_per_row" type="integer">2</item>
     <item name="images_per_row" type="integer">4</item>
 </resources>
