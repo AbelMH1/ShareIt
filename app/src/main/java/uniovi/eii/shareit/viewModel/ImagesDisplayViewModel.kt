@@ -122,6 +122,11 @@ class ImagesDisplayViewModel : ViewModel() {
     }
 
     fun registerUserImagesListener(userAlbums: List<String>) {
+        if (userAlbums.isEmpty()) {
+            Log.d(TAG, "albumImagesListener: No user albums to register listener for")
+            updateAllImageList(emptyList())
+            return
+        }
         Log.d(TAG, "albumImagesListener: START")
         val updateEvent: (newAlbumImages: List<Image>, isUpdateFromServer: Boolean) -> Unit = { images, b ->
             updateImageList(images, b)

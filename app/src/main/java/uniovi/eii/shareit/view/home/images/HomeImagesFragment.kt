@@ -67,11 +67,9 @@ class HomeImagesFragment : Fragment() {
         )[GENERAL_VIEW, ImagesDisplayViewModel::class.java]
 
         val albumsDisplayViewModel: AlbumsDisplayViewModel by activityViewModels()
-        if (albumsDisplayViewModel.getAlbumListIds().isNotEmpty()) {
-            viewModel.registerUserImagesListener(
-                albumsDisplayViewModel.getAlbumListIds()
-            )
-        }
+        viewModel.registerUserImagesListener(
+            albumsDisplayViewModel.getAlbumListIds()
+        )
 
         columnCount = resources.getInteger(R.integer.images_per_row)+1 // Para que se vean más imágenes que dentro del álbum
         sectionListAdapter =
