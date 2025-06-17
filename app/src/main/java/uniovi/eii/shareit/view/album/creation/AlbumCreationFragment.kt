@@ -58,19 +58,6 @@ class AlbumCreationFragment : Fragment() {
         }
         binding.toggleNone.performClick()
 
-//        TODO: Borrar
-//        binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
-//            when (isChecked) {
-//                true -> {
-//                    binding.mapView.visibility = View.VISIBLE
-//                }
-//
-//                false -> {
-//                    binding.mapView.visibility = View.GONE
-//                }
-//            }
-//        }
-
         binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
                 true -> {
@@ -228,7 +215,6 @@ class AlbumCreationFragment : Fragment() {
         binding.dateToggleButton.isEnabled = isEnabled
         binding.dateStartLayout.isEnabled = isEnabled
         binding.dateEndLayout.isEnabled = isEnabled
-        binding.switchLocationSelection.isEnabled = isEnabled
         binding.switchSharedAlbum.isEnabled = isEnabled
         binding.createBtn.isEnabled = isEnabled
         binding.continueBtn.isEnabled = isEnabled

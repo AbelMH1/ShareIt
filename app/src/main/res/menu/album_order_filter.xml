@@ -14,12 +14,6 @@
                 android:id="@+id/action_order_select"
                 android:checkableBehavior="single">
                 <item
-                    android:id="@+id/action_order_custom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:title="@string/action_order_custom" />
-                <item
                     android:id="@+id/action_order_creation_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -25,8 +25,6 @@
     <string name="tab_shared">Shared</string>
     <string name="tab_participants">Participants</string>
     <!--    Main Activity    -->
-    <string name="read_only">Read only supporting text</string>
-    <string name="not_enabled">Not enabled</string>
     <string name="required">*required</string>
     <string name="err_empty_field">This field is mandatory</string>
     <string name="err_invalid_date">This is not a valid date</string>
@@ -40,7 +38,6 @@
     <string name="action_order_album">Album</string>
     <string name="action_order_date">Date</string>
     <string name="action_order_likes">Likes</string>
-    <string name="action_order_custom">Custom</string>
     <string name="action_order_creation_date">Creation date</string>
     <string name="action_order_name">Name</string>
     <string name="action_order_last_update">Last update</string>
@@ -117,12 +114,10 @@
     <string name="date_format">DD/MM/YYYY</string>
     <string name="album_date_start">Start date</string>
     <string name="album_date_end">End date</string>
-    <string name="switch_location_selection">Select Location for the Album</string>
     <string name="switch_shared_album">Shared Album</string>
     <string name="btn_continue">Continue</string>
     <string name="btn_create">Create</string>
     <string name="btn_add">Add</string>
-    <string name="switch_invitation_link">Invitation link</string>
     <string name="btn_info_permission">Information about permissions and roles</string>
     <string name="info_permission_and_roles_title">Permission and roles</string>
     <string name="info_permission_and_roles_message">There are <b>two roles</b> for album participants. Different permissions can be set for each role. <b>Members</b>: those who have been added directly by the album creator. <b>Guests</b>: those who have joined the album on their own (only possible if the album has <i>Public</i> visibility). The album <b>creator can modify the role</b> of a participant at any time by promoting him/her to Member or demoting him/her to Guest.</string>
@@ -157,8 +152,6 @@
     <string name="warn_eliminated_from_album_message">Either you were eliminated from this album or the album itself got deleted.</string>
     <string name="bt_exit">Exit</string>
     <string name="label_date_disabled">Date not enabled</string>
-    <string name="label_location">Location of the Album</string>
-    <string name="label_location_disabled">Location not enabled</string>
     <string name="fab_edit_desc">Edit the information displayed</string>
     <string name="fab_save_desc">Save the modified information</string>
     <string name="label_tags">Tags</string>

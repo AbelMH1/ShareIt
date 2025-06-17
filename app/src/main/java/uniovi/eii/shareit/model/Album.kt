@@ -1,6 +1,5 @@
 package uniovi.eii.shareit.model
 
-import com.google.android.gms.maps.model.LatLng
 import java.util.Date
 
 data class Album(
@@ -14,14 +13,11 @@ data class Album(
     var lastUpdate: Date = Date(),
     var startDate: Date? = null,
     var endDate: Date? = null,
-    var location: LatLng? = null,
     var visibility: Visibility = Visibility.PRIVATE,
     var membersImagesPermission: ImagePermission? = null,
     var membersChatPermission: ChatPermission? = null,
     var guestsImagesPermission: ImagePermission? = null,
     var guestsChatPermission: ChatPermission? = null,
-    var invitationLinkEnabled: Boolean = false,
-    var invitationLink: String? = null,
     var tags: List<Tags> = emptyList(),
 ) {
     enum class ChatPermission {
@@ -60,41 +56,50 @@ data class Album(
             albumId, creatorId, creatorName, name, coverImage, creationDate, lastUpdate, tags
         )
     }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as Album
 
-        if (name != other.name) return false
+        if (albumId != other.albumId) return false
+        if (creatorId != other.creatorId) return false
         if (creatorName != other.creatorName) return false
+        if (name != other.name) return false
+        if (coverImage != other.coverImage) return false
+        if (useLastImageAsCover != other.useLastImageAsCover) return false
+        if (creationDate != other.creationDate) return false
+        if (lastUpdate != other.lastUpdate) return false
         if (startDate != other.startDate) return false
         if (endDate != other.endDate) return false
-        if (location != other.location) return false
         if (visibility != other.visibility) return false
         if (membersImagesPermission != other.membersImagesPermission) return false
         if (membersChatPermission != other.membersChatPermission) return false
         if (guestsImagesPermission != other.guestsImagesPermission) return false
         if (guestsChatPermission != other.guestsChatPermission) return false
-        if (invitationLinkEnabled != other.invitationLinkEnabled) return false
-        if (invitationLink != other.invitationLink) return false
+        if (tags != other.tags) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = name.hashCode()
+        var result = albumId.hashCode()
+        result = 31 * result + creatorId.hashCode()
         result = 31 * result + creatorName.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + coverImage.hashCode()
+        result = 31 * result + useLastImageAsCover.hashCode()
+        result = 31 * result + creationDate.hashCode()
+        result = 31 * result + lastUpdate.hashCode()
         result = 31 * result + (startDate?.hashCode() ?: 0)
         result = 31 * result + (endDate?.hashCode() ?: 0)
-        result = 31 * result + (location?.hashCode() ?: 0)
         result = 31 * result + visibility.hashCode()
         result = 31 * result + (membersImagesPermission?.hashCode() ?: 0)
         result = 31 * result + (membersChatPermission?.hashCode() ?: 0)
         result = 31 * result + (guestsImagesPermission?.hashCode() ?: 0)
         result = 31 * result + (guestsChatPermission?.hashCode() ?: 0)
-        result = 31 * result + invitationLinkEnabled.hashCode()
-        result = 31 * result + (invitationLink?.hashCode() ?: 0)
+        result = 31 * result + tags.hashCode()
         return result
     }
 }

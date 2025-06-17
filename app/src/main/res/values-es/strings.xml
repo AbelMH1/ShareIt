@@ -22,8 +22,6 @@
     <string name="tab_shared">Compartido</string>
     <string name="tab_participants">Participantes</string>
     <!--    Main Activity    -->
-    <string name="read_only">Texto de soporte de solo lectura</string>
-    <string name="not_enabled">No habilitado</string>
     <string name="required">*obligatorio</string>
     <string name="err_empty_field">Este campo es obligatorio</string>
     <string name="err_invalid_date">No es una fecha válida</string>
@@ -37,7 +35,6 @@
     <string name="action_order_album">Álbum</string>
     <string name="action_order_date">Fecha</string>
     <string name="action_order_likes">Me gusta</string>
-    <string name="action_order_custom">Personalizado</string>
     <string name="action_order_creation_date">Fecha de creación</string>
     <string name="action_order_name">Nombre</string>
     <string name="action_order_last_update">Última actualización</string>
@@ -114,12 +111,10 @@
     <string name="date_format">DD/MM/YYYY</string>
     <string name="album_date_start">Fecha de inicio</string>
     <string name="album_date_end">Fecha de fin</string>
-    <string name="switch_location_selection">Seleccionar ubicación para el álbum</string>
     <string name="switch_shared_album">Álbum Compartido</string>
     <string name="btn_continue">Continuar</string>
     <string name="btn_create">Crear</string>
     <string name="btn_add">Agregar</string>
-    <string name="switch_invitation_link">Enlace de invitación</string>
     <string name="btn_info_permission">Información sobre permisos y roles</string>
     <string name="info_permission_and_roles_title">Permisos y roles</string>
     <string name="info_permission_and_roles_message">Existen <b>dos roles</b> para los participantes de un álbum. Se pueden establecer distintos permisos para cada rol. <b>Miembros</b>: aquellos que el creador del álbum ha añadido directamente. <b>Invitados</b>: aquellos que se han unido al álbum por cuenta propia (solo posible si el álbum tiene visibilidad <i>Público</i>). <b>El creador</b> del álbum <b>puede modificar los roles</b> de un participante en cualquier momento, ascendiéndolo a Miembro o degradándolo a Invitado.</string>
@@ -154,8 +149,6 @@
     <string name="warn_eliminated_from_album_message">O fuiste eliminado de este álbum o el álbum fue eliminado.</string>
     <string name="bt_exit">Salir</string>
     <string name="label_date_disabled">Fecha no habilitada</string>
-    <string name="label_location">Ubicación del álbum</string>
-    <string name="label_location_disabled">Ubicación no habilitada</string>
     <string name="fab_edit_desc">Editar la información mostrada</string>
     <string name="fab_save_desc">Guardar la información modificada</string>
     <string name="label_tags">Etiquetas</string>

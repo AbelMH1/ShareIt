@@ -253,7 +253,6 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.displayNameLayout.isVisible = !enable
         binding.editNameLayout.isVisible = enable
         binding.dateToggleButton.isVisible = enable
-        binding.switchLocationSelection.isVisible = enable
         binding.dateStartLayout.isEnabled = enable
         binding.dateEndLayout.isEnabled = enable
         binding.coverSettingsButton.isVisible = enable
@@ -287,8 +286,7 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.dateStartEditText.text?.toString() ?: "",
             binding.dateEndEditText.text?.toString() ?: "",
             binding.dateToggleButton.checkedButtonId,
-            tags,
-            binding.switchLocationSelection.isChecked
+            tags
         )
         if (dataValidationResult.isDataValid) {
             binding.editFAB.show()
@@ -324,10 +322,6 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.nameEditText.setText(album.name)
         binding.switchCoverLastImage.isChecked = album.useLastImageAsCover
         requireContext().loadImageIntoView(album.coverImage, album.lastUpdate.time, binding.albumCover)
-        binding.switchLocationSelection.isChecked = album.location != null
-//        if (album.location != null) {
-//            // TODO: Establecer ubicación en el mapa
-//        }
         binding.displayChipGroup.removeAllViews()
         binding.chipGroup.checkedChipIds.clear()
         val tagsNames = resources.getStringArray(R.array.Tags)
@@ -431,8 +425,7 @@ class AlbumInformationGeneralFragment : Fragment() {
             binding.dateStartEditText.text?.toString(),
             binding.dateEndEditText.text?.toString(),
             binding.dateToggleButton.checkedButtonId,
-            tags,
-            binding.switchLocationSelection.isChecked
+            tags
         )
     }
 

@@ -72,7 +72,6 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.1.0") // Paginación horizontal deslizante
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.0")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
     // Firebase Android BoM (Bill of Materials), to manage all the Firebase library versions
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     // Firebase library versions

@@ -74,10 +74,9 @@ class AlbumInformationViewModel : ViewModel() {
         startDate: String,
         endDate: String,
         toggleDateSelected: Int,
-        tags: List<Int>,
-        location: Boolean
+        tags: List<Int>
     ): GeneralValidationResult {
-        val dataValidation = checkValidData(name, useLastImageAsCover, imageUri, startDate, endDate, toggleDateSelected, tags, location)
+        val dataValidation = checkValidData(name, useLastImageAsCover, imageUri, startDate, endDate, toggleDateSelected, tags)
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
                 FirestoreAlbumService.updateCurrentAlbumData(album.albumId, dataValidation.dataToUpdate)
@@ -91,16 +90,15 @@ class AlbumInformationViewModel : ViewModel() {
         membersImagesPermission: Int,
         membersChatPermission: Int,
         guestsImagesPermission: Int,
-        guestsChatPermission: Int,
-        invitationLinkEnabled: Boolean
+        guestsChatPermission: Int
     ): SharedValidationResult {
         val dataValidation = checkValidData(
             visibility,
             membersImagesPermission,
             membersChatPermission,
             guestsImagesPermission,
-            guestsChatPermission,
-            invitationLinkEnabled)
+            guestsChatPermission
+        )
 
         if (dataValidation.isDataValid) {
             viewModelScope.launch(Dispatchers.IO) {
@@ -181,7 +179,7 @@ class AlbumInformationViewModel : ViewModel() {
     }
 
     private fun checkValidData(
-        name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, tags: List<Int>, location: Boolean
+        name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, tags: List<Int>
     ): GeneralValidationResult {
         // Todo: location (LatLng(0.0, 0.0))
         val dataToUpdate: HashMap<String, Any?> = HashMap()
@@ -231,8 +229,7 @@ class AlbumInformationViewModel : ViewModel() {
         membersImagesPermissionPos: Int,
         membersChatPermissionPos: Int,
         guestsImagesPermissionPos: Int,
-        guestsChatPermissionPos: Int,
-        invitationLinkEnabled: Boolean
+        guestsChatPermissionPos: Int
     ): SharedValidationResult {
         val dataToUpdate: HashMap<String, Any?> = HashMap()
         if (visibility != album.visibility) {
@@ -294,8 +291,7 @@ class AlbumInformationViewModel : ViewModel() {
         startDate: String?,
         endDate: String?,
         toggleDateSelected: Int,
-        tags: MutableList<Album.Tags>,
-        location: Boolean
+        tags: MutableList<Album.Tags>
     ) {
         Log.d("saveUnsavedData", "saveUnsavedData")
         unsavedData = Album(
@@ -304,7 +300,6 @@ class AlbumInformationViewModel : ViewModel() {
             useLastImageAsCover = useLastImageAsCover,
             startDate = if (toggleDateSelected != R.id.toggleNone) startDate?.toDate() else null,
             endDate = if (toggleDateSelected == R.id.toggleRange) endDate?.toDate() else null,
-            location = if (location) album.location else null,
             tags = tags
         )
     }

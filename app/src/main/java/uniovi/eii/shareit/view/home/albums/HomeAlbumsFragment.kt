@@ -103,7 +103,7 @@ class HomeAlbumsFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
-                    R.id.action_order_custom, R.id.action_order_creation_date, R.id.action_order_name, R.id.action_order_last_update -> {
+                    R.id.action_order_creation_date, R.id.action_order_name, R.id.action_order_last_update -> {
                         menuItem.isChecked = !menuItem.isChecked
                         if(viewModel.applyOrder(order = menuItem.itemId))
                             Toast.makeText(context, resources.getString(R.string.toast_info_albums_order, menuItem.title), Toast.LENGTH_SHORT).show()

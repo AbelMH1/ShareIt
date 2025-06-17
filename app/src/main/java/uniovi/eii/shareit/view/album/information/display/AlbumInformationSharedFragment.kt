@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.navGraphViewModels
@@ -42,13 +41,6 @@ class AlbumInformationSharedFragment : Fragment() {
     }
 
     private fun setUpListeners(currentUserOwner: Boolean) {
-        binding.switchInvitationLink.setOnCheckedChangeListener { _, isChecked ->
-            binding.invitationLinkLayout.isVisible = isChecked
-        }
-        binding.invitationLinkLayout.setEndIconOnClickListener {
-            Toast.makeText(context, "Copy", Toast.LENGTH_SHORT).show()
-            // TODO: Copy to clipboard
-        }
         binding.visibilityToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 binding.sharedSettings.isVisible = checkedId != R.id.togglePrivate
@@ -117,8 +109,7 @@ class AlbumInformationSharedFragment : Fragment() {
             imagesPermissions.indexOf(binding.membersImagesPermissionEditText.text.toString()),
             chatPermissions.indexOf(binding.membersChatPermissionEditText.text.toString()),
             imagesPermissions.indexOf(binding.guestsImagesPermissionEditText.text.toString()),
-            chatPermissions.indexOf(binding.guestsChatPermissionEditText.text.toString()),
-            binding.switchInvitationLink.isChecked
+            chatPermissions.indexOf(binding.guestsChatPermissionEditText.text.toString())
         )
         if (dataValidationResult.isDataValid) {
             binding.editFAB.show()
@@ -182,7 +173,6 @@ class AlbumInformationSharedFragment : Fragment() {
         binding.albumVisibilityValue.isVisible = !enable
         binding.visibilityToggleButton.isVisible = enable
         binding.labelAlbumVisibilityExplanation.isVisible = enable
-        binding.switchInvitationLink.isVisible = enable
         binding.guestsChatPermissionLayout.isEnabled = enable
         binding.guestsImagesPermissionLayout.isEnabled = enable
         binding.membersChatPermissionLayout.isEnabled = enable
@@ -218,13 +208,6 @@ class AlbumInformationSharedFragment : Fragment() {
             binding.membersChatPermissionEditText.setText(chatPermissions[album.membersChatPermission!!.ordinal], false)
             binding.guestsImagesPermissionEditText.setText(imagesPermissions[album.guestsImagesPermission!!.ordinal], false)
             binding.guestsChatPermissionEditText.setText(chatPermissions[album.guestsChatPermission!!.ordinal], false)
-        }
-        if (album.visibility != Visibility.PRIVATE && album.invitationLinkEnabled) {
-            binding.invitationLinkEditText.setText(album.invitationLink)
-            binding.switchInvitationLink.isChecked = true
-        } else {
-            binding.invitationLinkEditText.text = null
-            binding.switchInvitationLink.isChecked = false
         }
     }
 }
