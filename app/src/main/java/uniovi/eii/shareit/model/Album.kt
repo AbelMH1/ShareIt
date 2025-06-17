@@ -57,7 +57,7 @@ data class Album(
 
     fun toUserAlbum(): UserAlbum {
         return UserAlbum(
-            albumId, creatorId, creatorName, name, coverImage, creationDate, lastUpdate
+            albumId, creatorId, creatorName, name, coverImage, creationDate, lastUpdate, tags
         )
     }
     override fun equals(other: Any?): Boolean {
