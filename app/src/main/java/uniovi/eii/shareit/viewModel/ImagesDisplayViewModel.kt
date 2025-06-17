@@ -76,6 +76,11 @@ class ImagesDisplayViewModel : ViewModel() {
         }
     }
 
+    fun resetImageLikes() {
+        Log.d(TAG, "resetImageLikes: resetting likes")
+        _updatedImageLikes.value = mutableMapOf()
+    }
+
     fun incrementImageLikes(imageId: String, likesIncrement: Int) {
         if (_updatedImageLikes.value!!.containsKey(imageId)) {
             _updatedImageLikes.value!![imageId] = _updatedImageLikes.value!![imageId]!! + likesIncrement

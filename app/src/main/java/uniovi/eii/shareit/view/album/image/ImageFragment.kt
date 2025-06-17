@@ -86,6 +86,7 @@ class ImageFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.resetImageLikes()
         _binding = null
     }
 
