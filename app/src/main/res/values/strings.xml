@@ -123,6 +123,10 @@
     <string name="btn_create">Create</string>
     <string name="btn_add">Add</string>
     <string name="switch_invitation_link">Invitation link</string>
+    <string name="btn_info_permission">Information about permissions and roles</string>
+    <string name="info_permission_and_roles_title">Permission and roles</string>
+    <string name="info_permission_and_roles_message">There are <b>two roles</b> for album participants. Different permissions can be set for each role. <b>Members</b>: those who have been added directly by the album creator. <b>Guests</b>: those who have joined the album on their own (only possible if the album has <i>Public</i> visibility). The album <b>creator can modify the role</b> of a participant at any time by promoting him/her to Member or demoting him/her to Guest.</string>
+    <string name="bt_close">Close</string>
     <string name="label_permission_settings">Permission Settings</string>
     <string name="label_permission_members">Members</string>
     <string name="label_permission_images">Images</string>

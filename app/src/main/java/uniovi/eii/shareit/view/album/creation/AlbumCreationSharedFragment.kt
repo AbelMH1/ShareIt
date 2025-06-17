@@ -14,6 +14,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAlbumCreationSharedBinding
 import uniovi.eii.shareit.view.MainActivity
@@ -39,6 +40,15 @@ class AlbumCreationSharedFragment : Fragment() {
             if (validateData()) {
                 viewModel.createAlbum()
             }
+        }
+
+        binding.infoBtn.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getText(R.string.info_permission_and_roles_title))
+                .setMessage(resources.getText(R.string.info_permission_and_roles_message))
+                .setCancelable(true)
+                .setPositiveButton(resources.getString(R.string.bt_close), null)
+                .show()
         }
 
         viewModel.isCompletedAlbumCreation.observe(viewLifecycleOwner) {

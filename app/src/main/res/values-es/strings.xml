@@ -120,6 +120,10 @@
     <string name="btn_create">Crear</string>
     <string name="btn_add">Agregar</string>
     <string name="switch_invitation_link">Enlace de invitación</string>
+    <string name="btn_info_permission">Información sobre permisos y roles</string>
+    <string name="info_permission_and_roles_title">Permisos y roles</string>
+    <string name="info_permission_and_roles_message">Existen <b>dos roles</b> para los participantes de un álbum. Se pueden establecer distintos permisos para cada rol. <b>Miembros</b>: aquellos que el creador del álbum ha añadido directamente. <b>Invitados</b>: aquellos que se han unido al álbum por cuenta propia (solo posible si el álbum tiene visibilidad <i>Público</i>). <b>El creador</b> del álbum <b>puede modificar los roles</b> de un participante en cualquier momento, ascendiéndolo a Miembro o degradándolo a Invitado.</string>
+    <string name="bt_close">Cerrar</string>
     <string name="label_permission_settings">Configuración de permisos</string>
     <string name="label_permission_members">Miembros</string>
     <string name="label_permission_images">Imágenes</string>

@@ -68,6 +68,14 @@ class AlbumInformationSharedFragment : Fragment() {
                 }
             }
         }
+        binding.infoBtn.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getText(R.string.info_permission_and_roles_title))
+                .setMessage(resources.getText(R.string.info_permission_and_roles_message))
+                .setCancelable(true)
+                .setPositiveButton(resources.getString(R.string.bt_close), null)
+                .show()
+        }
         if (!currentUserOwner) return
         binding.editFAB.setOnClickListener {
             enableEdition(true)

@@ -89,12 +89,27 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/divider_margin" />
 
-                <TextView
-                    android:id="@+id/labelPermissionSettings"
-                    style="?attr/textAppearanceTitleLarge"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_permission_settings" />
+                    >
+
+                    <TextView
+                        android:id="@+id/labelPermissionSettings"
+                        style="?attr/textAppearanceTitleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_permission_settings" />
+
+                    <Button
+                        android:id="@+id/infoBtn"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/btn_info_permission"
+                        app:icon="@drawable/ic_menu_info_24" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/labelPermissionMembers"
