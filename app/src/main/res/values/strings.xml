@@ -155,6 +155,7 @@
     <string name="fab_edit_desc">Edit the information displayed</string>
     <string name="fab_save_desc">Save the modified information</string>
     <string name="label_tags">Tags</string>
+    <string name="label_tags_not_selected">No tags selected</string>
     <string name="tags_party">Party</string>
     <string name="tags_humor">Humor</string>
     <string name="tags_travel">Travel</string>

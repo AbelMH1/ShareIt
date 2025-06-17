@@ -152,6 +152,7 @@
     <string name="fab_edit_desc">Editar la información mostrada</string>
     <string name="fab_save_desc">Guardar la información modificada</string>
     <string name="label_tags">Etiquetas</string>
+    <string name="label_tags_not_selected">Sin etiquetas seleccionadas</string>
     <string name="tags_food">Comidas</string>
     <string name="tags_animals">Animales</string>
     <string name="tags_sports">Deportes</string>

@@ -258,6 +258,7 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.coverSettingsButton.isVisible = enable
         binding.layoutLabelCoverSwitch.isVisible = enable
         binding.displayChipGroup.isVisible = !enable
+        binding.tagsNotSelected.isVisible = !enable && binding.displayChipGroup.childCount == 0
         binding.chipGroup.isVisible = enable
         if (enable) {
             binding.dateStartLayout.setEndIconDrawable(R.drawable.ic_calendar_24)
@@ -334,6 +335,7 @@ class AlbumInformationGeneralFragment : Fragment() {
             )
             (chips.elementAt(tag.ordinal) as Chip).isChecked = true
         }
+        binding.tagsNotSelected.isVisible = album.tags.isEmpty() && !binding.chipGroup.isVisible
         if (album.endDate != null && album.startDate != null) {
             binding.dateStartEditText.setText(album.startDate!!.toFormattedString())
             binding.dateEndEditText.setText(album.endDate!!.toFormattedString())

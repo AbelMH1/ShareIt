@@ -254,6 +254,14 @@
                 android:layout_marginVertical="@dimen/text_margin"
                 android:text="@string/label_tags" />
 
+            <TextView
+                android:id="@+id/tagsNotSelected"
+                style="?attr/textAppearanceTitleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_margin"
+                android:text="@string/label_tags_not_selected" />
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/displayChipGroup"
                 app:chipSpacingVertical="0dp"
