@@ -9,7 +9,7 @@ data class Album(
     var creatorName: String = "",
     var name: String = "",
     var coverImage: String = "",
-    var useLastImageAsCover: Boolean = false,
+    var useLastImageAsCover: Boolean = true,
     var creationDate: Date = Date(),
     var lastUpdate: Date = Date(),
     var startDate: Date? = null,
