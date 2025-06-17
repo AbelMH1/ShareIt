@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.util.Pair
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -58,17 +59,17 @@ class AlbumCreationFragment : Fragment() {
         }
         binding.toggleNone.performClick()
 
-        binding.switchSharedAlbum.setOnCheckedChangeListener { _, isChecked ->
-            when (isChecked) {
-                true -> {
-                    binding.continueBtn.visibility = View.VISIBLE
-                    binding.createBtn.visibility = View.GONE
+        binding.visibilityToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                val isPrivateAlbum = checkedId == R.id.togglePrivate
+                binding.continueBtn.isVisible = !isPrivateAlbum
+                binding.createBtn.isVisible = isPrivateAlbum
+                val explanationResource = when (checkedId) {
+                    R.id.togglePublic -> R.string.label_album_visibility_public_explanation
+                    R.id.toggleShared -> R.string.label_album_visibility_shared_explanation
+                    else /*R.id.togglePrivate*/ ->  R.string.label_album_visibility_private_explanation
                 }
-
-                false -> {
-                    binding.continueBtn.visibility = View.GONE
-                    binding.createBtn.visibility = View.VISIBLE
-                }
+                binding.labelAlbumVisibilityExplanation.text = resources.getString(explanationResource)
             }
         }
 
@@ -197,7 +198,7 @@ class AlbumCreationFragment : Fragment() {
             binding.dateStartEditText.text?.toString() ?: "",
             binding.dateEndEditText.text?.toString() ?: "",
             binding.dateToggleButton.checkedButtonId,
-            binding.switchSharedAlbum.isChecked
+            binding.visibilityToggleButton.checkedButtonId
         )
         if (!dataValidationResult.isDataValid) {
             updateErrors(
@@ -215,7 +216,7 @@ class AlbumCreationFragment : Fragment() {
         binding.dateToggleButton.isEnabled = isEnabled
         binding.dateStartLayout.isEnabled = isEnabled
         binding.dateEndLayout.isEnabled = isEnabled
-        binding.switchSharedAlbum.isEnabled = isEnabled
+        binding.visibilityToggleButton.isEnabled = isEnabled
         binding.createBtn.isEnabled = isEnabled
         binding.continueBtn.isEnabled = isEnabled
     }

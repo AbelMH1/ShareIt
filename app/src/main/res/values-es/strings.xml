@@ -166,7 +166,7 @@
     <string name="label_album_visibility">Visibilidad</string>
     <string name="label_album_visibility_private_explanation">Solo tú puedes ver las imágenes del álbum</string>
     <string name="label_album_visibility_shared_explanation">Puedes elegir con quién compartes tu álbum</string>
-    <string name="label_album_visibility_public_explanation">Cualquiera puede unirse a tu álbum como invitado y ver las imágenes</string>
+    <string name="label_album_visibility_public_explanation">Cualquiera puede unirse a tu álbum como Invitado y ver las imágenes</string>
     <string name="album_visibility_private">Privado</string>
     <string name="album_visibility_shared">Compartido</string>
     <string name="album_visibility_public">Público</string>
