@@ -171,7 +171,6 @@ class AlbumInformationViewModel : ViewModel() {
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            Thread.sleep(2000)
             _joinResultCorrect.postValue(
                 FirestoreAlbumService.addNewGuestToAlbum(album, currentUserAsParticipant)
             )
