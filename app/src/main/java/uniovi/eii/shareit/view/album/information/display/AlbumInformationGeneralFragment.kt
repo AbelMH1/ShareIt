@@ -119,20 +119,6 @@ class AlbumInformationGeneralFragment : Fragment() {
         binding.dateToggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) toggleDatesEditTexts(checkedId)
         }
-//        TODO: Borrar
-//        binding.switchLocationSelection.setOnCheckedChangeListener { _, isChecked ->
-//            when (isChecked) {
-//                true -> {
-//                    binding.labelLocationNotEnabled.visibility = View.GONE
-////                    binding.mapView.visibility = View.VISIBLE
-//                }
-//
-//                false -> {
-//                    binding.labelLocationNotEnabled.visibility = View.VISIBLE
-////                    binding.mapView.visibility = View.GONE
-//                }
-//            }
-//        }
         if (currentUserOwner) {
             binding.dropAlbumButton.setOnClickListener(null)
             binding.deleteAlbumButton.setOnClickListener {

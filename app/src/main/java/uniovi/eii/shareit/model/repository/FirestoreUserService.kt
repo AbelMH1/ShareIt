@@ -76,9 +76,6 @@ object FirestoreUserService {
                 db.collection("users").document(userId).update(newUserData).await()
             ) {
                 Log.d(TAG, "updateCurrentUserData:success")
-                // TODO: Actualizar campos en todos los UserAlbums donde sea creador
-                // TODO: Actualizar campos en todos los álbumes donde sea creador
-                // TODO: Actualizar campos en todos los álbumes donde sea participante
                 ValidationResult(true)
             }
         } catch (e: Exception) {

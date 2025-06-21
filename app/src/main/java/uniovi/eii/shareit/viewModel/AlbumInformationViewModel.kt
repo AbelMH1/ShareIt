@@ -181,7 +181,6 @@ class AlbumInformationViewModel : ViewModel() {
     private fun checkValidData(
         name: String, useLastImageAsCover: Boolean, imageUri: Uri?, startDate: String, endDate: String, toggleDateSelected: Int, tags: List<Int>
     ): GeneralValidationResult {
-        // Todo: location (LatLng(0.0, 0.0))
         val dataToUpdate: HashMap<String, Any?> = HashMap()
         if (name.isBlank()) {
             return GeneralValidationResult(nameError = R.string.err_empty_field)
