@@ -103,6 +103,7 @@
 
     <Button
         android:id="@+id/btExit"
+        style="@style/Widget.Material3.Button.TonalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_exit"
@@ -114,6 +115,7 @@
 
     <Button
         android:id="@+id/btCloseSession"
+        style="@style/Widget.Material3.Button.TonalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_logOut"
