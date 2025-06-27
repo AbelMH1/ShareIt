@@ -1,4 +1,4 @@
-package uniovi.eii.shareit.model.service
+package uniovi.eii.shareit.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -169,7 +169,7 @@ class ImageUploadService : Service() {
                 }
 
                 val result = FirestoreImageService.uploadImage(image!!, image!!.imagePath.toUri())
-                Log.e(TAG, "Image upload result: $result")
+                Log.d(TAG, "Image upload result. Is success: $result")
                 _isUploadCompleted.postValue(result)
 
                 withContext(Dispatchers.Main) {

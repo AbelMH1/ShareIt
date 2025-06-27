@@ -35,7 +35,7 @@
         android:theme="@style/Theme.ShareIt"
         tools:targetApi="31">
         <service
-            android:name=".model.service.ImageUploadService"
+            android:name=".service.ImageUploadService"
             android:foregroundServiceType="shortService"
             android:exported="false">
         </service>

@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.FragmentAddImageBinding
 import uniovi.eii.shareit.model.Participant.Role
-import uniovi.eii.shareit.model.service.ImageUploadService
+import uniovi.eii.shareit.service.ImageUploadService
 import uniovi.eii.shareit.utils.compressImage
 import uniovi.eii.shareit.utils.createTempImageFile
 import uniovi.eii.shareit.utils.getRequiredGalleryPermissions
