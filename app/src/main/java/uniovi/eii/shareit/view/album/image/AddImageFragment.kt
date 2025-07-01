@@ -59,7 +59,7 @@ class AddImageFragment : Fragment() {
     private val albumViewModel: AlbumViewModel by navGraphViewModels(R.id.navigation_album)
 
     private var imageUri: Uri? = null
-    private var exampleService: ImageUploadService? = null
+    private var imageUploadService: ImageUploadService? = null
     private var serviceBoundState = false
 
     // Lanzador para seleccionar la imagen de la galería
@@ -83,7 +83,7 @@ class AddImageFragment : Fragment() {
             // Al vincularnos al servicio, obtenemos una instancia de él y actualizamos el estado del servicio.
             Log.d(TAG, "onServiceConnected")
             val binder = service as ImageUploadService.LocalBinder
-            exampleService = binder.getService()
+            imageUploadService = binder.getService()
 
             onServiceConnected()
         }
@@ -92,7 +92,7 @@ class AddImageFragment : Fragment() {
             // Se llama cuando la conexión con el servicio se ha desconectado. Limpieza.
             Log.d(TAG, "onServiceDisconnected")
             serviceBoundState = false
-            exampleService = null
+            imageUploadService = null
         }
     }
 
@@ -277,7 +277,7 @@ class AddImageFragment : Fragment() {
     private fun onServiceConnected() {
         serviceBoundState = true
         viewModel.setServiceRunning(true)
-        exampleService?.isUploadCompleted?.observe(viewLifecycleOwner) { isCompleted ->
+        imageUploadService?.isUploadCompleted?.observe(viewLifecycleOwner) { isCompleted ->
             if (isCompleted != null) {
                 viewModel.setServiceRunning(false)
                 if (isCompleted) {
@@ -288,7 +288,7 @@ class AddImageFragment : Fragment() {
                 // Desvincularse después de recibir el resultado
                 if (serviceBoundState) {
                     unbindService()
-                    exampleService = null
+                    imageUploadService = null
                 }
             }
         }
