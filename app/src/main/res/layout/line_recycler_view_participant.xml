@@ -41,17 +41,20 @@
             <TextView
                 android:id="@+id/participantMail"
                 style="?attr/textAppearanceTitleSmall"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Email@gmail.com"
                 tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/participantRole"
                 style="?attr/textAppearanceTitleSmall"
-                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/divider_margin"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="end"
                 android:text="Role"
                 tools:ignore="HardcodedText" />
