@@ -11,7 +11,7 @@
     <string name="menu_explore">Explorar</string>
     <string name="menu_account">Mi cuenta</string>
     <string name="menu_logOut">Cerrar sesión</string>
-    <string name="menu_album_add_image">Agregar nueva imagen</string>
+    <string name="menu_album_add_image">Agregar imagen</string>
     <!--    AppBar subtitles    -->
     <string name="menu_album_creation_general">Información general</string>
     <string name="menu_album_creation_shared">Información de compartición</string>
@@ -71,7 +71,7 @@
     <string name="btn_do_not_have_account">¿No tienes una cuenta? Regístrate</string>
     <string name="toast_successful_login">Has iniciado sesión en tu cuenta</string>
     <string name="toast_successful_signup">Tu cuenta ha sido creada exitosamente</string>
-    <string name="help_text_password">Las contraseñas deben tener al menos 1 dígito, 1 letra minúscula y 1 letra mayúscula</string>
+    <string name="help_text_password">Requerido al menos %1$d caracteres, 1 dígito, 1 letra minúscula y 1 letra mayúscula</string>
     <string name="err_not_an_email">No es un correo electrónico válido</string>
     <string name="err_password_too_short">Las contraseñas deben tener al menos %1$d caracteres</string>
     <string name="err_invalid_password">Se requieren 1 dígito, 1 letra minúscula y 1 letra mayúscula</string>

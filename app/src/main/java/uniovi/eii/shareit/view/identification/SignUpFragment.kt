@@ -48,6 +48,7 @@ class SignUpFragment : Fragment() {
                 binding.passwordRepeatEditText.text?.toString() ?: ""
             )
         }
+        binding.passwordLayout.helperText = resources.getString(R.string.help_text_password, MIN_PASS_LENGTH)
 
         binding.emailEditText.setOnFocusChangeListener { _, hasFocus ->
             updateHint(binding.emailLayout, hasFocus, R.string.label_email, R.string.placeholder_email)
