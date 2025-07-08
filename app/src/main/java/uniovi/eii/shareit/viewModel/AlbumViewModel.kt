@@ -9,8 +9,6 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uniovi.eii.shareit.model.Album
-import uniovi.eii.shareit.model.Album.ChatPermission
-import uniovi.eii.shareit.model.Album.ImagePermission
 import uniovi.eii.shareit.model.Album.Visibility
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.model.Participant.Role
@@ -109,63 +107,19 @@ class AlbumViewModel : ViewModel() {
         return _album.value!!.visibility == Visibility.PUBLIC
     }
 
-    fun hasChatSeePermission(): Boolean {
-        when (_currentUserRole.value) {
-            Role.OWNER -> return true
-            Role.MEMBER -> {
-                val chatPermission = _album.value!!.membersChatPermission
-                return chatPermission == ChatPermission.SEE || chatPermission == ChatPermission.COMMENT
-            }
-            Role.GUEST -> {
-                val chatPermission = _album.value!!.guestsChatPermission
-                return chatPermission == ChatPermission.SEE || chatPermission == ChatPermission.COMMENT
-            }
-            else -> return false
-        }
-    }
+    fun hasChatSeePermission()      = hasPermission { role -> chatPermissionFor(role)?.canSee  }
+    fun hasChatCommentPermission()  = hasPermission { role -> chatPermissionFor(role)?.canComment  }
+    fun hasImagesAddPermission()    = hasPermission { role -> imagePermissionFor(role)?.canAdd }
+    fun hasImagesVotePermission()   = hasPermission { role -> imagePermissionFor(role)?.canVote }
 
-    fun hasChatCommentPermission(): Boolean {
-        when (_currentUserRole.value) {
-            Role.OWNER -> return true
-            Role.MEMBER -> {
-                val chatPermission = _album.value!!.membersChatPermission
-                return chatPermission == ChatPermission.COMMENT
-            }
-            Role.GUEST -> {
-                val chatPermission = _album.value!!.guestsChatPermission
-                return chatPermission == ChatPermission.COMMENT
-            }
-            else -> return false
-        }
-    }
-
-    fun hasImagesAddPermission(): Boolean {
-        when (_currentUserRole.value) {
-            Role.OWNER -> return true
-            Role.MEMBER -> {
-                val imagesPermission = _album.value!!.membersImagesPermission
-                return imagesPermission == ImagePermission.ADD
-            }
-            Role.GUEST -> {
-                val imagesPermission = _album.value!!.guestsImagesPermission
-                return imagesPermission == ImagePermission.ADD
-            }
-            else -> return false
-        }
-    }
-
-    fun hasImagesVotePermission(): Boolean {
-        when (_currentUserRole.value) {
-            Role.OWNER -> return true
-            Role.MEMBER -> {
-                val imagesPermission = _album.value!!.membersImagesPermission
-                return imagesPermission == ImagePermission.VOTE || imagesPermission == ImagePermission.ADD
-            }
-            Role.GUEST -> {
-                val imagesPermission = _album.value!!.guestsImagesPermission
-                return imagesPermission == ImagePermission.VOTE || imagesPermission == ImagePermission.ADD
-            }
-            else -> return false
+    private fun hasPermission(check: Album.(Role) -> Boolean?): Boolean {
+        val role  = _currentUserRole.value
+        val album = _album.value               // LiveData puede ser null
+        return when (role) {
+            Role.OWNER  -> true                // El owner siempre puede
+            Role.MEMBER,
+            Role.GUEST  -> album?.check(role) ?: false
+            else        -> false               // rol indefinido
         }
     }
 

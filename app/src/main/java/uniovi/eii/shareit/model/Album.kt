@@ -21,15 +21,15 @@ data class Album(
     var tags: List<Tags> = emptyList(),
 ) {
     enum class ChatPermission {
-        HIDDEN,
-        SEE,
-        COMMENT
+        HIDDEN, SEE, COMMENT;
+        val canSee get() = this == SEE || this == COMMENT
+        val canComment get() = this == COMMENT
     }
 
     enum class ImagePermission {
-        SEE,
-        VOTE,
-        ADD
+        SEE, VOTE, ADD;
+        val canVote get() = this == VOTE || this == ADD
+        val canAdd  get() = this == ADD
     }
 
     enum class Visibility {
@@ -55,6 +55,18 @@ data class Album(
         return UserAlbum(
             albumId, creatorId, creatorName, name, coverImage, creationDate, lastUpdate, tags
         )
+    }
+
+    fun chatPermissionFor(role: Participant.Role) = when (role) {
+        Participant.Role.MEMBER -> membersChatPermission
+        Participant.Role.GUEST  -> guestsChatPermission
+        else -> ChatPermission.COMMENT // owner máximo permiso
+    }
+
+    fun imagePermissionFor(role: Participant.Role) = when (role) {
+        Participant.Role.MEMBER -> membersImagesPermission
+        Participant.Role.GUEST  -> guestsImagesPermission
+        else -> ImagePermission.ADD // owner máximo permiso
     }
 
     override fun equals(other: Any?): Boolean {
