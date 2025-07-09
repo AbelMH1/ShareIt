@@ -89,6 +89,8 @@
     <string name="toast_info_order_direction">Cambiada dirección de ordenamiento: %1$s</string>
     <string name="toast_info_images_order">Ordenando imágenes por %1$s</string>
     <string name="toast_info_images_filter">Filtrando imágenes: %1$s</string>
+    <string name="album_info_btn_desc">Información sobre el álbum %1$s por %2$s, creado en %3$s</string>
+    <string name="image_preview_desc">Imagen subida por %1$s en %2$s</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Buscar álbumes</string>
     <string name="toast_no_more_albums">No hay más álbumes disponibles</string>

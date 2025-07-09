@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewImageBinding
 import uniovi.eii.shareit.model.Image
 import uniovi.eii.shareit.utils.loadImageIntoView
@@ -49,6 +50,11 @@ class ImageListAdapter(
             binding.root.context.loadImageIntoView(
                 image.imagePath.toUri(),
                 binding.image
+            )
+            binding.image.contentDescription = binding.root.context.getString(
+                R.string.image_preview_desc,
+                image.authorName,
+                image.creationDate
             )
             itemView.setOnClickListener {
                 listener.onItemClick(image, accumulatedPosition+position)

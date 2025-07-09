@@ -92,6 +92,8 @@
     <string name="toast_info_order_direction">Changed order direction: %1$s</string>
     <string name="toast_info_images_order">Ordering images by %1$s</string>
     <string name="toast_info_images_filter">Filtering images: %1$s</string>
+    <string name="album_info_btn_desc">Information about album "%1$s" by %2$s, created on %3$s</string>
+    <string name="image_preview_desc">Image uploaded by "%1$s" on %2$s</string>
     <!--    Explore    -->
     <string name="searchbar_hint">Search for albums</string>
     <string name="toast_no_more_albums">No more albums available</string>

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import uniovi.eii.shareit.R
 import uniovi.eii.shareit.databinding.LineRecyclerViewAlbumBinding
 import uniovi.eii.shareit.model.UserAlbum
 import uniovi.eii.shareit.utils.loadImageIntoView
@@ -51,6 +52,12 @@ class AlbumListAdapter(
                 album.coverImage,
                 album.lastUpdate.time,
                 binding.albumCover
+            )
+            binding.infoBtn.contentDescription = binding.root.context.getString(
+                R.string.album_info_btn_desc,
+                album.name,
+                album.creatorName,
+                album.creationDate
             )
             binding.infoBtn.setOnClickListener {
                 Log.d("AlbumListAdapter", "Click en información del álbum")
